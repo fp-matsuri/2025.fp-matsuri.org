@@ -15,8 +15,10 @@ marketing:
     site_type: Person
     local_business_type: ''
     org_name: ''
-    description: 'A highly-customizable Hugo landing page theme powered by Hugo Blox website builder.'
-    twitter: 'GetResearchDev'
+    description: |
+      関数型まつりは関数型プログラミングをテーマとしたカンファレンスです。
+      2025年の夏に開催予定です。
+    twitter: 'fp_matsuri'
   analytics:
     google_analytics: ''
     baidu_tongji: ''
