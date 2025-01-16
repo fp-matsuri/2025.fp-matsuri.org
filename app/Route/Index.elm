@@ -4,8 +4,8 @@ import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, div, h1, h2, h3, iframe, p, section, text)
-import Html.Attributes exposing (attribute, class, height, src, style)
+import Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, text, ul)
+import Html.Attributes exposing (attribute, class, height, href, src, style, target)
 import Pages.Url
 import PagesMsg exposing (PagesMsg)
 import Route
@@ -91,6 +91,7 @@ view app shared =
             |> Route.link [] [ text "My blog post" ]
         , aboutBlock
         , overviewBlock
+        , teamBlock
         ]
     }
 
@@ -141,6 +142,69 @@ overviewBlock =
             ]
             []
         ]
+
+
+teamBlock : Html msg
+teamBlock =
+    let
+        listItem member =
+            li [ class "person" ]
+                [ img [ src ("https://github.com/" ++ member.id ++ ".png") ] []
+                , a [ href ("https://github.com/" ++ member.id), target "_blank" ] [ text member.id ]
+                ]
+    in
+    block "Team"
+        [ div [ class "people" ]
+            [ h3 [] [ text "座長" ]
+            , ul [] (List.map listItem staff.leader)
+            , h3 [] [ text "スタッフ" ]
+            , ul [] (List.map listItem staff.members)
+            ]
+        ]
+
+
+type alias Member =
+    { id : String }
+
+
+staff : { leader : List Member, members : List Member }
+staff =
+    { leader =
+        [ Member "lagenorhynque"
+        , Member "omiend"
+        , Member "shomatan"
+        , Member "taketora26"
+        , Member "yoshihiro503"
+        , Member "ysaito8015"
+        ]
+    , members =
+        [ Member "a-skua"
+        , Member "aoiroaoino"
+        , Member "ChenCMD"
+        , Member "Guvalif"
+        , Member "igrep"
+        , Member "ik11235"
+        , Member "Iwaji"
+        , Member "katsujukou"
+        , Member "kawagashira"
+        , Member "kazup0n"
+        , Member "Keita-N"
+        , Member "kmizu"
+        , Member "magnolia-k"
+        , Member "quantumshiro"
+        , Member "rabe1028"
+        , Member "takezoux2"
+        , Member "tanishiking"
+        , Member "tomoco95"
+        , Member "Tomoyuki-TAKEZAKI"
+        , Member "unarist"
+        , Member "usabarashi"
+        , Member "wm3"
+        , Member "y047aka"
+        , Member "yonta"
+        , Member "yshnb"
+        ]
+    }
 
 
 block : String -> List (Html msg) -> Html msg
