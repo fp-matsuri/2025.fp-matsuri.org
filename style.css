@@ -23,6 +23,15 @@
 Hugo Blox 由来のスタイル
 ------------------------------------ */
 
+p.note {
+  font-size: 0.875rem;
+  color: rgb(64, 64, 64);
+}
+
+p.note::before {
+  content: "※";
+}
+
 section {
   padding: 8rem 1.5rem 6rem;
 
@@ -57,6 +66,59 @@ section>h2 {
 
 .map {
   max-width: none;
+}
+
+ul.schedule {
+  padding: 0;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  grid-template-rows: repeat(4, auto);
+  column-gap: 40px;
+  row-gap: 4rem;
+}
+
+ul.schedule::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: block;
+  margin-block: 25px;
+  height: calc(100% - 50px);
+  border-radius: 9px;
+  background-color: rgb(16, 40, 48);
+}
+
+ul.schedule>li.event {
+  position: relative;
+  list-style: none;
+}
+
+li.event::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: -57px;
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 100px;
+  background-color: #FFF;
+  border: 1px solid rgb(16, 40, 48);
+}
+
+li.event>h3 {
+  margin-block: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+li.event>h3.highlight {
+  font-size: 1.875rem;
+}
+
+li.event>p {
+  margin-block: 0;
+  font-size: 0.875rem;
 }
 
 .sponsors {

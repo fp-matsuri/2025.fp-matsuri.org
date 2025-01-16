@@ -91,6 +91,7 @@ view app shared =
             |> Route.link [] [ text "My blog post" ]
         , aboutBlock
         , overviewBlock
+        , scheduleBlock
         , sponsorsBlock
         , teamBlock
         ]
@@ -143,6 +144,56 @@ overviewBlock =
             ]
             []
         ]
+
+
+scheduleBlock : Html msg
+scheduleBlock =
+    let
+        listItem event =
+            li [ class "event" ]
+                [ h3 [ class (highlight event.highlight) ] [ text event.name ]
+                , p [] [ text event.at ]
+                ]
+
+        highlight bool =
+            if bool then
+                "highlight"
+
+            else
+                ""
+    in
+    block "Schedule"
+        [ ul [ class "schedule" ] (List.map listItem schedule)
+        , p [ class "note" ] [ text "記載されているスケジュールの一部は予告なく変更されることがございます。" ]
+        ]
+
+
+type alias Event =
+    { name : String
+    , at : String
+    , highlight : Bool
+    }
+
+
+schedule : List Event
+schedule =
+    [ { name = "セッション応募開始"
+      , at = "2025年初め"
+      , highlight = False
+      }
+    , { name = "セッション採択結果発表"
+      , at = ""
+      , highlight = False
+      }
+    , { name = "チケット販売開始"
+      , at = "2025年春頃"
+      , highlight = False
+      }
+    , { name = "関数型まつり開催"
+      , at = "2025.6.14-15"
+      , highlight = True
+      }
+    ]
 
 
 sponsorsBlock : Html msg
