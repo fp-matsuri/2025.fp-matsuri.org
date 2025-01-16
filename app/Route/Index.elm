@@ -91,6 +91,7 @@ view app shared =
             |> Route.link [] [ text "My blog post" ]
         , aboutBlock
         , overviewBlock
+        , sponsorsBlock
         , teamBlock
         ]
     }
@@ -141,6 +142,24 @@ overviewBlock =
             , attribute "referrerpolicy" "no-referrer-when-downgrade"
             ]
             []
+        ]
+
+
+sponsorsBlock : Html msg
+sponsorsBlock =
+    block "Sponsors"
+        [ div [ class "sponsors" ]
+            [ h3 [ class "text-3xl font-bold text-center py-8" ] [ text "スポンサー募集中！" ]
+            , p []
+                [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
+                ]
+            , p []
+                [ text "スポンサープランの詳細は、2025年初頭に公開を予定しております。"
+                , text "ご興味をお持ちの企業様は、ぜひ"
+                , a [ href "https://scalajp.notion.site/1566d12253aa80229b3bc0a015497cb4?pvs=105" ] [ text "お問い合わせフォーム" ]
+                , text "よりお気軽にご連絡ください。後日、担当者よりご連絡を差し上げます。"
+                ]
+            ]
         ]
 
 

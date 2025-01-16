@@ -59,6 +59,27 @@ section>h2 {
   max-width: none;
 }
 
+.sponsors {
+  padding-inline: 2rem;
+  border: 1px solid;
+  border-radius: 0.75rem;
+  border-color: #000;
+}
+
+.sponsors h3 {
+  margin: 0;
+  padding-block: 2rem;
+  text-align: center;
+  line-height: 2.25rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.sponsors p {
+  margin-block: 1.25rem;
+  line-height: 1.75;
+}
+
 .people {
   max-width: none;
 }
