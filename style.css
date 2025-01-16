@@ -1,4 +1,73 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  font-size: 12pt;
+  font-family: "游明朝", "Yu Mincho", "游明朝体", "YuMincho", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "HiraMinProN-W3", "HGS明朝E", "ＭＳ Ｐ明朝", "MS PMincho", serif;
+
+  --color-primary: 16 40 48;
+  --color-on-primary: 240 240 230;
+}
+
+/* Hugoのビルドが上手くいかなくてセットされないTailwindのスタイル(暫定対応) */
+@media (min-width: 640px) {
+  .sm\:text-2xl {
+    font-size: 1.5rem;
+  }
+}
+
+/* セクションタイトル部分のフォント */
+.matsuri-text-title {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+}
+
+/* セミボールドそのままだと日本語フォントはOSによって太さが変わってくるのでいっそboldに上書き */
+.font-semibold {
+  font-weight: bold;
+}
+
+/* 画面トップの部分で、tailwindの設定が効かなかったもの */
+.matsuri-hero {
+  height: 100vh;
+  height: 100dvh;
+  /* new browsers */
+  justify-content: center;
+  align-items: center;
+}
+
+.matsuri-hero-links {
+  margin: 32px 24px;
+  gap: 16px;
+  justify-content: flex-end;
+  flex: 0 1 900px;
+}
+
+.matsuri-hero-links-button {
+  width: 40px;
+  height: 40px;
+}
+
+@media all and (min-width: 640px) and (min-height: 640px) {
+  .matsuri-hero-links {
+    margin: 48px;
+    gap: 24px;
+  }
+
+  .matsuri-hero-links-button {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* メンバー一覧部分で、tailwindの設定が効かなかったもの */
+.people-person {
+  max-width: 150px;
+  min-width: 150px;
+}
+
+@media all and (min-width: 640px) {
+  .people-person {
+    width: 150px;
+  }
 }
