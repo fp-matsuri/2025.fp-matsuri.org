@@ -4,13 +4,15 @@ import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, text, ul)
+import Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
 import Html.Attributes exposing (attribute, class, height, href, src, style, target)
 import Pages.Url
 import PagesMsg exposing (PagesMsg)
 import Route
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
+import Svg exposing (Svg, path, svg)
+import Svg.Attributes exposing (d, fill, viewBox)
 import UrlPath
 import View exposing (View)
 
@@ -89,6 +91,7 @@ view app shared =
             ]
         , Route.Blog__Slug_ { slug = "hello" }
             |> Route.link [] [ text "My blog post" ]
+        , hero
         , aboutBlock
         , overviewBlock
         , scheduleBlock
@@ -96,6 +99,72 @@ view app shared =
         , teamBlock
         ]
     }
+
+
+hero : Html msg
+hero =
+    let
+        iconButton item =
+            a
+                [ class "icon-button"
+                , href item.href
+                , style "padding" item.padding
+                ]
+                [ item.icon ]
+    in
+    div [ class "hero" ]
+        [ h1 [] [ text "関数型まつり" ]
+        , div [ class "date" ]
+            [ text "2025.6.14"
+            , span [ style "font-size" "70%" ] [ text " sat" ]
+            , text " – 15"
+            , span [ style "font-size" "70%" ] [ text " sun" ]
+            ]
+        , ul [ class "links" ] (List.map (\link -> li [] [ iconButton link ]) links)
+        ]
+
+
+links :
+    List
+        { name : String
+        , icon : Svg msg
+        , href : String
+        , padding : String
+        }
+links =
+    [ { name = "X"
+      , icon = icon_X
+      , href = "https://x.com/fp_matsuri"
+      , padding = "10px"
+      }
+    , { name = "Hatena Blog"
+      , icon = icon_hatenablog
+      , href = "https://blog.fp-matsuri.org/"
+      , padding = "10px"
+      }
+    ]
+
+
+icon_X : Svg msg
+icon_X =
+    svg [ style "height" "100%", viewBox "0 0 512 512" ]
+        [ path
+            [ fill "currentcolor"
+            , d "M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
+            ]
+            []
+        ]
+
+
+icon_hatenablog : Svg msg
+icon_hatenablog =
+    svg [ style "height" "100%", viewBox "0 0 300 300" ]
+        [ path
+            [ fill "currentcolor"
+            , d "M149.999 248.909c-54.537.0-98.906-44.367-98.906-98.909.0-54.537 44.369-98.909 98.906-98.909 54.545.0 98.908 44.372 98.908 98.909.0 54.542-44.363 98.909-98.908 98.909zm0-185.238c-47.601.0-86.33 38.723-86.33 86.329.0 47.605 38.729 86.332 86.33 86.332 47.61.0 86.338-38.727 86.338-86.332.0-47.606-38.728-86.329-86.338-86.329zM161.52 101.16c-4.832-9.785-7.783-19.3-9.273-24.845v70.055c2.447.917 4.197 3.257 4.197 6.021.0 3.559-2.887 6.442-6.443 6.442-3.56.0-6.443-2.885-6.443-6.442.0-2.896 1.925-5.317 4.558-6.131V76.241c-1.485 5.531-4.438 15.092-9.293 24.919-7.571 15.314-17.009 28.823-17.009 28.823l6.036 82.598s5.736 6.401 22.31 6.41h.023c16.573-.009 22.312-6.41 22.312-6.41l6.035-82.598c-.003.0-9.441-13.508-17.01-28.823z"
+            ]
+            []
+        ]
 
 
 aboutBlock : Html msg
