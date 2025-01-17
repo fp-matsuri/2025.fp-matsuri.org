@@ -85,13 +85,7 @@ view :
 view app shared =
     { title = "elm-pages is running"
     , body =
-        [ h1 [] [ text "elm-pages is up and running!" ]
-        , p []
-            [ text <| "The message is: " ++ app.data.message
-            ]
-        , Route.Blog__Slug_ { slug = "hello" }
-            |> Route.link [] [ text "My blog post" ]
-        , hero
+        [ hero
         , aboutBlock
         , overviewBlock
         , scheduleBlock
