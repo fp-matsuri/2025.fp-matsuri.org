@@ -1,36 +1,291 @@
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  font-size: 12pt;
+  font-family: "游明朝", "Yu Mincho", "游明朝体", "YuMincho", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "HiraMinProN-W3", "HGS明朝E", "ＭＳ Ｐ明朝", "MS PMincho", serif;
+
+  --color-primary: 16 40 48;
+  --color-on-primary: 240 240 230;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Hugoのビルドが上手くいかなくてセットされないTailwindのスタイル(暫定対応) */
+@media (min-width: 640px) {
+  .sm\:text-2xl {
+    font-size: 1.5rem;
+  }
+}
+
+/* ------------------------------------
+Hugo Blox 由来のスタイル
+------------------------------------ */
+
+p.note {
+  font-size: 0.875rem;
+  color: rgb(64, 64, 64);
+}
+
+p.note::before {
+  content: "※";
+}
+
+section {
+  padding: 8rem 1.5rem 6rem;
+
   display: flex;
   flex-direction: column;
+  align-items: center;
+  row-gap: 2.25rem;
 }
 
-header {
-  position: sticky;
-  top: 0;
-  background: white;
+section>* {
+  max-width: 65ch;
+}
+
+section>h2 {
+  margin: 0;
+  font-family: montserrat, sans-serif;
+  font-optical-sizing: auto;
+  line-height: 1;
+  font-size: 3rem;
+  font-weight: 300;
+
+}
+
+.hero {
+  height: 100vh;
+  padding: 48px;
+  display: grid;
+  grid-template-rows: 1fr auto auto 1fr auto;
+  place-items: center;
+  row-gap: 8px;
+  background-color: rgb(16, 40, 48);
+  color: rgb(243, 244, 246);
+}
+
+.hero h1 {
+  grid-row: 2;
+  margin: 0;
+  line-height: 1;
+  font-size: 4.5rem;
+  font-weight: inherit;
+  letter-spacing: -0.25rem;
+}
+
+.hero .date {
+  grid-row: 3;
+  font-family: montserrat, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: rgb(209, 213, 219);
+}
+
+.hero .links {
+  grid-row: 5;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
   display: flex;
-  align-items: end;
-  padding: 0 1rem;
-  border-bottom: 1px solid;
+  justify-content: flex-end;
+  column-gap: 1rem;
+}
 
-  &>h1 {
-    flex: 1;
-    margin: 1rem 0;
-    white-space: nowrap;
+.hero .links>li {
+  list-style: none;
+}
+
+.hero .icon-button {
+  display: block;
+  width: 56px;
+  height: 56px;
+  padding: 10px;
+  border-radius: 100%;
+  background-color: rgb(222 227 237 / 0.4);
+}
+
+.prose {
+  width: 100%;
+}
+
+.prose h3 {
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+}
+
+.map {
+  max-width: none;
+}
+
+ul.schedule {
+  padding: 0;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  grid-template-rows: repeat(4, auto);
+  column-gap: 40px;
+  row-gap: 4rem;
+}
+
+ul.schedule::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: block;
+  margin-block: 25px;
+  height: calc(100% - 50px);
+  border-radius: 9px;
+  background-color: rgb(16, 40, 48);
+}
+
+ul.schedule>li.event {
+  position: relative;
+  list-style: none;
+}
+
+li.event::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: -57px;
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 100px;
+  background-color: #FFF;
+  border: 1px solid rgb(16, 40, 48);
+}
+
+li.event>h3 {
+  margin-block: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+li.event>h3.highlight {
+  font-size: 1.875rem;
+}
+
+li.event>p {
+  margin-block: 0;
+  font-size: 0.875rem;
+}
+
+.sponsors {
+  padding-inline: 2rem;
+  border: 1px solid;
+  border-radius: 0.75rem;
+  border-color: #000;
+}
+
+.sponsors h3 {
+  margin: 0;
+  padding-block: 2rem;
+  text-align: center;
+  line-height: 2.25rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.sponsors p {
+  margin-block: 1.25rem;
+  line-height: 1.75;
+}
+
+.people {
+  max-width: none;
+}
+
+.people ul {
+  padding: 0;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.people li.person {
+  width: 150px;
+  margin: 0;
+  padding: 0.75rem;
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 0.5rem;
+}
+
+.people .person>img {
+  max-width: 100%;
+  border-radius: 100%;
+}
+
+.people .person>a {
+  font-weight: bold;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ------------------------------------
+ページ毎のカスタマイズ
+------------------------------------ */
+
+/* セクションタイトル部分のフォント */
+.matsuri-text-title {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+}
+
+/* セミボールドそのままだと日本語フォントはOSによって太さが変わってくるのでいっそboldに上書き */
+.font-semibold {
+  font-weight: bold;
+}
+
+/* 画面トップの部分で、tailwindの設定が効かなかったもの */
+.matsuri-hero {
+  height: 100vh;
+  height: 100dvh;
+  /* new browsers */
+  justify-content: center;
+  align-items: center;
+}
+
+.matsuri-hero-links {
+  margin: 32px 24px;
+  gap: 16px;
+  justify-content: flex-end;
+  flex: 0 1 900px;
+}
+
+.matsuri-hero-links-button {
+  width: 40px;
+  height: 40px;
+}
+
+@media all and (min-width: 640px) and (min-height: 640px) {
+  .matsuri-hero-links {
+    margin: 48px;
+    gap: 24px;
   }
 
-  @media (max-width: 768px) {
-    display: block;
-
-    &>h1 {
-      margin: 0.5rem 0;
-    }
+  .matsuri-hero-links-button {
+    width: 56px;
+    height: 56px;
   }
 }
 
-main {
-  flex: 1;
-  padding: 1rem;
+/* メンバー一覧部分で、tailwindの設定が効かなかったもの */
+.people-person {
+  max-width: 150px;
+  min-width: 150px;
+}
+
+@media all and (min-width: 640px) {
+  .people-person {
+    width: 150px;
+  }
 }
