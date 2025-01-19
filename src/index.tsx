@@ -7,6 +7,7 @@ export default () => (
     <Overview />
     <Schedule />
     <Sponsors />
+    <Team />
   </>
 );
 
@@ -77,6 +78,71 @@ const Sponsors = () => (
     </div>
   </Block>
 );
+
+const Team = () => {
+  const ListItem = ({ id }) => (
+    <li className="person">
+      <img src={`https://github.com/${id}.png`} alt="" />
+      <a href={`https://github.com/${id}`} target="_blank">{id}</a>
+    </li>
+  );
+
+  return (
+    <Block title="Team">
+      <div className="people">
+        <h3>座長</h3>
+        <ul>
+          {staff.leaders.map((leader, i) => (<ListItem id={leader} />))}
+        </ul>
+        <h3>スタッフ</h3>
+        <ul>
+          {staff.members.map((member, i) => (<ListItem id={member} />))}
+        </ul>
+      </div>
+    </Block>
+  )
+};
+
+const staff: { leaders: string[], members: string[] } =
+{
+  leaders: [
+    "lagenorhynque",
+    "omiend",
+    "shomatan",
+    "taketora26",
+    "yoshihiro503",
+    "ysaito8015"
+  ],
+  members: [
+    "a-skua",
+    "aoiroaoino",
+    "ChenCMD",
+    "Guvalif",
+    "igrep",
+    "ik11235",
+    "Iwaji",
+    "katsujukou",
+    "kawagashira",
+    "kazup0n",
+    "Keita-N",
+    "kmizu",
+    "magnolia-k",
+    "quantumshiro",
+    "rabe1028",
+    "takezoux2",
+    "tanishiking",
+    "tomoco95",
+    "Tomoyuki-TAKEZAKI",
+    "unarist",
+    "usabarashi",
+    "wm3",
+    "y047aka",
+    "yonta",
+    "yshnb"
+  ]
+}
+
+
 
 const Block = ({ title, children }) => (
   <section>
