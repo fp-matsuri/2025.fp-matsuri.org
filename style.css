@@ -4,6 +4,8 @@
   font-size: 12pt;
   font-family: "游明朝", "Yu Mincho", "游明朝体", "YuMincho", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "HiraMinProN-W3", "HGS明朝E", "ＭＳ Ｐ明朝", "MS PMincho", serif;
 
+  --navbar-height: 72px;
+
   --color-primary: 16 40 48;
   --color-on-primary: 240 240 230;
 }
@@ -21,6 +23,22 @@ body {
   .sm\:text-2xl {
     font-size: 1.5rem;
   }
+}
+
+.site-header {
+  padding: 0.75rem;
+}
+
+.site-header>h1 {
+  height: auto;
+  margin: 0;
+}
+
+.site-header>h1>a {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-decoration: inherit;
+  color: #000;
 }
 
 /* ------------------------------------
@@ -60,7 +78,8 @@ section>h2 {
 }
 
 .hero {
-  height: 100vh;
+  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   padding: 48px;
   display: grid;
   grid-template-rows: 1fr auto auto 1fr auto;

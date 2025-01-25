@@ -3,7 +3,8 @@ module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 import BackendTask exposing (BackendTask)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
-import Html exposing (Html)
+import Html exposing (Html, a, h1, header, main_, text)
+import Html.Attributes exposing (class, href)
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Route exposing (Route)
@@ -84,6 +85,10 @@ view :
     -> View msg
     -> { body : List (Html msg), title : String }
 view sharedData page model toMsg pageView =
-    { body = [ Html.main_ [] pageView.body ]
+    { body =
+        [ header [ class "site-header" ]
+            [ h1 [] [ a [ href "/" ] [ text "関数型まつり" ] ] ]
+        , main_ [] pageView.body
+        ]
     , title = pageView.title
     }
