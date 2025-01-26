@@ -123,6 +123,10 @@ section>h2 {
   color: rgb(209, 213, 219);
 }
 
+.hero .date>span {
+  font-size: 70%;
+}
+
 .hero .links {
   grid-row: 5;
   width: 100%;

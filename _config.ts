@@ -7,6 +7,7 @@ const site = lume({
 });
 
 site.copy("/styles.css");
+site.copy("assets/")
 
 site.use(jsx());
 site.use(favicon({

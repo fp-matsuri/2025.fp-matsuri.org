@@ -3,6 +3,7 @@ export const title = "関数型まつり";
 
 export default () => (
   <>
+    <Hero />
     <About />
     <Overview />
     <Schedule />
@@ -10,6 +11,27 @@ export default () => (
     <Team />
   </>
 );
+
+const Hero = () => {
+  const IconButton = ({ href, icon }: { href: string, icon: string }) => (
+    <a className="icon-button" href={href} target="_blank">
+      <img src={icon} alt="" />
+    </a>
+  );
+
+  return (
+    <div className="hero">
+      <h1>関数型まつり</h1>
+      <div className="date">
+        2025.6.14 <span >sat</span> – 15 <span>sun</span>
+      </div>
+      <ul className="links">
+        <IconButton href="https://x.com/fp_matsuri" icon="/assets/images/x.svg" />
+        <IconButton href="https://blog.fp-matsuri.org/" icon="/assets/images/hatenablog.svg" />
+      </ul>
+    </div>
+  )
+};
 
 const About = () => (
   <Block title="About">
@@ -141,8 +163,6 @@ const staff: { leaders: string[], members: string[] } =
     "yshnb"
   ]
 }
-
-
 
 const Block = ({ title, children }) => (
   <section>
