@@ -8,7 +8,6 @@
     "build": "elm-pages build"
   },
   "devDependencies": {
-    "elm-codegen": "^0.6.1",
     "elm-optimize-level-2": "^0.3.5",
     "elm-pages": "3.0.19",
     "elm-review": "^2.12.0",

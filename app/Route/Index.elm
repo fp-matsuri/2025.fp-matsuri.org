@@ -30,8 +30,7 @@ type alias RouteParams =
 
 
 type alias Data =
-    { message : String
-    }
+    {}
 
 
 type alias ActionData =
@@ -40,18 +39,13 @@ type alias ActionData =
 
 route : StatelessRoute RouteParams Data ActionData
 route =
-    RouteBuilder.single
-        { head = head
-        , data = data
-        }
+    RouteBuilder.single { head = head, data = data }
         |> RouteBuilder.buildNoState { view = view }
 
 
 data : BackendTask FatalError Data
 data =
     BackendTask.succeed Data
-        |> BackendTask.andMap
-            (BackendTask.succeed "Hello!")
 
 
 head :
