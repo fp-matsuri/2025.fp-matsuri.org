@@ -73,8 +73,8 @@ const Schedule = () => {
   return (
     <Block title="Schedule">
       <ul className="schedule">
-        <ListItem label="セッション応募開始" at="2025年初め" />
-        <ListItem label="セッション採択結果発表" at="" />
+        <ListItem label={<a href="https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp" target="_blank">セッション応募開始</a>} at="2025年1月20日" />
+        <ListItem label="セッション採択結果発表" at="2025年3月中" />
         <ListItem label="チケット販売開始" at="2025年春頃" />
         <ListItem label="関数型まつり開催" at="2025.6.14-15" />
       </ul>
