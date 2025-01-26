@@ -20,6 +20,7 @@ export default ({ title, children }: Lume.Data, helpers: Lume.Helpers) => (
       <main>
         {children}
       </main>
+      <footer className="site-footer">© 2025 関数型まつり準備委員会</footer>
     </body>
   </html>
 );

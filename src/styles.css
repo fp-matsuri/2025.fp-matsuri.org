@@ -59,6 +59,12 @@ body {
   color: inherit;
 }
 
+.site-footer {
+  padding: 2rem;
+  text-align: center;
+  color: rgb(51 65 85);
+}
+
 /* ------------------------------------
 Hugo Blox 由来のスタイル
 ------------------------------------ */
