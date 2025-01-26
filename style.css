@@ -18,6 +18,10 @@ body {
   margin: 0;
 }
 
+/* ------------------------------------
+トップページ
+------------------------------------ */
+
 /* Hugoのビルドが上手くいかなくてセットされないTailwindのスタイル(暫定対応) */
 @media (min-width: 640px) {
   .sm\:text-2xl {
@@ -289,8 +293,8 @@ li.event>p {
 /* 画面トップの部分で、tailwindの設定が効かなかったもの */
 .matsuri-hero {
   height: 100vh;
-  height: 100dvh;
-  /* new browsers */
+  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   justify-content: center;
   align-items: center;
 }
