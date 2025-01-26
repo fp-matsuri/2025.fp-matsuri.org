@@ -88,7 +88,7 @@ view sharedData page model toMsg pageView =
     { body =
         [ header [ class "site-header" ]
             [ h1 [] [ a [ href "/" ] [ text "関数型まつり" ] ]
-            , nav [] [ a [ href "/code-of-conduct" ] [ text "行動規範" ] ]
+            , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
             ]
         , main_ [] pageView.body
         , footer [ class "site-footer" ] [ text "© 2025 関数型まつり準備委員会" ]
