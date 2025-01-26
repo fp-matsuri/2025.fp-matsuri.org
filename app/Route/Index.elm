@@ -170,7 +170,7 @@ scheduleBlock =
     let
         listItem event =
             li [ class "event" ]
-                [ h3 [ class (highlight event.highlight) ] [ text event.name ]
+                [ h3 [ class (highlight event.highlight) ] [ event.label ]
                 , p [] [ text event.at ]
                 ]
 
@@ -187,28 +187,30 @@ scheduleBlock =
         ]
 
 
-type alias Event =
-    { name : String
+type alias Event msg =
+    { label : Html msg
     , at : String
     , highlight : Bool
     }
 
 
-schedule : List Event
+schedule : List (Event msg)
 schedule =
-    [ { name = "セッション応募開始"
-      , at = "2025年初め"
+    [ { label =
+            a [ href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", target "_blank" ]
+                [ text "セッション応募開始" ]
+      , at = "2025年1月20日"
       , highlight = False
       }
-    , { name = "セッション採択結果発表"
-      , at = ""
+    , { label = text "セッション採択結果発表"
+      , at = "2025年3月中"
       , highlight = False
       }
-    , { name = "チケット販売開始"
+    , { label = text "チケット販売開始"
       , at = "2025年春頃"
       , highlight = False
       }
-    , { name = "関数型まつり開催"
+    , { label = text "関数型まつり開催"
       , at = "2025.6.14-15"
       , highlight = True
       }
