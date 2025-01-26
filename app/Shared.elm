@@ -93,5 +93,10 @@ view sharedData page model toMsg pageView =
         , main_ [] pageView.body
         , footer [ class "site-footer" ] [ text "© 2025 関数型まつり準備委員会" ]
         ]
-    , title = pageView.title
+    , title =
+        if pageView.title /= "" then
+            pageView.title ++ " | 関数型まつり"
+
+        else
+            "関数型まつり"
     }

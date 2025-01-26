@@ -2,12 +2,14 @@ module Route.CodeOfConduct exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
+import Head
+import Head.Seo
 import Html exposing (Html, a, blockquote, br, div, figure, h2, iframe, li, p, section, text, ul)
 import Html.Attributes exposing (attribute, class, height, href, src, target, width)
 import PagesMsg exposing (PagesMsg)
-import Route
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
+import Site
 import View exposing (View)
 
 
@@ -33,13 +35,21 @@ type alias ActionData =
 
 route : StatelessRoute RouteParams Data ActionData
 route =
-    RouteBuilder.single { head = \_ -> [], data = data }
+    RouteBuilder.single { head = head, data = data }
         |> RouteBuilder.buildNoState { view = view }
 
 
 data : BackendTask FatalError Data
 data =
     BackendTask.succeed Data
+
+
+head :
+    App Data ActionData RouteParams
+    -> List Head.Tag
+head app =
+    Site.summaryLarge { pageTitle = "行動規範" }
+        |> Head.Seo.website
 
 
 
@@ -51,7 +61,7 @@ view :
     -> Shared.Model
     -> View (PagesMsg Msg)
 view app shared =
-    { title = "elm-pages is running"
+    { title = "行動規範"
     , body =
         [ block "行動規範マナー動画"
             [ div [ class "section_note" ]
