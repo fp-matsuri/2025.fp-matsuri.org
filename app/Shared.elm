@@ -3,7 +3,7 @@ module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 import BackendTask exposing (BackendTask)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
-import Html exposing (Html, a, h1, header, main_, nav, text)
+import Html exposing (Html, a, footer, h1, header, main_, nav, text)
 import Html.Attributes exposing (class, href)
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
@@ -91,6 +91,7 @@ view sharedData page model toMsg pageView =
             , nav [] [ a [ href "/code-of-conduct" ] [ text "行動規範" ] ]
             ]
         , main_ [] pageView.body
+        , footer [ class "site-footer" ] [ text "© 2025 関数型まつり準備委員会" ]
         ]
     , title = pageView.title
     }
