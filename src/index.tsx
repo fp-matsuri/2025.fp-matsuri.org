@@ -25,9 +25,17 @@ const Hero = () => {
       <div className="date">
         2025.6.14 <span >sat</span> – 15 <span>sun</span>
       </div>
+      <div className="announcement">
+        セッションを募集中です(2025/3/2まで)
+        <div className="buttons">
+          <a className="button" href="https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp" target="_blank">セッションに応募する</a>
+          <a className="button" href="https://fortee.jp/2025fp-matsuri/proposal/all" target="_blank">応募中のセッション一覧を見る</a>
+        </div>
+      </div>
       <ul className="links">
         <IconButton href="https://x.com/fp_matsuri" icon="/assets/images/x.svg" />
         <IconButton href="https://blog.fp-matsuri.org/" icon="/assets/images/hatenablog.svg" />
+        <IconButton href="https://fortee.jp/2025fp-matsuri" icon="/assets/images/fortee.svg" />
       </ul>
     </div>
   )
