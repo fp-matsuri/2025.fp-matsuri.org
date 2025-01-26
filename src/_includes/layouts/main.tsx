@@ -9,8 +9,13 @@ export default ({ title, children }: Lume.Data, helpers: Lume.Helpers) => (
       <link rel="stylesheet" href="/styles.css" />
     </head>
     <body>
-      <header>
-        <h1>関数型まつり</h1>
+      <header class="site-header" >
+        <h1>
+          <a href="/">関数型まつり</a>
+        </h1>
+        <nav>
+          <a href="/code-of-conduct/">行動規範</a>
+        </nav>
       </header>
       <main>
         {children}
