@@ -84,6 +84,17 @@ hero =
                 , span [ style "font-size" "70%" ] [ text " sun" ]
                 ]
 
+        announcement =
+            div [ class "announcement" ]
+                [ text "セッションを募集中です(2025/3/2まで)"
+                , div [ class "buttons" ]
+                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", target "_blank" ]
+                        [ text "セッションに応募する" ]
+                    , a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", target "_blank" ]
+                        [ text "応募中のセッション一覧を見る" ]
+                    ]
+                ]
+
         iconButton item =
             a
                 [ class "icon-button"
@@ -95,6 +106,7 @@ hero =
     div [ class "hero" ]
         [ h1 [] [ text "関数型まつり" ]
         , date
+        , announcement
         , ul [ class "links" ] (List.map (\link -> li [] [ iconButton link ]) links)
         ]
 
@@ -115,6 +127,11 @@ links =
     , { name = "Hatena Blog"
       , icon = "images/hatenablog.svg"
       , href = "https://blog.fp-matsuri.org/"
+      , padding = "10px"
+      }
+    , { name = "fortee"
+      , icon = "images/fortee.svg"
+      , href = "https://fortee.jp/2025fp-matsuri"
       , padding = "10px"
       }
     ]
