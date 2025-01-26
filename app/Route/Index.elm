@@ -76,6 +76,14 @@ view app shared =
 hero : Html msg
 hero =
     let
+        date =
+            div [ class "date" ]
+                [ text "2025.6.14"
+                , span [ style "font-size" "70%" ] [ text " sat" ]
+                , text " – 15"
+                , span [ style "font-size" "70%" ] [ text " sun" ]
+                ]
+
         iconButton item =
             a
                 [ class "icon-button"
@@ -86,12 +94,7 @@ hero =
     in
     div [ class "hero" ]
         [ h1 [] [ text "関数型まつり" ]
-        , div [ class "date" ]
-            [ text "2025.6.14"
-            , span [ style "font-size" "70%" ] [ text " sat" ]
-            , text " – 15"
-            , span [ style "font-size" "70%" ] [ text " sun" ]
-            ]
+        , date
         , ul [ class "links" ] (List.map (\link -> li [] [ iconButton link ]) links)
         ]
 
