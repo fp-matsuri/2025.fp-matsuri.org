@@ -63,23 +63,20 @@ const Overview = () => {
 };
 
 const Schedule = () => {
-  const events: { event: string, at: string }[] =
-    [
-      { event: "セッション応募開始", at: "2025年初め" },
-      { event: "セッション採択結果発表", at: "" },
-      { event: "チケット販売開始", at: "2025年春頃" },
-      { event: "関数型まつり開催", at: "2025.6.14-15" }
-    ];
+  const ListItem = ({ label, at }) => (
+    <li className="event">
+      <h3>{label}</h3>
+      <p>{at}</p>
+    </li>
+  );
 
   return (
     <Block title="Schedule">
       <ul className="schedule">
-        {events.map((eee, i) => (
-          <li className="event">
-            <h3>{eee.event}</h3>
-            <p>{eee.at}</p>
-          </li>
-        ))}
+        <ListItem label="セッション応募開始" at="2025年初め" />
+        <ListItem label="セッション採択結果発表" at="" />
+        <ListItem label="チケット販売開始" at="2025年春頃" />
+        <ListItem label="関数型まつり開催" at="2025.6.14-15" />
       </ul>
       <p className="note">記載されているスケジュールの一部は予告なく変更されることがございます。</p>
     </Block>
