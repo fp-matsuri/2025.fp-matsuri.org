@@ -27,18 +27,31 @@ body {
 
 .site-header {
   padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  column-gap: 1.5rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
 }
 
 .site-header>h1 {
-  height: auto;
   margin: 0;
+  line-height: 1;
 }
 
 .site-header>h1>a {
+  display: block;
   font-size: 1.25rem;
   font-weight: 600;
   text-decoration: inherit;
   color: #000;
+}
+
+.site-header>nav>a {
+  display: block;
+  padding: 0.75rem 0.5rem;
+  font-weight: 600;
+  text-decoration: inherit;
+  color: inherit;
 }
 
 /* ------------------------------------
@@ -311,4 +324,53 @@ li.event>p {
   .people-person {
     width: 150px;
   }
+}
+
+/* ------------------------------------
+行動規範
+------------------------------------ */
+
+section.coc {
+  padding-block: 3rem;
+}
+
+.section_figure {
+  text-align: center;
+}
+
+.section_movie {
+  max-width: 100%;
+}
+
+.section_text a {
+  font-weight: bold;
+}
+
+.section_note {
+  background-color: #F1F1F1;
+  font-weight: bold;
+  line-height: 26px;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  padding: 40px;
+  margin-top: 20px;
+}
+
+.section_note_item {
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 5px;
+  list-style: none;
+}
+
+.section_note_item::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: #000000;
+  border-radius: 3px;
+  position: absolute;
+  top: 11px;
+  left: 0;
 }
