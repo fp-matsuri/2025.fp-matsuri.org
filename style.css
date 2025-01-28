@@ -87,6 +87,10 @@ section {
   row-gap: 2.25rem;
 }
 
+section p {
+  line-height: 1.75;
+}
+
 section>* {
   max-width: 65ch;
 }
@@ -278,7 +282,6 @@ li.event>p {
 
 .sponsors p {
   margin-block: 1.25rem;
-  line-height: 1.75;
 }
 
 .people {
