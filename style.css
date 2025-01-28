@@ -175,15 +175,21 @@ section>h2 {
 }
 
 .hero .icon-button {
-  display: block;
   width: 56px;
   height: 56px;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 100%;
   background-color: rgb(222 227 237 / 0.4);
 }
 
-.hero .icon-button>img {
+.hero .icon-button>:where(.x, .fortee) {
+  width: 50%;
+  height: 50%;
+}
+
+.hero .icon-button>.hatena_blog {
   width: 100%;
   height: 100%;
 }

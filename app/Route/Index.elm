@@ -96,12 +96,8 @@ hero =
                 ]
 
         iconButton item =
-            a
-                [ class "icon-button"
-                , href item.href
-                , style "padding" item.padding
-                ]
-                [ img [ src item.icon ] [] ]
+            a [ class "icon-button", href item.href ]
+                [ img [ class item.id, src item.icon ] [] ]
     in
     div [ class "hero" ]
         [ h1 [] [ text "関数型まつり" ]
@@ -111,28 +107,19 @@ hero =
         ]
 
 
-links :
-    List
-        { name : String
-        , icon : String
-        , href : String
-        , padding : String
-        }
+links : List { id : String, icon : String, href : String }
 links =
-    [ { name = "X"
+    [ { id = "x"
       , icon = "images/x.svg"
       , href = "https://x.com/fp_matsuri"
-      , padding = "10px"
       }
-    , { name = "Hatena Blog"
+    , { id = "hatena_blog"
       , icon = "images/hatenablog.svg"
       , href = "https://blog.fp-matsuri.org/"
-      , padding = "10px"
       }
-    , { name = "fortee"
+    , { id = "fortee"
       , icon = "images/fortee.svg"
       , href = "https://fortee.jp/2025fp-matsuri"
-      , padding = "10px"
       }
     ]
 
