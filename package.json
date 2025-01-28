@@ -3,15 +3,15 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "postinstall": "elm-tooling install",
     "start": "elm-pages dev",
     "build": "elm-pages build"
   },
   "devDependencies": {
+    "elm": "^0.19.1-6",
+    "elm-format": "^0.8.7",
     "elm-optimize-level-2": "^0.3.5",
     "elm-pages": "3.0.19",
     "elm-review": "^2.12.0",
-    "elm-tooling": "^1.15.1",
     "lamdera": "^0.19.1-1.3.2",
     "vite": "^6.0.6"
   }
