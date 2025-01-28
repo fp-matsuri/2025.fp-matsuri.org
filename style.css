@@ -402,6 +402,7 @@ section.coc {
 }
 
 .section_figure {
+  margin-inline: 0;
   text-align: center;
 }
 
