@@ -316,6 +316,10 @@ li.event>p {
   max-width: none;
 }
 
+.people>h3 {
+  text-align: center;
+}
+
 .people ul {
   padding: 0;
 
