@@ -1,5 +1,8 @@
 module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 
+{-| <https://elm-pages.com/docs/file-structure#shared.elm>
+-}
+
 import BackendTask exposing (BackendTask)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)

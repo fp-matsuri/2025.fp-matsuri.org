@@ -1,5 +1,8 @@
 module Api exposing (routes)
 
+{-| elm-pages の動作に必要なボイラープレート（現時点では使用しない）
+-}
+
 import ApiRoute exposing (ApiRoute)
 import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)

@@ -1,5 +1,8 @@
 module Site exposing (config, summaryLarge)
 
+{-| <https://elm-pages.com/docs/file-structure#site.elm>
+-}
+
 import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
 import Head

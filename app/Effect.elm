@@ -1,6 +1,7 @@
 module Effect exposing (Effect(..), batch, fromCmd, map, none, perform)
 
-{-|
+{-| elm-pages の動作に必要なボイラープレート
+<https://elm-pages.com/docs/file-structure#effect.elm>
 
 @docs Effect, batch, fromCmd, map, none, perform
 
