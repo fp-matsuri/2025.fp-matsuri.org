@@ -20,7 +20,7 @@ body {
 }
 
 /* ------------------------------------
-トップページ
+ページ共通
 ------------------------------------ */
 
 /* Hugoのビルドが上手くいかなくてセットされないTailwindのスタイル(暫定対応) */
@@ -66,7 +66,7 @@ body {
 }
 
 /* ------------------------------------
-Hugo Blox 由来のスタイル
+トップページ
 ------------------------------------ */
 
 p.note {
@@ -349,67 +349,6 @@ li.event>p {
   font-weight: bold;
   color: inherit;
   text-decoration: none;
-}
-
-/* ------------------------------------
-ページ毎のカスタマイズ
------------------------------------- */
-
-/* セクションタイトル部分のフォント */
-.matsuri-text-title {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-}
-
-/* セミボールドそのままだと日本語フォントはOSによって太さが変わってくるのでいっそboldに上書き */
-.font-semibold {
-  font-weight: bold;
-}
-
-/* 画面トップの部分で、tailwindの設定が効かなかったもの */
-.matsuri-hero {
-  height: 100vh;
-  height: calc(100vh - var(--navbar-height));
-  height: calc(100dvh - var(--navbar-height));
-  justify-content: center;
-  align-items: center;
-}
-
-.matsuri-hero-links {
-  margin: 32px 24px;
-  gap: 16px;
-  justify-content: flex-end;
-  flex: 0 1 900px;
-}
-
-.matsuri-hero-links-button {
-  width: 40px;
-  height: 40px;
-}
-
-@media all and (min-width: 640px) and (min-height: 640px) {
-  .matsuri-hero-links {
-    margin: 48px;
-    gap: 24px;
-  }
-
-  .matsuri-hero-links-button {
-    width: 56px;
-    height: 56px;
-  }
-}
-
-/* メンバー一覧部分で、tailwindの設定が効かなかったもの */
-.people-person {
-  max-width: 150px;
-  min-width: 150px;
-}
-
-@media all and (min-width: 640px) {
-  .people-person {
-    width: 150px;
-  }
 }
 
 /* ------------------------------------
