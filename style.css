@@ -221,7 +221,7 @@ section>h2 {
 }
 
 .map {
-  max-width: none;
+  max-width: 800px;
 }
 
 ul.schedule {
