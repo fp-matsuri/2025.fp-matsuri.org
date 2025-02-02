@@ -11,8 +11,8 @@ import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
 import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
-import MarkdownCodec
 import PagesMsg exposing (PagesMsg)
+import Plugin.MarkdownCodec
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Site
@@ -80,7 +80,7 @@ type alias Page =
 
 data : RouteParams -> BackendTask FatalError Data
 data routeParams =
-    MarkdownCodec.withFrontmatter Data
+    Plugin.MarkdownCodec.withFrontmatter Data
         frontmatterDecoder
         customizedHtmlRenderer
         ("content/" ++ routeParams.slug ++ ".md")

@@ -1,4 +1,4 @@
-module MarkdownCodec exposing (withFrontmatter)
+module Plugin.MarkdownCodec exposing (withFrontmatter)
 
 {-| elm-pages のサンプルに使われている MarkdownCodec モジュールから、不使用コードを削除したもの
 <https://github.com/dillonkearns/elm-pages/blob/master/plugins/MarkdownCodec.elm>
