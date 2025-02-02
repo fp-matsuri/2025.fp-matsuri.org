@@ -5,8 +5,8 @@ import BackendTask.Glob as Glob
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html exposing (Html, div, iframe, section)
-import Html.Attributes exposing (attribute, class, src)
+import Html exposing (Html, a, div, iframe, section)
+import Html.Attributes as Attributes exposing (attribute, class, href, rel, src, target)
 import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
 import Markdown.Html
@@ -97,7 +97,33 @@ customizedHtmlRenderer =
     Markdown.Renderer.defaultHtmlRenderer
         |> (\renderer ->
                 { renderer
-                    | html =
+                    | link =
+                        \{ title, destination } children ->
+                            let
+                                externalLinkAttrs =
+                                    if isExternalLink destination then
+                                        [ target "_blank", rel "noopener" ]
+
+                                    else
+                                        []
+
+                                isExternalLink url =
+                                    let
+                                        isProduction =
+                                            String.startsWith url "https://2025.fp-matsuri.org"
+
+                                        isLocalDevelopment =
+                                            String.startsWith url "/"
+                                    in
+                                    not (isProduction || isLocalDevelopment)
+
+                                titleAttrs =
+                                    title
+                                        |> Maybe.map (\title_ -> [ Attributes.title title_ ])
+                                        |> Maybe.withDefault []
+                            in
+                            a (href destination :: externalLinkAttrs ++ titleAttrs) children
+                    , html =
                         Markdown.Html.oneOf
                             [ Markdown.Html.tag "iframe"
                                 (\class_ width_ height_ src_ frameborder_ allow_ allowfullscreen_ children ->
