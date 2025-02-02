@@ -2,6 +2,12 @@
 title: 行動規範
 ---
 
+## 行動規範マナー動画
+
+> 関数型まつりの行動規範は [ScalaMatsuri](https://scalamatsuri.org/)の行動規範に基づいています。
+> ScalaMatsuri の行動規範は動画で見る事ができます。
+> <iframe class="section_movie" width="900" height="450" src="https://www.youtube.com/embed/lIfOQNTWdxI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
 ## はじめに
 
 関数型まつりは、様々な地域やコミュニティから集う技術者に対して開かれたカンファレンスを目指しています。

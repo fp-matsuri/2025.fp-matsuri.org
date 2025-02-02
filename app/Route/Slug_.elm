@@ -5,11 +5,12 @@ import BackendTask.Glob as Glob
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html exposing (Html, a, div, figure, h2, iframe, section, text)
-import Html.Attributes exposing (attribute, class, height, href, src, target, width)
+import Html exposing (Html, div, iframe, section)
+import Html.Attributes exposing (attribute, class, src)
 import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
-import Markdown.Renderer
+import Markdown.Html
+import Markdown.Renderer exposing (Renderer)
 import MarkdownCodec
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -81,7 +82,7 @@ data : RouteParams -> BackendTask FatalError Data
 data routeParams =
     MarkdownCodec.withFrontmatter Data
         frontmatterDecoder
-        Markdown.Renderer.defaultHtmlRenderer
+        customizedHtmlRenderer
         ("content/" ++ routeParams.slug ++ ".md")
 
 
@@ -89,6 +90,38 @@ frontmatterDecoder : Decoder ArticleMetadata
 frontmatterDecoder =
     Decode.map ArticleMetadata
         (Decode.field "title" Decode.string)
+
+
+customizedHtmlRenderer : Renderer (Html msg)
+customizedHtmlRenderer =
+    Markdown.Renderer.defaultHtmlRenderer
+        |> (\renderer ->
+                { renderer
+                    | html =
+                        Markdown.Html.oneOf
+                            [ Markdown.Html.tag "iframe"
+                                (\class_ width_ height_ src_ frameborder_ allow_ allowfullscreen_ children ->
+                                    iframe
+                                        [ class class_
+                                        , attribute "width" width_
+                                        , attribute "height" height_
+                                        , src src_
+                                        , attribute "frameborder" frameborder_
+                                        , attribute "allow" allow_
+                                        , attribute "allowfullscreen" allowfullscreen_
+                                        ]
+                                        children
+                                )
+                                |> Markdown.Html.withAttribute "class"
+                                |> Markdown.Html.withAttribute "width"
+                                |> Markdown.Html.withAttribute "height"
+                                |> Markdown.Html.withAttribute "src"
+                                |> Markdown.Html.withAttribute "frameborder"
+                                |> Markdown.Html.withAttribute "allow"
+                                |> Markdown.Html.withAttribute "allowfullscreen"
+                            ]
+                }
+           )
 
 
 head :
@@ -118,40 +151,12 @@ view app shared =
     in
     { title = metadata.title
     , body =
-        [ block "行動規範マナー動画"
-            [ div [ class "section_note" ]
-                [ text "関数型まつりの行動規範は"
-                , a [ href "https://scalamatsuri.org/", target "_blank" ] [ text "ScalaMatsuri" ]
-                , text "の行動規範に基づいています。ScalaMatsuri の行動規範は動画で見る事ができます。"
-                , figure [ class "section_figure" ]
-                    [ iframe
-                        [ class "section_movie"
-                        , width 900
-                        , height 450
-                        , src "https://www.youtube.com/embed/lIfOQNTWdxI"
-                        , attribute "frameborder" "0"
-                        , attribute "allow" "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        , attribute "allowfullscreen" ""
-                        ]
-                        []
-                    ]
-                ]
-            ]
-        , section [ class "coc" ]
+        [ section [ class "coc" ]
             [ div []
                 (app.data.body
-                    |> Markdown.Renderer.render Markdown.Renderer.defaultHtmlRenderer
+                    |> Markdown.Renderer.render customizedHtmlRenderer
                     |> Result.withDefault []
                 )
             ]
         ]
     }
-
-
-block : String -> List (Html msg) -> Html msg
-block title children =
-    let
-        heading =
-            h2 [] [ text title ]
-    in
-    section [ class "coc" ] (heading :: children)
