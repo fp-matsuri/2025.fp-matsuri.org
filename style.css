@@ -390,7 +390,10 @@ section.coc p+p {
   font-weight: bold;
 }
 
+section.coc ul,
+section.coc blockquote,
 .section_note {
+  margin-inline: 0;
   background-color: #F1F1F1;
   font-weight: bold;
   line-height: 26px;
@@ -400,14 +403,14 @@ section.coc p+p {
   margin-top: 20px;
 }
 
-.section_note_item {
+section.coc li {
   padding-left: 22px;
   position: relative;
   margin-bottom: 5px;
   list-style: none;
 }
 
-.section_note_item::before {
+section.coc li::before {
   content: "";
   display: block;
   width: 6px;
