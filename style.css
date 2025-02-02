@@ -359,6 +359,10 @@ section.coc {
   padding-block: 3rem;
 }
 
+section.coc p+p {
+  margin-block: 1.75em;
+}
+
 .section_figure {
   margin-inline: 0;
   text-align: center;

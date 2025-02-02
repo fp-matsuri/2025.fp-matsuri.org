@@ -4,8 +4,10 @@ import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html exposing (Html, a, blockquote, br, div, figure, h2, iframe, li, p, section, text, ul)
+import Html exposing (Html, a, blockquote, div, figure, h2, iframe, li, section, text, ul)
 import Html.Attributes exposing (attribute, class, height, href, src, target, width)
+import Markdown.Parser as Markdown
+import Markdown.Renderer
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
@@ -83,27 +85,24 @@ view app shared =
                 ]
             ]
         , block "はじめに"
-            [ p []
-                [ text "関数型まつりは、様々な地域やコミュニティから集う技術者に対して開かれたカンファレンスを目指しています。"
-                , text "そのためには、性別や人種など多様な背景を持つ、普段の生活では会わない人々同士でも、互いに敬意を払って楽しい時間を過ごせることが重要だと考えています。"
-                , br [] []
-                , br [] []
-                , text "以下の行動規範は、意図せずそういった配慮の行き届かない発言や行為をしてしまうことを防ぐためのガイドラインです。"
-                , text "関数型まつりの主催者は、発表者や参加者、スポンサーの皆様に行動規範を守っていただくことをお願いしており、その場にそぐわない発言や行為を未然に防ぐための手助けをしています。"
-                ]
+            [ markdownToHtml """
+関数型まつりは、様々な地域やコミュニティから集う技術者に対して開かれたカンファレンスを目指しています。
+そのためには、性別や人種など多様な背景を持つ、普段の生活では会わない人々同士でも、互いに敬意を払って楽しい時間を過ごせることが重要だと考えています。
+
+以下の行動規範は、意図せずそういった配慮の行き届かない発言や行為をしてしまうことを防ぐためのガイドラインです。
+関数型まつりの主催者は、発表者や参加者、スポンサーの皆様に行動規範を守っていただくことをお願いしており、その場にそぐわない発言や行為を未然に防ぐための手助けをしています。
+"""
             ]
         , block "本文"
-            [ p []
-                [ text "多様な背景を持つ人々が参加する技術カンファレンスにおいて、そこで交わされるコミュニケーションは技術的な発表と交流の場に相応しいものであって欲しいと願っています。"
-                , text "関数型まつりは、カンファレンスの参加者に対するいかなるハラスメント行為も歓迎しません。"
-                , br [] []
-                , br [] []
-                , text "関数型まつりは、会場内および関連するソーシャルイベント、SNS上でのコミュニケーションの全てにおいて、参加者、発表者、スポンサー、ブース出展者など、全ての関係者の皆様に対して本行動規範の遵守を求めます。"
-                , text "カンファレンスの参加者および関係者は、自身のハラスメント行為（意識的、無意識的を問わず）について他者から指摘を受けた場合は、直ちにその行動を中止することを期待されています。"
-                , br [] []
-                , br [] []
-                , text "ハラスメント行為の一例には以下のようなものがあります:"
-                ]
+            [ markdownToHtml """
+多様な背景を持つ人々が参加する技術カンファレンスにおいて、そこで交わされるコミュニケーションは技術的な発表と交流の場に相応しいものであって欲しいと願っています。
+関数型まつりは、カンファレンスの参加者に対するいかなるハラスメント行為も歓迎しません。
+
+関数型まつりは、会場内および関連するソーシャルイベント、SNS上でのコミュニケーションの全てにおいて、参加者、発表者、スポンサー、ブース出展者など、全ての関係者の皆様に対して本行動規範の遵守を求めます。
+カンファレンスの参加者および関係者は、自身のハラスメント行為（意識的、無意識的を問わず）について他者から指摘を受けた場合は、直ちにその行動を中止することを期待されています。
+
+ハラスメント行為の一例には以下のようなものがあります:
+"""
             , ul [ class "section_note" ]
                 (List.map (\itemString -> li [ class "section_note_item" ] [ text itemString ])
                     [ "他の参加者に対するナンパ行為 (容姿に関する発言、恋愛・性的興味を目的とした発言) や不適切な身体的接触を行うこと"
@@ -115,26 +114,23 @@ view app shared =
                     , "会場内のブースや掲示物において、出展スタッフやボランティアが性的な服装、制服、コスチュームを着用したり、その他の方法で性的な雰囲気を演出すること"
                     ]
                 )
-            , p []
-                [ text "関数型まつりの主催者は、本行動規範の趣旨に反してハラスメント行為を行う参加者に対して注意や警告を行います。"
-                , text "警告に従わずハラスメント行為を繰り返す場合や悪質な場合など、明らかな迷惑行為であると判断できる場合には、発表の中止やカンファレンス会場からの退場の指示を主催者の裁量で行うことがあります。"
-                , br [] []
-                , br [] []
-                , text "当カンファレンスの参加者、発表者、スポンサー、ブースの出展者は、主催者の指示に即時かつ無条件に従ってもらえることを期待します。"
-                , text "また、主催者の裁量によって会場から退場を指示された場合、該当者に対する参加料等の金銭の払い戻しは行わないものとします。"
-                , br [] []
-                , br [] []
-                , text "同種の行動規範は、ハラスメントの無いカンファレンスを提供することを目指して、例年 PNW Scala、NE Scala、Scala Days、ScalaMatsuri などでも採用されており、関数型まつりもその精神に賛同します。"
-                , br [] []
-                , br [] []
-                , text "この行動規範はより適切な運用を行うために随時更新される可能性があります。"
-                ]
+            , markdownToHtml """
+関数型まつりの主催者は、本行動規範の趣旨に反してハラスメント行為を行う参加者に対して注意や警告を行います。
+警告に従わずハラスメント行為を繰り返す場合や悪質な場合など、明らかな迷惑行為であると判断できる場合には、発表の中止やカンファレンス会場からの退場の指示を主催者の裁量で行うことがあります。
+
+当カンファレンスの参加者、発表者、スポンサー、ブースの出展者は、主催者の指示に即時かつ無条件に従ってもらえることを期待します。
+また、主催者の裁量によって会場から退場を指示された場合、該当者に対する参加料等の金銭の払い戻しは行わないものとします。
+
+同種の行動規範は、ハラスメントの無いカンファレンスを提供することを目指して、例年 PNW Scala、NE Scala、Scala Days、ScalaMatsuri などでも採用されており、関数型まつりもその精神に賛同します。
+
+この行動規範はより適切な運用を行うために随時更新される可能性があります。
+"""
             ]
         , block "運用方法"
-            [ p []
-                [ text "関数型まつりでは、行動規範について以下の通り運用します。"
-                , text "また必要に応じて、新たなプロセスを設ける可能性が有ります。"
-                ]
+            [ markdownToHtml """
+関数型まつりでは、行動規範について以下の通り運用します。
+また必要に応じて、新たなプロセスを設ける可能性が有ります。
+"""
             , ul [ class "section_note" ]
                 (List.map (\itemString -> li [ class "section_note_item" ] [ text itemString ])
                     [ "インシデントの報告窓口をオンライン及びオフラインで設けます。インシデントが報告された場合、主催者は同様のインシデントが繰り返し発生しないように努め、必要に応じて注意や警告を行います。"
@@ -145,21 +141,18 @@ view app shared =
                 )
             ]
         , block "会期中の報告窓口"
-            [ div []
-                [ text "自分や他の人がハラスメントを受けている場合には以下のフォームにてご連絡ください。"
-                , br [] []
-                , br [] []
-                , a [ href "https://forms.gle/4NZfofiHZzBcyZjRA", target "_blank" ] [ text "ハラスメント インシデント報告フォーム" ]
-                ]
+            [ markdownToHtml """
+自分や他の人がハラスメントを受けている場合には以下のフォームにてご連絡ください。
+
+[ハラスメント インシデント報告フォーム](https://forms.gle/4NZfofiHZzBcyZjRA)
+"""
             ]
         , block "ライセンスと帰属に関して"
             [ blockquote [ class "section_note" ]
-                [ p []
-                    [ text "本規範は"
-                    , a [ href "http://scalamatsuri.org/", target "_blank" ] [ text "ScalaMatsuri" ]
-                    , text " の規範に基いています。"
-                    , text "ScalaMatsuri の行動規範は、Geek Feminism wiki の規範例から派生しており、PNW Scala、NE Scala、および Scala Days の影響を受けています。"
-                    ]
+                [ markdownToHtml """
+本規範は [ScalaMatsuri](http://scalamatsuri.org/) の規範に基いています。
+ScalaMatsuri の行動規範は、Geek Feminism wiki の規範例から派生しており、PNW Scala、NE Scala、および Scala Days の影響を受けています。
+"""
                 ]
             ]
         ]
@@ -173,3 +166,24 @@ block title children =
             h2 [] [ text title ]
     in
     section [ class "coc" ] (heading :: children)
+
+
+markdownToHtml : String -> Html msg
+markdownToHtml markdownInput =
+    let
+        deadEndsToString deadEnds =
+            deadEnds
+                |> List.map Markdown.deadEndToString
+                |> String.join "\n"
+    in
+    case
+        markdownInput
+            |> Markdown.parse
+            |> Result.mapError deadEndsToString
+            |> Result.andThen (\ast -> Markdown.Renderer.render Markdown.Renderer.defaultHtmlRenderer ast)
+    of
+        Ok rendered ->
+            div [] rendered
+
+        Err errors ->
+            text errors
