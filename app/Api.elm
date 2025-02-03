@@ -19,8 +19,10 @@ routes :
     BackendTask FatalError (List Route)
     -> (Maybe { indent : Int, newLines : Bool } -> Html Never -> String)
     -> List (ApiRoute ApiRoute.Response)
-routes getStaticRoutes _ =
-    [ sitemap <| makeSitemapEntries getStaticRoutes ]
+routes getStaticRoutes htmlToString =
+    [ -- rss <| BackendTask.map (List.map makeArticleRssItem) builtPages
+      sitemap <| makeSitemapEntries getStaticRoutes
+    ]
 
 
 
