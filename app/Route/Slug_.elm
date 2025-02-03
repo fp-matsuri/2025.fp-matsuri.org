@@ -1,4 +1,4 @@
-module Route.Slug_ exposing (ActionData, Data, Model, Msg, route)
+module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, pages, route)
 
 {-|
 
