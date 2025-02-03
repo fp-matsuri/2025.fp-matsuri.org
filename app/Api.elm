@@ -26,6 +26,10 @@ routes getStaticRoutes htmlToString =
     ]
 
 
+
+-- RSS
+
+
 rss : BackendTask FatalError (List Rss.Item) -> ApiRoute.ApiRoute ApiRoute.Response
 rss itemsSource =
     ApiRoute.succeed
@@ -76,6 +80,10 @@ builtPages =
         |> BackendTask.map (List.map build)
         |> BackendTask.resolve
         |> BackendTask.map identity
+
+
+
+-- SITEMAP
 
 
 sitemap :

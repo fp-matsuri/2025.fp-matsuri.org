@@ -1,12 +1,13 @@
 module Page exposing
     ( Page, Metadata
+    , pagesGlob, allMetadata
     , frontmatterDecoder
-    , allMetadata, pagesGlob
     )
 
-{-|
+{-| サイト内のページを表す型と、関数を提供するモジュール
 
 @docs Page, Metadata
+@docs pagesGlob, allMetadata
 @docs frontmatterDecoder
 
 -}
@@ -25,6 +26,8 @@ type alias Page =
     }
 
 
+{-| content/ 直下にあるMarkdownファイルを取得するためのBackendTask
+-}
 pagesGlob : BackendTask.BackendTask error (List Page)
 pagesGlob =
     Glob.succeed Page
@@ -35,6 +38,8 @@ pagesGlob =
         |> Glob.toBackendTask
 
 
+{-| content/ 直下にあるMarkdownファイルのMetadataを取得するためのBackendTask
+-}
 allMetadata :
     BackendTask.BackendTask
         { fatal : FatalError, recoverable : File.FileReadError Decode.Error }
@@ -69,8 +74,6 @@ type alias Metadata =
     { title : String }
 
 
-{-| Frontmatter部分をデコードし、 ArticleMetadata 型にする
--}
 frontmatterDecoder : Decoder Metadata
 frontmatterDecoder =
     Decode.map Metadata
