@@ -8,16 +8,15 @@ module Route.Slug_ exposing (ActionData, Data, Model, Msg, route)
 -}
 
 import BackendTask exposing (BackendTask)
-import BackendTask.Glob as Glob
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html exposing (Html, a, div, iframe, section)
 import Html.Attributes as Attributes exposing (attribute, class, href, rel, src, target)
-import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
 import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
+import Page exposing (Metadata)
 import PagesMsg exposing (PagesMsg)
 import Plugin.MarkdownCodec
 import RouteBuilder exposing (App, StatelessRoute)
@@ -42,16 +41,9 @@ type alias RouteParams =
 2025年2月時点では、Markdownファイルの metadata と body が含まれます
 -}
 type alias Data =
-    { metadata : ArticleMetadata
+    { metadata : Metadata
     , body : List Block
     }
-
-
-{-| Markdownファイルの Frontmatter に記述された情報を格納するための型
-2025年2月時点では、title のみが含まれます
--}
-type alias ArticleMetadata =
-    { title : String }
 
 
 type alias ActionData =
@@ -66,7 +58,7 @@ route =
 
 pages : BackendTask FatalError (List RouteParams)
 pages =
-    pagesGlob
+    Page.pagesGlob
         |> BackendTask.map
             (List.map
                 (\globData ->
@@ -75,36 +67,12 @@ pages =
             )
 
 
-pagesGlob : BackendTask.BackendTask error (List Page)
-pagesGlob =
-    Glob.succeed Page
-        |> Glob.captureFilePath
-        |> Glob.match (Glob.literal "content/")
-        |> Glob.capture Glob.wildcard
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.toBackendTask
-
-
-type alias Page =
-    { filePath : String
-    , slug : String
-    }
-
-
 data : RouteParams -> BackendTask FatalError Data
 data routeParams =
     Plugin.MarkdownCodec.withFrontmatter Data
-        frontmatterDecoder
+        Page.frontmatterDecoder
         customizedHtmlRenderer
         ("content/" ++ routeParams.slug ++ ".md")
-
-
-{-| Frontmatter部分をデコードし、 ArticleMetadata 型にする
--}
-frontmatterDecoder : Decoder ArticleMetadata
-frontmatterDecoder =
-    Decode.map ArticleMetadata
-        (Decode.field "title" Decode.string)
 
 
 customizedHtmlRenderer : Renderer (Html msg)

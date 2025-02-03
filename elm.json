@@ -2,6 +2,7 @@
     "type": "application",
     "source-directories": [
         "app",
+        "src",
         ".elm-pages"
     ],
     "elm-version": "0.19.1",
