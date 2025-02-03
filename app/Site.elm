@@ -1,6 +1,16 @@
-module Site exposing (config, summaryLarge)
+module Site exposing
+    ( config
+    , eventName, eventName_2025, tagline
+    , summaryLarge
+    )
 
 {-| <https://elm-pages.com/docs/file-structure#site.elm>
+
+@docs config
+
+@docs eventName, eventName_2025, tagline
+@docs summaryLarge
+
 -}
 
 import BackendTask exposing (BackendTask)
@@ -31,23 +41,38 @@ head =
         |> BackendTask.succeed
 
 
+eventName : String
+eventName =
+    "関数型まつり"
+
+
+eventName_2025 : String
+eventName_2025 =
+    eventName ++ " 2025"
+
+
+tagline : String
+tagline =
+    "関数型まつりは関数型プログラミングをテーマとしたカンファレンスです"
+
+
 summaryLarge : { pageTitle : String } -> Common
 summaryLarge { pageTitle } =
     Head.Seo.summaryLarge
         { canonicalUrlOverride = Nothing
-        , siteName = "関数型まつり"
+        , siteName = eventName
         , image =
             { url = [ "images", "summaryLarge.png" ] |> UrlPath.join |> Pages.Url.fromPath
-            , alt = "関数型まつり 2025"
+            , alt = eventName_2025
             , dimensions = Nothing
             , mimeType = Nothing
             }
-        , description = "関数型まつりは関数型プログラミングをテーマとしたカンファレンスです"
+        , description = tagline
         , locale = Just ( ja, jp )
         , title =
             if pageTitle /= "" then
-                pageTitle ++ " | 関数型まつり"
+                pageTitle ++ " | " ++ eventName
 
             else
-                "関数型まつり"
+                eventName
         }
