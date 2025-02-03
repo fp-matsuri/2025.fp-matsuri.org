@@ -1,5 +1,12 @@
 module Route.Slug_ exposing (ActionData, Data, Model, Msg, route)
 
+{-|
+
+    ルート直下に配置されたMarkdownファイルを元に、ページ生成するためのモジュールです
+    2025年2月時点では「行動規範」ページが該当します
+
+-}
+
 import BackendTask exposing (BackendTask)
 import BackendTask.Glob as Glob
 import FatalError exposing (FatalError)
@@ -31,12 +38,18 @@ type alias RouteParams =
     { slug : String }
 
 
+{-| elm-pagesがこのページのBackendTaskを実行した結果を格納するための型
+2025年2月時点では、Markdownファイルの metadata と body が含まれます
+-}
 type alias Data =
     { metadata : ArticleMetadata
     , body : List Block
     }
 
 
+{-| Markdownファイルの Frontmatter に記述された情報を格納するための型
+2025年2月時点では、title のみが含まれます
+-}
 type alias ArticleMetadata =
     { title : String }
 
@@ -86,6 +99,8 @@ data routeParams =
         ("content/" ++ routeParams.slug ++ ".md")
 
 
+{-| Frontmatter部分をデコードし、 ArticleMetadata 型にする
+-}
 frontmatterDecoder : Decoder ArticleMetadata
 frontmatterDecoder =
     Decode.map ArticleMetadata
@@ -101,6 +116,7 @@ customizedHtmlRenderer =
                         \{ title, destination } children ->
                             let
                                 externalLinkAttrs =
+                                    -- Markdown記法で記述されたリンクについて、参照先が外部サイトであれば新しいタブで開くようにする
                                     if isExternalLink destination then
                                         [ target "_blank", rel "noopener" ]
 
@@ -125,7 +141,9 @@ customizedHtmlRenderer =
                             a (href destination :: externalLinkAttrs ++ titleAttrs) children
                     , html =
                         Markdown.Html.oneOf
-                            [ Markdown.Html.tag "iframe"
+                            -- Markdown記述の中でHTMLの使用を許可する場合には、この部分にタグを指定する。
+                            [ -- iframe: 行動規範ページに埋め込まれたYouTube動画を想定
+                              Markdown.Html.tag "iframe"
                                 (\class_ width_ height_ src_ frameborder_ allow_ allowfullscreen_ children ->
                                     iframe
                                         [ class class_
