@@ -20,13 +20,7 @@ routes :
     -> (Maybe { indent : Int, newLines : Bool } -> Html Never -> String)
     -> List (ApiRoute ApiRoute.Response)
 routes getStaticRoutes htmlToString =
-    [ -- rss <| BackendTask.map (List.map makeArticleRssItem) builtPages
-      sitemap <| makeSitemapEntries getStaticRoutes
-    ]
-
-
-
--- SITEMAP
+    [ sitemap <| makeSitemapEntries getStaticRoutes ]
 
 
 
