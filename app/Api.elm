@@ -11,7 +11,6 @@ import Iso8601
 import Pages
 import Route exposing (Route(..))
 import Route.Slug_ as Route__slug_
-import Rss
 import Site
 import Sitemap
 
@@ -21,65 +20,7 @@ routes :
     -> (Maybe { indent : Int, newLines : Bool } -> Html Never -> String)
     -> List (ApiRoute ApiRoute.Response)
 routes getStaticRoutes htmlToString =
-    [ -- rss <| BackendTask.map (List.map makeArticleRssItem) builtPages
-      sitemap <| makeSitemapEntries getStaticRoutes
-    ]
-
-
-
--- RSS
-
-
-rss : BackendTask FatalError (List Rss.Item) -> ApiRoute.ApiRoute ApiRoute.Response
-rss itemsSource =
-    ApiRoute.succeed
-        (itemsSource
-            |> BackendTask.map
-                (\items ->
-                    Rss.generate
-                        { title = Site.eventName
-                        , description = Site.tagline
-                        , url = Site.config.canonicalUrl ++ "/"
-                        , lastBuildTime = Pages.builtAt
-                        , generator = Just "elm-pages"
-                        , items = items
-                        , siteUrl = Site.config.canonicalUrl
-                        }
-                )
-        )
-        |> ApiRoute.literal "feed.xml"
-        |> ApiRoute.single
-
-
-type alias BuiltPage =
-    ( Route, Route__slug_.Data )
-
-
-makeArticleRssItem : BuiltPage -> Rss.Item
-makeArticleRssItem ( route, page ) =
-    { title = page.metadata.title
-    , description = "article.body.excerpt"
-    , url = String.join "/" (Route.routeToPath route)
-    , categories = []
-    , author = "関数型まつり"
-    , pubDate = Rss.DateTime Pages.builtAt
-    , content = Nothing
-    , contentEncoded = Nothing
-    , enclosure = Nothing
-    }
-
-
-builtPages : BackendTask FatalError (List BuiltPage)
-builtPages =
-    let
-        build routeParam =
-            Route__slug_.data routeParam
-                |> BackendTask.map (Tuple.pair (Route.Slug_ routeParam))
-    in
-    Route__slug_.pages
-        |> BackendTask.map (List.map build)
-        |> BackendTask.resolve
-        |> BackendTask.map identity
+    [ sitemap <| makeSitemapEntries getStaticRoutes ]
 
 
 
