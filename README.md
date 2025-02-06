@@ -40,6 +40,10 @@ npm start
 
 [Node.js]: https://nodejs.org/ja
 
+## サイトへの反映
+- GitHub Pages でホスティングしております。
+- 修正、追加内容があれmainブランチに向けてPRを出してください。
+- mainブランチへマージするとサイトへ反映されます。
 
 ## サイトの管理
 
