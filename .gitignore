@@ -4,3 +4,5 @@ dist/
 .elm-pages/
 functions/render/elm-pages-cli.mjs
 functions/server-render/elm-pages-cli.mjs
+_cache
+_site
