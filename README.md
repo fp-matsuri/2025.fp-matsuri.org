@@ -5,7 +5,12 @@
 ## 環境構築
 
 - [elm-pages](https://github.com/dillonkearns/elm-pages) というフレームワークを使用しています。
-- 実行にはNode.jsの環境が必要です。
+
+### Elm インストール
+
+https://guide.elm-lang.jp/install/elm.html
+
+- 実行には Node.js の環境が必要です。
 
 ```javascript
 npm install
