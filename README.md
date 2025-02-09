@@ -24,7 +24,7 @@
 
 ### Elm について
 
-- Elm は JavaScript にコンパイルできる関数型プログラミング言語です。
+- Elm は JavaScript にコンパイルできる関数型プログラミング言語です
 - 関連リンク
     - [公式ガイド（日本語版）](https://guide.elm-lang.jp/)
 
@@ -41,9 +41,11 @@ npm start
 [Node.js]: https://nodejs.org/ja
 
 ## サイトへの反映
-- GitHub Pages でホスティングしております。
-- 修正、追加内容があれmainブランチに向けてPRを出してください。
-- mainブランチへマージするとサイトへ反映されます。
+
+- Webサイトは GitHub Pages を使ってホスティングしています
+- 追加や修正があれば、mainブランチに向けてPRを出してください
+- PRをmainブランチへマージすると [GitHub Actionsのワークフロー](https://github.com/fp-matsuri/2025.fp-matsuri.org/blob/main/.github/workflows/publish.yaml) が動作し、サイトへ反映されます
+
 
 ## サイトの管理
 
