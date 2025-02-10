@@ -354,11 +354,6 @@ li.event>p {
 /* ------------------------------------
 Markdown
 ------------------------------------ */
-
-section.coc {
-  padding-block: 3rem;
-}
-
 .markdown>* {
   margin-block: 1.75em;
 }
@@ -376,6 +371,25 @@ section.coc {
   font-weight: bold;
 }
 
+.markdown li {
+  padding-left: 0.3em;
+}
+
+.markdown li+li {
+  margin-top: 0.25em;
+}
+
+.markdown li::marker {
+  font-size: 1.4em;
+}
+
+/* ------------------------------------
+行動規範
+------------------------------------ */
+
+section.coc {
+  padding-block: 3rem;
+}
 
 .section_figure {
   margin-inline: 0;
@@ -393,30 +407,19 @@ section.coc {
 .markdown ul,
 .markdown blockquote,
 .section_note {
+  margin-block: 2em;
+  width: calc(100% + 4em);
+  translate: -2em;
   margin-inline: 0;
   background-color: #F1F1F1;
-  font-weight: bold;
-  line-height: 26px;
+  line-height: 1.75;
   font-size: 16px;
-  letter-spacing: 0.1em;
-  padding: 40px;
+  letter-spacing: 0.05em;
+  padding: 2em;
+  border-radius: 10px;
 }
 
-.markdown li {
-  padding-left: 22px;
-  position: relative;
-  margin-bottom: 5px;
-  list-style: none;
-}
 
-.markdown li::before {
-  content: "";
-  display: block;
-  width: 6px;
-  height: 6px;
-  background: #000000;
-  border-radius: 3px;
-  position: absolute;
-  top: 11px;
-  left: 0;
+.markdown ul {
+  padding: 2em 2em 2em 55px;
 }
