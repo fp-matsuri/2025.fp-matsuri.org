@@ -352,30 +352,30 @@ li.event>p {
 }
 
 /* ------------------------------------
-行動規範
+Markdown
 ------------------------------------ */
 
 section.coc {
   padding-block: 3rem;
 }
 
-section.coc h2 {
-  margin: 0 0 2.5rem;
-  font-family: montserrat, sans-serif;
-  font-optical-sizing: auto;
-  line-height: 1;
-  text-align: center;
-  font-size: 3rem;
-  font-weight: 300;
-}
-
-section.coc *+h2 {
-  margin-top: 8rem;
-}
-
-section.coc p+p {
+.markdown>* {
   margin-block: 1.75em;
 }
+
+.markdown>:first-child {
+  margin-block: 0;
+}
+
+.markdown h2 {
+  margin: 7rem 0 2.5rem;
+  font-family: montserrat, sans-serif;
+  line-height: 1;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
 
 .section_figure {
   margin-inline: 0;
@@ -390,8 +390,8 @@ section.coc p+p {
   font-weight: bold;
 }
 
-section.coc ul,
-section.coc blockquote,
+.markdown ul,
+.markdown blockquote,
 .section_note {
   margin-inline: 0;
   background-color: #F1F1F1;
@@ -400,17 +400,16 @@ section.coc blockquote,
   font-size: 16px;
   letter-spacing: 0.1em;
   padding: 40px;
-  margin-top: 20px;
 }
 
-section.coc li {
+.markdown li {
   padding-left: 22px;
   position: relative;
   margin-bottom: 5px;
   list-style: none;
 }
 
-section.coc li::before {
+.markdown li::before {
   content: "";
   display: block;
   width: 6px;

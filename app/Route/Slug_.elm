@@ -164,7 +164,7 @@ view app _ =
     { title = metadata.title
     , body =
         [ section [ class "coc" ]
-            [ div []
+            [ div [ class "markdown" ]
                 (app.data.body
                     |> Markdown.Renderer.render customizedHtmlRenderer
                     |> Result.withDefault []
