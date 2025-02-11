@@ -130,7 +130,7 @@ p.note::before {
 }
 
 section {
-  padding: 8rem 1.5rem 6rem;
+  padding: 8rem 20px 6rem;
 
   display: flex;
   flex-direction: column;
