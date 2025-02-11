@@ -136,13 +136,6 @@ section {
   row-gap: 2.25rem;
 }
 
-section p {
-  line-height: 1.75;
-}
-
-section>* {
-  max-width: 65ch;
-}
 
 section>h2 {
   margin: 0;
@@ -267,6 +260,8 @@ section>h2 {
 .prose h3 {
   margin-top: 1.6em;
   margin-bottom: 0.6em;
+  font-family: "Hiragino Mincho ProN W6", "ヒラギノ明朝 ProN W6", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
+  font-weight: bold;
 }
 
 .map {
@@ -359,10 +354,6 @@ li.event>p {
 
 .sponsors p {
   margin-block: 1.25rem;
-}
-
-.people {
-  max-width: none;
 }
 
 .people>h3 {

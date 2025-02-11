@@ -127,7 +127,7 @@ links =
 aboutBlock : Html msg
 aboutBlock =
     block "About"
-        [ div []
+        [ div [ class "markdown" ]
             [ p [] [ text "関数型プログラミングのカンファレンス「関数型まつり」を開催します！" ]
             , p []
                 [ text "関数型プログラミングはメジャーな言語・フレームワークに取り入れられ、広く使われるようになりました。"
@@ -152,7 +152,7 @@ overviewBlock =
                 ]
     in
     block "Overview"
-        [ div [ class "prose" ]
+        [ div [ class "markdown prose" ]
             [ item "Dates"
                 "2025.6.14(土)〜15(日)"
             , item "Place"
@@ -227,7 +227,7 @@ schedule =
 sponsorsBlock : Html msg
 sponsorsBlock =
     block "Sponsors"
-        [ div [ class "sponsors" ]
+        [ div [ class "markdown sponsors" ]
             [ h3 [ class "text-3xl font-bold text-center py-8" ] [ text "スポンサー募集中！" ]
             , p []
                 [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
