@@ -81,7 +81,7 @@ Markdown
 }
 
 .markdown>* {
-  margin-block: 1.75em;
+  margin-block: 1.5em;
 }
 
 .markdown>:first-child {
@@ -263,7 +263,6 @@ section>h2 {
   margin-top: 1.6em;
   margin-bottom: 0.6em;
   font-family: "Hiragino Mincho ProN W6", "ヒラギノ明朝 ProN W6", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
-  font-weight: bold;
 }
 
 .map {
@@ -324,7 +323,6 @@ li.event>h3 {
   grid-row: 2;
   margin-block: 0;
   font-size: 1.125rem;
-  font-weight: 700;
 }
 
 li.event>h3.highlight {
@@ -347,11 +345,11 @@ li.event>p {
 
 .sponsors h3 {
   margin: 0;
-  padding-block: 2rem;
+  padding-block: 2rem 0.5rem;
+  font-family: "Hiragino Mincho ProN W3", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
   text-align: center;
   line-height: 2.25rem;
   font-size: 1.875rem;
-  font-weight: 700;
 }
 
 .sponsors p {
@@ -360,6 +358,7 @@ li.event>p {
 
 .people>h3 {
   text-align: center;
+  font-family: "Hiragino Mincho ProN W6", "ヒラギノ明朝 ProN W6", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
 }
 
 .people ul {
@@ -388,7 +387,6 @@ li.event>p {
 }
 
 .people .person>a {
-  font-weight: bold;
   color: inherit;
   text-decoration: none;
 }
@@ -408,10 +406,6 @@ section.coc {
 
 .section_movie {
   max-width: 100%;
-}
-
-.section_text a {
-  font-weight: bold;
 }
 
 .markdown ul,
