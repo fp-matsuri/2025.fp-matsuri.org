@@ -412,15 +412,32 @@ section.coc {
 .markdown blockquote,
 .section_note {
   margin-block: 2em;
-  width: calc(100% + 4em);
-  translate: -2em;
+  width: calc(100% + 1em);
+  translate: -0.5em;
   margin-inline: 0;
   background-color: #F1F1F1;
   font-size: 16px;
-  padding: 2em;
+  padding: 1em 1.5em;
   border-radius: 10px;
 }
 
 .markdown ul {
-  padding: 2em 2em 2em 55px;
+  padding: 1em 1.5em 1em 2em;
+}
+
+
+@media all and (min-width: 640px) {
+
+  .markdown ul,
+  .markdown blockquote,
+  .section_note {
+    width: calc(100% + 4em);
+    translate: -2em;
+    padding: 2em;
+  }
+
+  .markdown ul {
+    padding: 2em 2em 2em 55px;
+  }
+
 }
