@@ -3,19 +3,18 @@
 :root {
   --navbar-height: 72px;
 
-  --serif-W3: "Hiragino Mincho ProN W3", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
-  --serif-W6: "Hiragino Mincho ProN W6", "ヒラギノ明朝 ProN W6", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
+  --serif: "Hiragino Mincho ProN", "ヒラギノ明朝 ProN", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
   --serif-logo: "游明朝", "Yu Mincho", "游明朝体", "YuMincho", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "HiraMinProN-W3", "HGS明朝E", "ＭＳ Ｐ明朝", "MS PMincho", serif;
 
   /* [2024年に最適なfont-familyの書き方](https://ics.media/entry/200317/) */
-  --sans-serif-W3: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  --sans-serif: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 
   --color-primary: 16 40 48;
   --color-on-primary: 240 240 230;
   --color-accent: 233 30 99;
 
   font-size: 12pt;
-  font-family: var(--serif-W3);
+  font-family: var(--serif);
 }
 
 * {
@@ -79,7 +78,7 @@ Markdown
 
 .markdown {
   max-width: 32.5em;
-  font-family: var(--sans-serif-W3);
+  font-family: var(--sans-serif);
 }
 
 .markdown>* {
@@ -100,7 +99,7 @@ Markdown
 
 .markdown p,
 .markdown ul {
-  font-family: var(--serif-W3);
+  font-family: var(--serif);
   letter-spacing: 0.01em;
   line-height: 1.75;
 }
@@ -264,7 +263,8 @@ section>h2 {
 .prose h3 {
   margin-top: 1.6em;
   margin-bottom: 0.6em;
-  font-family: var(--serif-W6);
+  font-family: var(--serif);
+  font-weight: bold;
 }
 
 .map {
@@ -348,10 +348,11 @@ li.event>p {
 .sponsors h3 {
   margin: 0;
   padding-block: 2rem 0.5rem;
-  font-family: var(--serif-W3);
+  font-family: var(--serif);
   text-align: center;
   line-height: 2.25rem;
   font-size: 1.875rem;
+  font-weight: normal;
 }
 
 .sponsors p {
@@ -360,7 +361,8 @@ li.event>p {
 
 .people>h3 {
   text-align: center;
-  font-family: var(--serif-W6);
+  font-family: var(--serif);
+  font-weight: bold;
 }
 
 .people ul {
