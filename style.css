@@ -2,7 +2,7 @@
 
 :root {
   font-size: 12pt;
-  font-family: "游明朝", "Yu Mincho", "游明朝体", "YuMincho", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "HiraMinProN-W3", "HGS明朝E", "ＭＳ Ｐ明朝", "MS PMincho", serif;
+  font-family: "Hiragino Mincho ProN W3", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
 
   --navbar-height: 72px;
 
@@ -45,6 +45,7 @@ body {
 
 .site-header>h1>a {
   display: block;
+  font-family: "游明朝", "Yu Mincho", "游明朝体", "YuMincho", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "HiraMinProN-W3", "HGS明朝E", "ＭＳ Ｐ明朝", "MS PMincho", serif;
   font-size: 1.25rem;
   font-weight: 600;
   text-decoration: inherit;
@@ -163,6 +164,7 @@ section>h2 {
   grid-row: 2;
   margin: 0;
   line-height: 1;
+  font-family: "游明朝", "Yu Mincho", "游明朝体", "YuMincho", "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "HiraMinProN-W3", "HGS明朝E", "ＭＳ Ｐ明朝", "MS PMincho", serif;
   font-size: 3rem;
   font-weight: inherit;
   letter-spacing: -0.25rem;
