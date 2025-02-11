@@ -359,13 +359,29 @@ li.event>p {
   margin-block: 1.25rem;
 }
 
+.people {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+}
+
 .people>h3 {
+  margin: 0;
   text-align: center;
   font-family: var(--serif);
   font-weight: bold;
 }
 
+.people.leaders {
+  max-width: 800px;
+}
+
+.people.staff {
+  max-width: 1200px;
+}
+
 .people ul {
+  margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;

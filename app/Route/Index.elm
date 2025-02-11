@@ -254,10 +254,12 @@ teamBlock =
                 ]
     in
     block "Team"
-        [ div [ class "people" ]
+        [ div [ class "people leaders" ]
             [ h3 [] [ text "座長" ]
             , ul [] (List.map listItem staff.leader)
-            , h3 [] [ text "スタッフ" ]
+            ]
+        , div [ class "people staff" ]
+            [ h3 [] [ text "スタッフ" ]
             , ul [] (List.map listItem staff.members)
             ]
         ]
