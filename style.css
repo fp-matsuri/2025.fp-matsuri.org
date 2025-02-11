@@ -66,6 +66,55 @@ body {
 }
 
 /* ------------------------------------
+Markdown
+------------------------------------ */
+
+.markdown {
+  max-width: 32.5em;
+
+  /*
+    2024年に最適なfont-familyの書き方
+    https://ics.media/entry/200317/
+  */
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+}
+
+.markdown>* {
+  margin-block: 1.75em;
+}
+
+.markdown>:first-child {
+  margin-block: 0;
+}
+
+.markdown h2 {
+  margin: 7rem 0 2.5rem;
+  line-height: 1;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: normal;
+}
+
+.markdown p,
+.markdown ul {
+  font-family: "Hiragino Mincho ProN W3", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
+  letter-spacing: 0.01em;
+  line-height: 1.75;
+}
+
+.markdown li {
+  padding-left: 0.3em;
+}
+
+.markdown li+li {
+  margin-top: 0.25em;
+}
+
+.markdown li::marker {
+  font-size: 1.4em;
+}
+
+/* ------------------------------------
 トップページ
 ------------------------------------ */
 
@@ -349,55 +398,6 @@ li.event>p {
   font-weight: bold;
   color: inherit;
   text-decoration: none;
-}
-
-/* ------------------------------------
-Markdown
------------------------------------- */
-
-.markdown {
-  max-width: 32.5em;
-
-  /*
-    2024年に最適なfont-familyの書き方
-    https://ics.media/entry/200317/
-  */
-  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-}
-
-.markdown>* {
-  margin-block: 1.75em;
-}
-
-.markdown>:first-child {
-  margin-block: 0;
-}
-
-.markdown h2 {
-  margin: 7rem 0 2.5rem;
-  line-height: 1;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: normal;
-}
-
-.markdown p,
-.markdown ul {
-  font-family: "Hiragino Mincho ProN W3", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "游明朝", YuMincho, "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
-  letter-spacing: 0.01em;
-  line-height: 1.75;
-}
-
-.markdown li {
-  padding-left: 0.3em;
-}
-
-.markdown li+li {
-  margin-top: 0.25em;
-}
-
-.markdown li::marker {
-  font-size: 1.4em;
 }
 
 /* ------------------------------------
