@@ -246,9 +246,11 @@ teamBlock : Html msg
 teamBlock =
     let
         listItem member =
-            li [ class "person" ]
-                [ img [ src ("https://github.com/" ++ member.id ++ ".png") ] []
-                , a [ href ("https://github.com/" ++ member.id), target "_blank" ] [ text member.id ]
+            li []
+                [ a [ class "person", href ("https://github.com/" ++ member.id), target "_blank" ]
+                    [ img [ src ("https://github.com/" ++ member.id ++ ".png") ] []
+                    , text member.id
+                    ]
                 ]
     in
     block "Team"
