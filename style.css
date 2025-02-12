@@ -426,7 +426,7 @@ a.person:hover {
 
 .people .person>img {
   max-width: 45px;
-  border-radius: 30%;
+  border-radius: 50%;
   border: 1px solid hsl(0 0 0 / 0.05);
 }
 
