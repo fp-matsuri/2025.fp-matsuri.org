@@ -1,13 +1,14 @@
 module Route.Logo exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
+import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html exposing (Html, div)
+import Html exposing (div)
 import Html.Attributes exposing (attribute, class)
 import PagesMsg exposing (PagesMsg)
-import RouteBuilder exposing (App, StatelessRoute)
+import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
 import Svg exposing (Svg, defs, g, linearGradient, path, rect, stop, svg)
@@ -16,11 +17,28 @@ import View exposing (View)
 
 
 type alias Model =
-    {}
+    { gradients : List ( String, String ) }
 
 
-type alias Msg =
-    ()
+init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
+init _ _ =
+    ( { gradients =
+            [ ( "black", "blue" )
+            , ( "blue", "#06F" )
+            , ( "#06F", "black" )
+            ]
+      }
+    , Effect.none
+    )
+
+
+type Msg
+    = NoOp
+
+
+update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
+update _ _ _ model =
+    ( model, Effect.none )
 
 
 type alias RouteParams =
@@ -35,10 +53,15 @@ type alias ActionData =
     {}
 
 
-route : StatelessRoute RouteParams Data ActionData
+route : StatefulRoute RouteParams Data ActionData Model Msg
 route =
     RouteBuilder.single { head = head, data = data }
-        |> RouteBuilder.buildNoState { view = view }
+        |> RouteBuilder.buildWithLocalState
+            { init = init
+            , update = update
+            , view = view
+            , subscriptions = \_ _ _ _ -> Sub.none
+            }
 
 
 data : BackendTask FatalError Data
@@ -61,24 +84,15 @@ head _ =
 view :
     App Data ActionData RouteParams
     -> Shared.Model
+    -> Model
     -> View (PagesMsg Msg)
-view _ _ =
+view _ _ model =
     { title = ""
     , body =
-        [ aboutBlock
+        [ div [ class "logo-study" ]
+            (List.indexedMap logoMark model.gradients)
         ]
     }
-
-
-aboutBlock : Html msg
-aboutBlock =
-    div [ class "logo-study" ]
-        (List.indexedMap logoMark
-            [ ( "black", "blue" )
-            , ( "blue", "#06F" )
-            , ( "#06F", "black" )
-            ]
-        )
 
 
 logoMark : Int -> ( String, String ) -> Svg msg
