@@ -59,7 +59,7 @@ colorGerenator =
         (\r g b -> "hsl(" ++ String.fromInt r ++ " " ++ String.fromInt g ++ "% " ++ String.fromInt b ++ "%)")
         (Random.int 0 359)
         (Random.int 0 100)
-        (Random.int 0 100)
+        (Random.int 25 90)
 
 
 
