@@ -56,10 +56,10 @@ gradientGenerator =
 colorGerenator : Generator String
 colorGerenator =
     Random.map3
-        (\r g b -> "rgb(" ++ String.fromInt r ++ " " ++ String.fromInt g ++ " " ++ String.fromInt b ++ ")")
-        (Random.int 0 255)
-        (Random.int 0 255)
-        (Random.int 0 255)
+        (\r g b -> "hsl(" ++ String.fromInt r ++ " " ++ String.fromInt g ++ "% " ++ String.fromInt b ++ "%)")
+        (Random.int 0 359)
+        (Random.int 0 100)
+        (Random.int 0 100)
 
 
 
