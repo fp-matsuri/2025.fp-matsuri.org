@@ -8,6 +8,7 @@ import Head.Seo
 import Html exposing (div)
 import Html.Attributes exposing (attribute, class)
 import PagesMsg exposing (PagesMsg)
+import Random exposing (Generator)
 import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
@@ -41,14 +42,24 @@ type alias Model =
 
 init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
 init _ _ =
-    ( { gradients =
-            [ ( "black", "blue" )
-            , ( "blue", "#06F" )
-            , ( "#06F", "black" )
-            ]
-      }
-    , Effect.none
+    ( { gradients = [] }
+    , Random.generate NewGradients (Random.list 3 gradientGenerator)
+        |> Effect.fromCmd
     )
+
+
+gradientGenerator : Generator ( String, String )
+gradientGenerator =
+    Random.pair colorGerenator colorGerenator
+
+
+colorGerenator : Generator String
+colorGerenator =
+    Random.weighted
+        ( 10, "black" )
+        [ ( 10, "blue" )
+        , ( 10, "#06F" )
+        ]
 
 
 
@@ -56,12 +67,14 @@ init _ _ =
 
 
 type Msg
-    = NoOp
+    = NewGradients (List ( String, String ))
 
 
 update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
-update _ _ _ model =
-    ( model, Effect.none )
+update _ _ msg model =
+    case msg of
+        NewGradients gradients ->
+            ( { model | gradients = gradients }, Effect.none )
 
 
 
