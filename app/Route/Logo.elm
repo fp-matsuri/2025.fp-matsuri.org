@@ -73,17 +73,19 @@ view _ _ =
 aboutBlock : Html msg
 aboutBlock =
     div [ class "logo-study" ]
-        [ logoMark "black" "blue"
-        , logoMark "blue" "#06F"
-        , logoMark "#06F" "black"
-        ]
+        (List.indexedMap logoMark
+            [ ( "black", "blue" )
+            , ( "blue", "#06F" )
+            , ( "#06F", "black" )
+            ]
+        )
 
 
-logoMark : String -> String -> Svg msg
-logoMark color1 color2 =
+logoMark : Int -> ( String, String ) -> Svg msg
+logoMark index ( color1, color2 ) =
     let
         id_ =
-            color1 ++ "_" ++ color2
+            "id_" ++ String.fromInt index
 
         clipPath =
             Svg.clipPath [ id "logo_outline" ]
