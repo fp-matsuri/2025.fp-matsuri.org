@@ -10,8 +10,8 @@ import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Site
-import Svg exposing (Svg, g, path, rect, svg)
-import Svg.Attributes exposing (d, fill, height, rx, transform, viewBox, width, x, y)
+import Svg exposing (Svg, defs, g, linearGradient, path, rect, stop, svg)
+import Svg.Attributes exposing (d, fill, gradientTransform, height, id, offset, rx, stopColor, transform, viewBox, width, x, y)
 import View exposing (View)
 
 
@@ -73,16 +73,26 @@ view _ _ =
 aboutBlock : Html msg
 aboutBlock =
     div [ class "logo-study" ]
-        [ logoMark "black"
-        , logoMark "blue"
-        , logoMark "green"
+        [ logoMark "black" "blue"
+        , logoMark "blue" "#06F"
+        , logoMark "#06F" "black"
         ]
 
 
-logoMark : String -> Svg msg
-logoMark fillColor =
+logoMark : String -> String -> Svg msg
+logoMark color1 color2 =
+    let
+        id_ =
+            color1 ++ "_" ++ color2
+    in
     svg [ width "125", height "100", viewBox "0 0 250 200", attribute "xmlns" "http://www.w3.org/2000/svg" ]
-        [ g [ fill fillColor ]
+        [ defs []
+            [ linearGradient [ id id_, gradientTransform "rotate(45)" ]
+                [ stop [ offset "0%", stopColor color1 ] []
+                , stop [ offset "100%", stopColor color2 ] []
+                ]
+            ]
+        , g [ fill ("url(#" ++ id_ ++ ")") ]
             [ path [ d "M0 50C0 22.3858 22.3858 0 50 0V50H0Z" ] []
             , rect [ width "50", height "50", transform "translate(50)" ] []
             , rect [ width "50", height "50", transform "translate(150)" ] []
