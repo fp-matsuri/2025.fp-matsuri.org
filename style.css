@@ -487,3 +487,13 @@ section.coc {
   }
 
 }
+
+/* ------------------------------------
+ロゴ
+------------------------------------ */
+.logo-study {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 5em;
+}

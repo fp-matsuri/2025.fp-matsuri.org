@@ -10,7 +10,7 @@ import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Site
-import Svg exposing (path, rect, svg)
+import Svg exposing (Svg, g, path, rect, svg)
 import Svg.Attributes exposing (d, fill, height, rx, transform, viewBox, width, x, y)
 import View exposing (View)
 
@@ -72,18 +72,27 @@ view _ _ =
 
 aboutBlock : Html msg
 aboutBlock =
-    div [ class "svg-study" ]
-        [ svg [ width "250", height "200", viewBox "0 0 250 200", fill "white", attribute "xmlns" "http://www.w3.org/2000/svg" ]
-            [ path [ d "M0 50C0 22.3858 22.3858 0 50 0V50H0Z", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(50)", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(150)", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(0 50)", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(100 50)", fill "black" ] []
-            , rect [ x "200", y "50", width "50", height "50", rx "25", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(0 100)", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(50 100)", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(150 100)", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(0 150)", fill "black" ] []
-            , rect [ width "50", height "50", transform "translate(100 150)", fill "black" ] []
+    div [ class "logo-study" ]
+        [ logoMark "black"
+        , logoMark "blue"
+        , logoMark "green"
+        ]
+
+
+logoMark : String -> Svg msg
+logoMark fillColor =
+    svg [ width "125", height "100", viewBox "0 0 250 200", attribute "xmlns" "http://www.w3.org/2000/svg" ]
+        [ g [ fill fillColor ]
+            [ path [ d "M0 50C0 22.3858 22.3858 0 50 0V50H0Z" ] []
+            , rect [ width "50", height "50", transform "translate(50)" ] []
+            , rect [ width "50", height "50", transform "translate(150)" ] []
+            , rect [ width "50", height "50", transform "translate(0 50)" ] []
+            , rect [ width "50", height "50", transform "translate(100 50)" ] []
+            , rect [ x "200", y "50", width "50", height "50", rx "25" ] []
+            , rect [ width "50", height "50", transform "translate(0 100)" ] []
+            , rect [ width "50", height "50", transform "translate(50 100)" ] []
+            , rect [ width "50", height "50", transform "translate(150 100)" ] []
+            , rect [ width "50", height "50", transform "translate(0 150)" ] []
+            , rect [ width "50", height "50", transform "translate(100 150)" ] []
             ]
         ]
