@@ -43,7 +43,7 @@ type alias Model =
 init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
 init _ _ =
     ( { gradients = [] }
-    , Random.generate NewGradients (Random.list 3 gradientGenerator)
+    , Random.generate NewGradients (Random.list 20 gradientGenerator)
         |> Effect.fromCmd
     )
 
@@ -55,11 +55,11 @@ gradientGenerator =
 
 colorGerenator : Generator String
 colorGerenator =
-    Random.weighted
-        ( 10, "black" )
-        [ ( 10, "blue" )
-        , ( 10, "#06F" )
-        ]
+    Random.map3
+        (\r g b -> "rgb(" ++ String.fromInt r ++ " " ++ String.fromInt g ++ " " ++ String.fromInt b ++ ")")
+        (Random.int 0 255)
+        (Random.int 0 255)
+        (Random.int 0 255)
 
 
 
