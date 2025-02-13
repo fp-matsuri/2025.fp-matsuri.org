@@ -37,7 +37,7 @@ body {
 }
 
 .site-header {
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
   column-gap: 1.5rem;
@@ -50,12 +50,19 @@ body {
 }
 
 .site-header>h1>a {
-  display: block;
+  display: flex;
+  align-items: center;
+  column-gap: 0.4em;
   font-family: var(--serif-logo);
   font-size: 1.25rem;
   font-weight: 600;
   text-decoration: inherit;
   color: #000;
+}
+
+.site-header>h1 svg {
+  width: 2em;
+  height: 1.6em;
 }
 
 .site-header>nav>a {

@@ -5,6 +5,7 @@ module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 
 import BackendTask exposing (BackendTask)
 import Effect exposing (Effect)
+import FPMatsuri.Logo as FPMatsuri
 import FatalError exposing (FatalError)
 import Html exposing (Html, a, footer, h1, header, main_, nav, text)
 import Html.Attributes exposing (class, href)
@@ -90,7 +91,12 @@ view :
 view _ _ _ _ pageView =
     { body =
         [ header [ class "site-header" ]
-            [ h1 [] [ a [ href "/" ] [ text "関数型まつり" ] ]
+            [ h1 []
+                [ a [ href "/" ]
+                    [ FPMatsuri.logoMark -1 ( "#FC0", "#C00" )
+                    , text "関数型まつり"
+                    ]
+                ]
             , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
             ]
         , main_ [] pageView.body
