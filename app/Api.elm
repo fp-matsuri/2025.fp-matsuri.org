@@ -57,6 +57,9 @@ makeSitemapEntries getStaticRoutes =
                         }
             in
             case route of
+                Logo ->
+                    Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
+
                 Slug_ routeParam ->
                     Route__slug_.data routeParam
                         |> BackendTask.andThen (\_ -> routeSource (Iso8601.fromTime Pages.builtAt))
