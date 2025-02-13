@@ -16,6 +16,25 @@ import Svg.Attributes exposing (d, fill, gradientTransform, height, id, offset, 
 import View exposing (View)
 
 
+type alias RouteParams =
+    {}
+
+
+route : StatefulRoute RouteParams Data ActionData Model Msg
+route =
+    RouteBuilder.single { head = head, data = data }
+        |> RouteBuilder.buildWithLocalState
+            { init = init
+            , update = update
+            , view = view
+            , subscriptions = \_ _ _ _ -> Sub.none
+            }
+
+
+
+-- MODEL
+
+
 type alias Model =
     { gradients : List ( String, String ) }
 
@@ -32,6 +51,10 @@ init _ _ =
     )
 
 
+
+-- UPDATE
+
+
 type Msg
     = NoOp
 
@@ -41,8 +64,8 @@ update _ _ _ model =
     ( model, Effect.none )
 
 
-type alias RouteParams =
-    {}
+
+-- DATA
 
 
 type alias Data =
@@ -51,17 +74,6 @@ type alias Data =
 
 type alias ActionData =
     {}
-
-
-route : StatefulRoute RouteParams Data ActionData Model Msg
-route =
-    RouteBuilder.single { head = head, data = data }
-        |> RouteBuilder.buildWithLocalState
-            { init = init
-            , update = update
-            , view = view
-            , subscriptions = \_ _ _ _ -> Sub.none
-            }
 
 
 data : BackendTask FatalError Data
