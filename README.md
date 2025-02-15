@@ -38,6 +38,8 @@ npm install
 npm start
 ```
 
+正常に起動すると、 http://localhost:1234/ でアクセスできます。
+
 [Node.js]: https://nodejs.org/ja
 
 ## サイトへの反映
