@@ -114,6 +114,6 @@ view _ _ model =
     { title = ""
     , body =
         [ div [ class "logo-study" ]
-            (List.indexedMap FPMatsuri.logoMark model.gradients)
+            (List.indexedMap FPMatsuri.logoMarkWithOptions model.gradients)
         ]
     }

@@ -93,7 +93,7 @@ view _ _ _ _ pageView =
         [ header [ class "site-header" ]
             [ h1 []
                 [ a [ href "/" ]
-                    [ FPMatsuri.logoMark -1 ( "#FC0", "#C00" )
+                    [ FPMatsuri.logoMarkWithOptions -1 ( "#FC0", "#C00" )
                     , text "関数型まつり"
                     ]
                 ]

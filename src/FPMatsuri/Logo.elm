@@ -1,12 +1,12 @@
-module FPMatsuri.Logo exposing (logoMark)
+module FPMatsuri.Logo exposing (logoMarkWithOptions)
 
 import Html.Attributes exposing (attribute)
 import Svg exposing (Svg, defs, g, linearGradient, path, rect, stop, svg)
 import Svg.Attributes exposing (d, fill, gradientTransform, height, id, offset, rx, ry, stopColor, viewBox, width, x, y)
 
 
-logoMark : Int -> ( String, String ) -> Svg msg
-logoMark index ( color1, color2 ) =
+logoMarkWithOptions : Int -> ( String, String ) -> Svg msg
+logoMarkWithOptions index ( color1, color2 ) =
     let
         id_ =
             "id_" ++ String.fromInt index
