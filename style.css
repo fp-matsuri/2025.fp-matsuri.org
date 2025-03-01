@@ -120,15 +120,6 @@ Markdown
 トップページ
 ------------------------------------ */
 
-p.note {
-  font-size: 0.875rem;
-  color: rgb(64, 64, 64);
-}
-
-p.note::before {
-  content: "※";
-}
-
 section {
   padding: 8rem 20px 6rem;
 

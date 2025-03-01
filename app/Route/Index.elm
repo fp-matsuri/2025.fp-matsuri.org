@@ -1,11 +1,12 @@
 module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
+import Css exposing (before, color, fontSize, qt, rem, rgb)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
-import Html.Styled.Attributes exposing (attribute, class, height, href, src, style, target)
+import Html.Styled.Attributes exposing (attribute, class, css, height, href, src, style, target)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
@@ -194,8 +195,20 @@ scheduleBlock =
     in
     block "Schedule"
         [ ul [ class "schedule" ] (List.map listItem schedule)
-        , p [ class "note" ] [ text "記載されているスケジュールの一部は予告なく変更されることがございます。" ]
+        , note "記載されているスケジュールの一部は予告なく変更されることがございます。"
         ]
+
+
+note : String -> Html msg
+note description =
+    p
+        [ css
+            [ fontSize (rem 0.875)
+            , color (rgb 64 64 64)
+            , before [ Css.property "content" (qt "※") ]
+            ]
+        ]
+        [ text description ]
 
 
 type alias Event msg =
