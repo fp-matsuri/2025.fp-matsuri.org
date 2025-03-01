@@ -1,12 +1,13 @@
 module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
-import Css exposing (before, color, fontSize, qt, rem, rgb)
+import Css exposing (..)
+import Css.Global exposing (withClass)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
-import Html.Styled.Attributes exposing (attribute, class, css, height, href, src, style, target)
+import Html.Styled.Attributes as Attributes exposing (attribute, class, css, height, href, src, style, target)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
@@ -167,7 +168,7 @@ overviewBlock =
             [ class "map"
             , src "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25918.24822641297!2d139.64379899847268!3d35.707005772578796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sen!2sjp!4v1736684092765!5m2!1sen!2sjp"
             , attribute "width" "100%"
-            , height 400
+            , Attributes.height 400
             , style "border" "0"
             , attribute "allowfullscreen" ""
             , attribute "loading" "lazy"
@@ -189,9 +190,71 @@ schedule : List (Event msg) -> Html msg
 schedule events_ =
     let
         listItem event =
-            li [ class "event" ]
-                [ h3 [ class (highlight event.highlight) ] [ event.label ]
-                , p [] [ text event.at ]
+            li
+                [ class "event"
+                , css
+                    [ property "display" "grid"
+                    , property "grid-template-columns " "18px 1fr"
+                    , property "grid-template-rows" "2rem repeat(2, auto) 2rem"
+                    , property "column-gap" "40px"
+                    , listStyleType none
+                    , before
+                        [ property "grid-column" "1"
+                        , property "grid-row" "1 / -1"
+                        , property "content" (qt "")
+                        , display Css.block
+                        , width (pct 100)
+                        , height (pct 100)
+                        , backgroundColor (rgb 16 40 48)
+                        ]
+                    , after
+                        [ property "grid-column" "1"
+                        , property "grid-row" "1 / -1"
+                        , alignSelf center
+                        , property "justify-self" "center"
+                        , property "content" (qt "")
+                        , display Css.block
+                        , width (px 14)
+                        , height (px 14)
+                        , borderRadius (pct 100)
+                        , backgroundColor (hex "FFF")
+                        ]
+                    , firstChild
+                        [ before
+                            [ alignSelf end
+                            , property "height" "calc(50% + 9px)"
+                            , borderRadius4 (px 9) (px 9) zero zero
+                            ]
+                        ]
+                    , lastChild
+                        [ before
+                            [ property "height" "calc(50% + 9px)"
+                            , borderRadius4 zero zero (px 9) (px 9)
+                            ]
+                        ]
+                    ]
+                ]
+                [ h3
+                    [ class (highlight event.highlight)
+                    , css
+                        [ property "grid-column" "2"
+                        , property "grid-row" "2"
+                        , property "margin-block" "0"
+                        , fontSize (rem 1.125)
+                        , withClass "highlight"
+                            [ fontSize (rem 1.875) ]
+                        ]
+                    ]
+                    [ event.label ]
+                , p
+                    [ css
+                        [ property "grid-column" "2"
+                        , property "grid-row" "3"
+                        , property "margin-block" "0"
+                        , fontSize (rem 0.875)
+                        ]
+                    ]
+                    [ text event.at ]
                 ]
 
         highlight bool =
@@ -201,7 +264,15 @@ schedule events_ =
             else
                 ""
     in
-    ul [ class "schedule" ] (List.map listItem events_)
+    ul
+        [ css
+            [ margin zero
+            , padding zero
+            , displayFlex
+            , flexDirection column
+            ]
+        ]
+        (List.map listItem events_)
 
 
 note : String -> Html msg
@@ -226,7 +297,7 @@ type alias Event msg =
 events : List (Event msg)
 events =
     [ { label =
-            a [ href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", target "_blank" ]
+            a [ href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", Attributes.target "_blank" ]
                 [ text "セッション応募開始" ]
       , at = "2025年1月20日"
       , highlight = False
@@ -256,9 +327,9 @@ sponsorsBlock =
                 ]
             , p []
                 [ text "スポンサープランの詳細は "
-                , a [ href "https://docs.google.com/presentation/d/1zMj4lBBr9ru6oAQEUJ01jrzl9hqX1ajs0zdb-73ngto/edit?usp=sharing", target "_blank" ] [ text "スポンサーシップのご案内" ]
+                , a [ href "https://docs.google.com/presentation/d/1zMj4lBBr9ru6oAQEUJ01jrzl9hqX1ajs0zdb-73ngto/edit?usp=sharing", Attributes.target "_blank" ] [ text "スポンサーシップのご案内" ]
                 , text " よりご確認いただけます。スポンサーには"
-                , a [ href "https://scalajp.notion.site/d5f10ec973fb4e779d96330d13b75e78", target "_blank" ] [ text "お申し込みフォーム" ]
+                , a [ href "https://scalajp.notion.site/d5f10ec973fb4e779d96330d13b75e78", Attributes.target "_blank" ] [ text "お申し込みフォーム" ]
                 , text " からお申し込みいただけます。"
                 ]
             , p []
@@ -275,7 +346,7 @@ teamBlock =
     let
         listItem member =
             li []
-                [ a [ class "person", href ("https://github.com/" ++ member.id), target "_blank" ]
+                [ a [ class "person", href ("https://github.com/" ++ member.id), Attributes.target "_blank" ]
                     [ img [ src ("https://github.com/" ++ member.id ++ ".png") ] []
                     , text member.id
                     ]
