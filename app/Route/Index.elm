@@ -199,7 +199,8 @@ schedule events_ =
                     , property "grid-template-rows" "2rem repeat(2, auto) 2rem"
                     , columnGap (px 40)
                     , listStyleType none
-                    , before
+                    , -- タイムラインの軸部分
+                      before
                         [ gridColumn "1"
                         , gridRow "1 / -1"
                         , content_ ""
@@ -208,7 +209,8 @@ schedule events_ =
                         , height (pct 100)
                         , backgroundColor (rgb 16 40 48)
                         ]
-                    , after
+                    , -- タイムラインのドット部分
+                      after
                         [ gridColumn "1"
                         , gridRow "1 / -1"
                         , alignSelf center

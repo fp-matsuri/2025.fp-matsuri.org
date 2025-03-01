@@ -6,7 +6,7 @@ module Css.Extra exposing
     , grid, gridTemplateColumns, gridTemplateRows, gridAutoColumns, gridAutoRows, gridColumn, gridRow
     )
 
-{-|
+{-| elm-css には含まれていないCSSプロパティや値を提供するモジュール
 
 @docs content_
 @docs marginBlock, marginInline, paddingBlock, paddingInline
