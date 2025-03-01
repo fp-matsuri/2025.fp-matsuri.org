@@ -6,8 +6,9 @@ module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 import BackendTask exposing (BackendTask)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
-import Html exposing (Html, a, footer, h1, header, main_, nav, text)
-import Html.Attributes exposing (class, href)
+import Html exposing (Html)
+import Html.Styled exposing (a, footer, h1, header, main_, nav, text)
+import Html.Styled.Attributes exposing (class, href)
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Route exposing (Route)
@@ -89,13 +90,14 @@ view :
     -> { body : List (Html msg), title : String }
 view _ _ _ _ pageView =
     { body =
-        [ header [ class "site-header" ]
-            [ h1 [] [ a [ href "/" ] [ text "関数型まつり" ] ]
-            , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
+        List.map Html.Styled.toUnstyled
+            [ header [ class "site-header" ]
+                [ h1 [] [ a [ href "/" ] [ text "関数型まつり" ] ]
+                , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
+                ]
+            , main_ [] pageView.body
+            , footer [ class "site-footer" ] [ text "© 2025 関数型まつり準備委員会" ]
             ]
-        , main_ [] pageView.body
-        , footer [ class "site-footer" ] [ text "© 2025 関数型まつり準備委員会" ]
-        ]
     , title =
         if pageView.title /= "" then
             pageView.title ++ " | 関数型まつり"

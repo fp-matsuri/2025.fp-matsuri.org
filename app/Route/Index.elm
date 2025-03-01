@@ -4,8 +4,8 @@ import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
-import Html.Attributes exposing (attribute, class, height, href, src, style, target)
+import Html.Styled exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
+import Html.Styled.Attributes exposing (attribute, class, height, href, src, style, target)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared

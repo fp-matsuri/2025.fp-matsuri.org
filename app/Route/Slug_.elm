@@ -11,8 +11,10 @@ import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html exposing (Html, a, div, iframe, section)
-import Html.Attributes as Attributes exposing (attribute, class, href, rel, src, target)
+import Html exposing (Html, a, iframe)
+import Html.Attributes exposing (attribute, href, rel, src, target)
+import Html.Styled exposing (div, section)
+import Html.Styled.Attributes exposing (class)
 import Markdown.Block exposing (Block)
 import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
@@ -103,7 +105,7 @@ customizedHtmlRenderer =
 
                                 titleAttrs =
                                     title
-                                        |> Maybe.map (\title_ -> [ Attributes.title title_ ])
+                                        |> Maybe.map (\title_ -> [ Html.Attributes.title title_ ])
                                         |> Maybe.withDefault []
                             in
                             a (href destination :: externalLinkAttrs ++ titleAttrs) children
@@ -114,7 +116,7 @@ customizedHtmlRenderer =
                               Markdown.Html.tag "iframe"
                                 (\class_ width_ height_ src_ frameborder_ allow_ allowfullscreen_ children ->
                                     iframe
-                                        [ class class_
+                                        [ Html.Attributes.class class_
                                         , attribute "width" width_
                                         , attribute "height" height_
                                         , src src_
@@ -167,6 +169,7 @@ view app _ =
             [ div [ class "markdown" ]
                 (app.data.body
                     |> Markdown.Renderer.render customizedHtmlRenderer
+                    |> Result.map (List.map Html.Styled.fromUnstyled)
                     |> Result.withDefault []
                 )
             ]
