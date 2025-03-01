@@ -4,7 +4,7 @@ import BackendTask exposing (BackendTask)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
+import Html exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
 import Html.Attributes exposing (attribute, class, height, href, src, style, target)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -86,11 +86,15 @@ hero =
 
         announcement =
             div [ class "announcement" ]
-                [ text "セッションを募集中です(2025/3/2まで)"
+                [ div [ style "text-align" "center", style "word-break" "auto-phrase" ]
+                    [ text "セッション募集は終了しました。"
+                    , br [] []
+                    , text "選考が完了するまでしばらくお待ちください。"
+                    , br [] []
+                    , text "ご応募ありがとうございました。"
+                    ]
                 , div [ class "buttons" ]
-                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", target "_blank" ]
-                        [ text "セッションに応募する" ]
-                    , a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", target "_blank" ]
+                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", target "_blank" ]
                         [ text "応募中のセッション一覧を見る" ]
                     ]
                 ]
