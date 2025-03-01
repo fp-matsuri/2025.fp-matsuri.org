@@ -223,13 +223,13 @@ schedule events_ =
                     , firstChild
                         [ before
                             [ alignSelf end
-                            , property "height" "calc(50% + 9px)"
+                            , height (calc (pct 50) plus (px 9))
                             , borderRadius4 (px 9) (px 9) zero zero
                             ]
                         ]
                     , lastChild
                         [ before
-                            [ property "height" "calc(50% + 9px)"
+                            [ height (calc (pct 50) plus (px 9))
                             , borderRadius4 zero zero (px 9) (px 9)
                             ]
                         ]
