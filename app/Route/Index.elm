@@ -179,6 +179,14 @@ overviewBlock =
 
 scheduleBlock : Html msg
 scheduleBlock =
+    block "Schedule"
+        [ schedule events
+        , note "記載されているスケジュールの一部は予告なく変更されることがございます。"
+        ]
+
+
+schedule : List (Event msg) -> Html msg
+schedule events_ =
     let
         listItem event =
             li [ class "event" ]
@@ -193,10 +201,7 @@ scheduleBlock =
             else
                 ""
     in
-    block "Schedule"
-        [ ul [ class "schedule" ] (List.map listItem schedule)
-        , note "記載されているスケジュールの一部は予告なく変更されることがございます。"
-        ]
+    ul [ class "schedule" ] (List.map listItem events_)
 
 
 note : String -> Html msg
@@ -218,8 +223,8 @@ type alias Event msg =
     }
 
 
-schedule : List (Event msg)
-schedule =
+events : List (Event msg)
+events =
     [ { label =
             a [ href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", target "_blank" ]
                 [ text "セッション応募開始" ]
