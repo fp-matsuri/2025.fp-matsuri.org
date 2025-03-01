@@ -2,6 +2,7 @@ module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
 import Css exposing (..)
+import Css.Extra exposing (columnGap, content_, grid, gridColumn, gridRow, marginBlock)
 import Css.Global exposing (withClass)
 import FatalError exposing (FatalError)
 import Head
@@ -193,26 +194,26 @@ schedule events_ =
             li
                 [ class "event"
                 , css
-                    [ property "display" "grid"
+                    [ display grid
                     , property "grid-template-columns " "18px 1fr"
                     , property "grid-template-rows" "2rem repeat(2, auto) 2rem"
-                    , property "column-gap" "40px"
+                    , columnGap (px 40)
                     , listStyleType none
                     , before
-                        [ property "grid-column" "1"
-                        , property "grid-row" "1 / -1"
-                        , property "content" (qt "")
+                        [ gridColumn "1"
+                        , gridRow "1 / -1"
+                        , content_ ""
                         , display Css.block
                         , width (pct 100)
                         , height (pct 100)
                         , backgroundColor (rgb 16 40 48)
                         ]
                     , after
-                        [ property "grid-column" "1"
-                        , property "grid-row" "1 / -1"
+                        [ gridColumn "1"
+                        , gridRow "1 / -1"
                         , alignSelf center
                         , property "justify-self" "center"
-                        , property "content" (qt "")
+                        , content_ ""
                         , display Css.block
                         , width (px 14)
                         , height (px 14)
@@ -237,9 +238,9 @@ schedule events_ =
                 [ h3
                     [ class (highlight event.highlight)
                     , css
-                        [ property "grid-column" "2"
-                        , property "grid-row" "2"
-                        , property "margin-block" "0"
+                        [ gridColumn "2"
+                        , gridRow "2"
+                        , marginBlock zero
                         , fontSize (rem 1.125)
                         , withClass "highlight"
                             [ fontSize (rem 1.875) ]
@@ -248,9 +249,9 @@ schedule events_ =
                     [ event.label ]
                 , p
                     [ css
-                        [ property "grid-column" "2"
-                        , property "grid-row" "3"
-                        , property "margin-block" "0"
+                        [ gridColumn "2"
+                        , gridRow "3"
+                        , marginBlock zero
                         , fontSize (rem 0.875)
                         ]
                     ]
@@ -281,7 +282,7 @@ note description =
         [ css
             [ fontSize (rem 0.875)
             , color (rgb 64 64 64)
-            , before [ Css.property "content" (qt "※") ]
+            , before [ content_ "※" ]
             ]
         ]
         [ text description ]
