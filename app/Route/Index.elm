@@ -7,7 +7,7 @@ import Css.Global exposing (withClass)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
+import Html.Styled as Html exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
 import Html.Styled.Attributes as Attributes exposing (attribute, class, css, height, href, src, style, target)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -67,11 +67,11 @@ view _ _ =
     { title = ""
     , body =
         [ hero
-        , aboutBlock
-        , overviewBlock
-        , scheduleBlock
-        , sponsorsBlock
-        , teamBlock
+        , aboutSection
+        , overviewSection
+        , scheduleSection
+        , sponsorsSection
+        , teamSection
         ]
     }
 
@@ -131,9 +131,9 @@ links =
     ]
 
 
-aboutBlock : Html msg
-aboutBlock =
-    block "About"
+aboutSection : Html msg
+aboutSection =
+    section "About"
         [ div [ class "markdown" ]
             [ p [] [ text "関数型プログラミングのカンファレンス「関数型まつり」を開催します！" ]
             , p []
@@ -149,8 +149,8 @@ aboutBlock =
         ]
 
 
-overviewBlock : Html msg
-overviewBlock =
+overviewSection : Html msg
+overviewSection =
     let
         item key value =
             div [ style "min-width" "18rem" ]
@@ -158,7 +158,7 @@ overviewBlock =
                 , p [] [ text value ]
                 ]
     in
-    block "Overview"
+    section "Overview"
         [ div [ class "markdown prose" ]
             [ item "Dates"
                 "2025.6.14(土)〜15(日)"
@@ -179,9 +179,9 @@ overviewBlock =
         ]
 
 
-scheduleBlock : Html msg
-scheduleBlock =
-    block "Schedule"
+scheduleSection : Html msg
+scheduleSection =
+    section "Schedule"
         [ schedule events
         , note "記載されているスケジュールの一部は予告なく変更されることがございます。"
         ]
@@ -204,7 +204,7 @@ schedule events_ =
                         [ gridColumn "1"
                         , gridRow "1 / -1"
                         , content_ ""
-                        , display Css.block
+                        , display block
                         , width (pct 100)
                         , height (pct 100)
                         , backgroundColor (rgb 16 40 48)
@@ -216,7 +216,7 @@ schedule events_ =
                         , alignSelf center
                         , property "justify-self" "center"
                         , content_ ""
-                        , display Css.block
+                        , display block
                         , width (px 14)
                         , height (px 14)
                         , borderRadius (pct 100)
@@ -320,9 +320,9 @@ events =
     ]
 
 
-sponsorsBlock : Html msg
-sponsorsBlock =
-    block "Sponsors"
+sponsorsSection : Html msg
+sponsorsSection =
+    section "Sponsors"
         [ div [ class "markdown sponsors" ]
             [ h3 [ class "text-3xl font-bold text-center py-8" ] [ text "スポンサー募集中！" ]
             , p []
@@ -344,8 +344,8 @@ sponsorsBlock =
         ]
 
 
-teamBlock : Html msg
-teamBlock =
+teamSection : Html msg
+teamSection =
     let
         listItem member =
             li []
@@ -355,7 +355,7 @@ teamBlock =
                     ]
                 ]
     in
-    block "Team"
+    section "Team"
         [ div [ class "people leaders" ]
             [ h3 [] [ text "座長" ]
             , ul [] (List.map listItem staff.leader)
@@ -415,10 +415,10 @@ staff =
     }
 
 
-block : String -> List (Html msg) -> Html msg
-block title children =
+section : String -> List (Html msg) -> Html msg
+section title children =
     let
         heading =
             h2 [] [ text title ]
     in
-    section [] (heading :: children)
+    Html.section [] (heading :: children)
