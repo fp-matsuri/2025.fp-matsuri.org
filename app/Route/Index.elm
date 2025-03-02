@@ -311,6 +311,8 @@ staff =
         , Member "y047aka"
         , Member "yonta"
         , Member "yshnb"
+        , Member "antimon2"
+        , Member "lmdexpr"
         ]
     }
 
