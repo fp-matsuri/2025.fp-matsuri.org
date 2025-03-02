@@ -274,9 +274,10 @@ teamBlock =
 type alias Member =
     { id : String }
 
--- 公平性のためにアルファベット順で表示
+
 staff : { leader : List Member, members : List Member }
 staff =
+    -- 公平性のためにアルファベット順で表示
     { leader =
         [ Member "lagenorhynque"
         , Member "omiend"
@@ -315,6 +316,7 @@ staff =
         , Member "yshnb"
         ]
     }
+
 
 block : String -> List (Html msg) -> Html msg
 block title children =
