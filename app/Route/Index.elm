@@ -8,7 +8,7 @@ import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
-import Html.Styled.Attributes as Attributes exposing (attribute, class, css, height, href, src, style, target)
+import Html.Styled.Attributes as Attributes exposing (attribute, class, css, href, src, style)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
@@ -97,7 +97,7 @@ hero =
                     , text "ご応募ありがとうございました。"
                     ]
                 , div [ class "buttons" ]
-                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", target "_blank" ]
+                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", Attributes.target "_blank" ]
                         [ text "応募中のセッション一覧を見る" ]
                     ]
                 ]
