@@ -29,18 +29,30 @@
     - [公式ガイド（日本語版）](https://guide.elm-lang.jp/)
 
 
-## 環境構築
+## 開発環境
 
-- 実行には [Node.js] の環境が必要です。
+### 環境構築
 
-```javascript
-npm install
-npm start
+実行には [Node.js] の環境が必要です。
+
+```zsh
+$ npm install
+$ npm start
 ```
 
 起動に成功すると、 http://localhost:1234/ でアクセスできます。
 
+### VSCode拡張機能など
+
+Elmの開発を快適にするために、VSCode拡張機能をインストールすることをお勧めします。
+
+- [Elm](https://marketplace.visualstudio.com/items?itemName=elmTooling.elm-ls-vscode)
+  - コード補完、エラーチェック、自動整形などの機能を提供します
+  - コードの自動整形には [elm-format] が使われています
+    - VSCode以外のエディタで開発する場合には、`npx elm-format app` を実行して適宜フォーマットしてください
+
 [Node.js]: https://nodejs.org/ja
+[elm-format]: https://github.com/avh4/elm-format
 
 ## サイトへの反映
 
@@ -58,7 +70,7 @@ npm start
 
 ## 開発
 
-### スタイリング
+### CSSによるスタイル記述
 
 2025年3月時点では2つの方法を併用しています。
 段階的に CSS in JS への移行を進めていきますが、現時点では各自が使いやすい方法を選択して構いません。
@@ -71,3 +83,15 @@ npm start
   - 全てのCSSプロパティをサポートしている訳ではないので、適宜 `Css.Extra` モジュールに関数を追加していきます
 
 [rtfeldman/elm-css]: https://package.elm-lang.org/packages/rtfeldman/elm-css/latest/
+
+
+### Elm Packages
+
+- パッケージの検索やインストールは [Elm Package] から行えます
+- パッケージのインストール例:
+  ```zsh
+  $ npx elm install (作者のid)/(パッケージ名)
+  ```
+- 使用するパッケージは `elm.json` で管理されます
+
+[Elm Package]: https://package.elm-lang.org/
