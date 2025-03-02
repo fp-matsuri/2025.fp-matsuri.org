@@ -287,6 +287,7 @@ staff =
         ]
     , members =
         [ Member "a-skua"
+        , Member "antimon2"
         , Member "aoiroaoino"
         , Member "ChenCMD"
         , Member "Guvalif"
@@ -298,6 +299,7 @@ staff =
         , Member "kazup0n"
         , Member "Keita-N"
         , Member "kmizu"
+        , Member "lmdexpr"
         , Member "magnolia-k"
         , Member "quantumshiro"
         , Member "rabe1028"
@@ -311,8 +313,6 @@ staff =
         , Member "y047aka"
         , Member "yonta"
         , Member "yshnb"
-        , Member "antimon2"
-        , Member "lmdexpr"
         ]
     }
 
