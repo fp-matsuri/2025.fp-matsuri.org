@@ -6,6 +6,7 @@ export default {
     return `
 <link rel="stylesheet" href="/style.css" />
 <meta name="generator" content="elm-pages v${context.cliVersion}" />
+<meta name="google-site-verification" content="bXaLaMdmF7uQAmi3krHPyj2D-Z6Zos0Jd048QJPqhL8" />
 `;
   },
   preloadTagForFile(file) {
