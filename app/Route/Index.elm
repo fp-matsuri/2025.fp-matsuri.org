@@ -275,9 +275,10 @@ type alias Member =
     { id : String }
 
 
+{-| 公平性のためにアルファベット順で記載しています。
+-}
 staff : { leader : List Member, members : List Member }
 staff =
-    -- 公平性のためにアルファベット順で表示
     { leader =
         [ Member "lagenorhynque"
         , Member "omiend"
