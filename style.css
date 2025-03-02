@@ -404,7 +404,7 @@ li.event>p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  column-gap: 0.5rem;
+  gap: 0.5rem;
   font-family: var(--sans-serif);
   font-size: 14px;
   text-decoration: none;
