@@ -37,6 +37,18 @@ head =
     [ Head.rootLanguage (LT.build LT.emptySubtags ja)
     , Head.metaName "viewport" (Head.raw "width=device-width,initial-scale=1")
     , Head.sitemapLink "/sitemap.xml"
+
+    -- https://coliss.com/articles/build-websites/operation/work/how-to-favicon.html#h201
+    , Head.nonLoadingNode "link"
+        [ ( "rel", Head.raw "icon" )
+        , ( "href", Head.raw "/favicon.ico" )
+        , ( "sizes", Head.raw "32x32" )
+        ]
+    , Head.nonLoadingNode "link"
+        [ ( "rel", Head.raw "icon" )
+        , ( "href", Head.raw "/icon.svg" )
+        , ( "type", Head.raw "image/svg+xml" )
+        ]
     ]
         |> BackendTask.succeed
 
