@@ -92,14 +92,12 @@ view _ _ _ _ pageView =
     { body =
         List.map Html.Styled.toUnstyled
             [ header [ class "site-header" ]
-                [ h1 []
-                    [ a [ href "/" ]
-                        [ img
-                            [ src "images/logotype.svg"
-                            , alt "関数型まつり"
-                            ]
-                            []
+                [ a [ class "site-logo", href "/" ]
+                    [ img
+                        [ src "images/logotype.svg"
+                        , alt "関数型まつり"
                         ]
+                        []
                     ]
                 , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
                 ]

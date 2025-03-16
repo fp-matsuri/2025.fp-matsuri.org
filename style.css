@@ -44,18 +44,11 @@ body {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
 }
 
-.site-header>h1 {
+.site-header>.site-logo {
   margin: 0;
-  line-height: 1;
-}
-
-.site-header>h1>a {
   display: block;
-  font-family: var(--serif-logo);
-  font-size: 1.25rem;
-  font-weight: 600;
+  line-height: 1;
   text-decoration: inherit;
-  color: #000;
 }
 
 .site-header>nav>a {
