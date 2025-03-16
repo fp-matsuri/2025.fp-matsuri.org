@@ -107,8 +107,11 @@ hero =
                 [ img [ class item.id, src item.icon ] [] ]
     in
     div [ class "hero" ]
-        [ h1 [] [ text "関数型まつり" ]
-        , date
+        [ div [ class "hero-main" ]
+            [ img [ class "logomark", src "images/logomark.svg" ] []
+            , h1 [] [ text "関数型まつり" ]
+            , date
+            ]
         , announcement
         , ul [ class "links" ] (List.map (\link -> li [] [ iconButton link ]) links)
         ]
