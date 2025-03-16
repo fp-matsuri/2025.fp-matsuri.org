@@ -38,7 +38,8 @@ body {
 
 .site-header {
   padding: 0.75rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 180px 1fr;
   align-items: center;
   column-gap: 1.5rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
@@ -49,6 +50,11 @@ body {
   display: block;
   line-height: 1;
   text-decoration: inherit;
+}
+
+.site-header>.site-logo>img {
+  display: block;
+  width: 100%;
 }
 
 .site-header>nav>a {
