@@ -4,14 +4,20 @@
   "type": "module",
   "scripts": {
     "start": "elm-pages dev",
-    "build": "elm-pages build"
+    "build": "elm-pages build",
+    "format": "elm-format --yes .",
+    "validate": "elm-format --yes --validate .",
+    "test": "elm-test",
+    "lint": "elm-review",
+    "fix": "elm-review --fix && elm-format --yes ."
   },
   "devDependencies": {
     "elm": "^0.19.1-6",
     "elm-format": "^0.8.7",
     "elm-optimize-level-2": "^0.3.5",
     "elm-pages": "3.0.19",
-    "elm-review": "^2.12.0",
+    "elm-review": "^2.13.2",
+    "elm-test": "^0.19.1-revision15",
     "lamdera": "^0.19.1-1.3.2",
     "svgo": "^3.3.2",
     "vite": "^6.0.6"
