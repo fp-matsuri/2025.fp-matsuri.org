@@ -9,9 +9,11 @@
   /* [2024年に最適なfont-familyの書き方](https://ics.media/entry/200317/) */
   --sans-serif: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 
-  --color-primary: 16 40 48;
+  --color-primary: hsl(226 49% 23%);
   --color-on-primary: 240 240 230;
-  --color-accent: 233 30 99;
+  --color-accent: hsl(4 58% 58%);
+
+  --color-grey095: hsl(226 10% 95%);
 
   font-size: 12pt;
   font-family: var(--serif);
@@ -128,6 +130,12 @@ section {
   row-gap: 2.25rem;
 }
 
+section:has(.sponsors) {
+  background-color: var(--color-grey095);
+  color: var(--color-primary);
+}
+
+
 
 section>h2 {
   margin: 0;
@@ -146,7 +154,7 @@ section>h2 {
   display: grid;
   grid-template-rows: 1fr auto 4rem auto 1fr auto;
   place-items: center;
-  background-color: hsl(226, 49%, 23%);
+  background-color: var(--color-primary);
   color: rgb(243, 244, 246);
 }
 
@@ -278,9 +286,8 @@ section>h2 {
 
 .sponsors {
   padding-inline: 2rem;
-  border: 1px solid;
   border-radius: 0.75rem;
-  border-color: #000;
+  background-color: white;
 }
 
 .sponsors h3 {
@@ -295,6 +302,10 @@ section>h2 {
 
 .sponsors p {
   margin-block: 1.25rem;
+}
+
+.sponsors a {
+  color: var(--color-accent);
 }
 
 .people {
