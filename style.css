@@ -222,7 +222,7 @@ section>h2 {
   text-decoration: none;
   white-space: nowrap;
   border-radius: 6px;
-  background: rgb(var(--color-accent));
+  background: rgb(233 30 99);
   color: inherit;
 }
 
