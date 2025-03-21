@@ -234,7 +234,7 @@ schedule events_ =
                         , display block
                         , width (pct 100)
                         , height (pct 100)
-                        , backgroundColor (rgb 16 40 48)
+                        , property "background-color" "var(--color-primary)"
                         ]
                     , -- タイムラインのドット部分
                       after
@@ -247,7 +247,7 @@ schedule events_ =
                         , width (px 14)
                         , height (px 14)
                         , borderRadius (pct 100)
-                        , backgroundColor (hex "FFF")
+                        , property "background-color" "var(--color-on-primary)"
                         ]
                     , firstChild
                         [ before
