@@ -10,7 +10,7 @@
   --sans-serif: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 
   --color-primary: hsl(226 49% 23%);
-  --color-on-primary: 240 240 230;
+  --color-on-primary: white;
   --color-accent: hsl(4 58% 58%);
 
   --color-grey095: hsl(226 10% 95%);
@@ -25,6 +25,7 @@
 
 body {
   margin: 0;
+  color: var(--color-primary);
 }
 
 /* ------------------------------------
@@ -70,7 +71,6 @@ body {
 .site-footer {
   padding: 2rem;
   text-align: center;
-  color: rgb(51 65 85);
 }
 
 /* ------------------------------------
@@ -132,7 +132,6 @@ section {
 
 section:has(.sponsors) {
   background-color: var(--color-grey095);
-  color: var(--color-primary);
 }
 
 
@@ -155,7 +154,7 @@ section>h2 {
   grid-template-rows: 1fr auto 4rem auto 1fr auto;
   place-items: center;
   background-color: var(--color-primary);
-  color: rgb(243, 244, 246);
+  color: var(--color-on-primary);
 }
 
 .hero>.hero-main {
@@ -195,7 +194,6 @@ section>h2 {
   font-family: montserrat, sans-serif;
   font-size: 1rem;
   font-weight: 300;
-  color: rgb(209, 213, 219);
 }
 
 @media all and (min-width: 640px) {
@@ -359,7 +357,6 @@ section>h2 {
   color: inherit;
   border-radius: 10px;
   border: 1px solid transparent;
-  color: #666;
 }
 
 a.person:hover {
