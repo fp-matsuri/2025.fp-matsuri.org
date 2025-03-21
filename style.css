@@ -9,6 +9,8 @@
   /* [2024年に最適なfont-familyの書き方](https://ics.media/entry/200317/) */
   --sans-serif: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 
+  --montserrat-sans: montserrat, sans-serif;
+
   --color-primary: hsl(226 49% 23%);
   --color-on-primary: white;
   --color-accent: hsl(4 58% 58%);
@@ -16,7 +18,7 @@
   --color-grey095: hsl(226 10% 95%);
 
   font-size: 12pt;
-  font-family: var(--serif);
+  font-family: var(--sans-serif);
 }
 
 * {
@@ -82,7 +84,6 @@ Markdown
 
 .markdown {
   max-width: 32.5em;
-  font-family: var(--sans-serif);
 }
 
 .markdown>* {
@@ -103,7 +104,6 @@ Markdown
 
 .markdown p,
 .markdown ul {
-  font-family: var(--serif);
   letter-spacing: 0.01em;
   line-height: 1.75;
 }
@@ -143,7 +143,7 @@ section:has(.people) {
 
 section>h2 {
   margin: 0;
-  font-family: montserrat, sans-serif;
+  font-family: var(--montserrat-sans);
   font-optical-sizing: auto;
   line-height: 1;
   font-size: 3rem;
@@ -196,7 +196,7 @@ section>h2 {
 }
 
 .hero-main>.date {
-  font-family: montserrat, sans-serif;
+  font-family: var(--montserrat-sans);
   font-size: 1rem;
   font-weight: 300;
 }
@@ -272,15 +272,15 @@ section>h2 {
   height: 100%;
 }
 
-.prose {
+.overview {
   width: 100%;
 }
 
-.prose h3 {
+.overview h3 {
   margin-top: 1.6em;
   margin-bottom: 0.6em;
-  font-family: var(--serif);
-  font-weight: bold;
+  font-family: var(--montserrat-sans);
+  font-weight: normal
 }
 
 .map {
@@ -296,7 +296,6 @@ section>h2 {
 .sponsors h3 {
   margin: 0;
   padding-block: 2rem 0.5rem;
-  font-family: var(--serif);
   text-align: center;
   line-height: 2.25rem;
   font-size: 1.875rem;
@@ -317,8 +316,7 @@ section>h2 {
 .people>h3 {
   margin: 0;
   text-align: center;
-  font-family: var(--serif);
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .people.leaders {
@@ -352,7 +350,6 @@ section>h2 {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--sans-serif);
   font-size: 14px;
   text-decoration: none;
   color: inherit;

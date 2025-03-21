@@ -162,7 +162,7 @@ overviewSection =
                 ]
     in
     section "Overview"
-        [ div [ class "markdown prose" ]
+        [ div [ class "markdown overview" ]
             [ item "Dates"
                 "2025.6.14(土)〜15(日)"
             , item "Place"
@@ -271,6 +271,7 @@ schedule events_ =
                         , gridRow "2"
                         , marginBlock zero
                         , fontSize (rem 1.125)
+                        , fontWeight normal
                         , withClass "highlight"
                             [ fontSize (rem 1.875) ]
                         ]
