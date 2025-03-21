@@ -28,6 +28,10 @@ body {
   color: var(--color-primary);
 }
 
+a {
+  color: var(--color-accent);
+}
+
 /* ------------------------------------
 ページ共通
 ------------------------------------ */
@@ -300,10 +304,6 @@ section>h2 {
 
 .sponsors p {
   margin-block: 1.25rem;
-}
-
-.sponsors a {
-  color: var(--color-accent);
 }
 
 .people {
