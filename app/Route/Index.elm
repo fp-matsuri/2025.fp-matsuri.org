@@ -326,9 +326,7 @@ type alias Event msg =
 
 events : List (Event msg)
 events =
-    [ { label =
-            a [ href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", Attributes.target "_blank" ]
-                [ text "セッション応募開始" ]
+    [ { label = text "セッション応募開始"
       , at = "2025年1月20日"
       , highlight = False
       }
