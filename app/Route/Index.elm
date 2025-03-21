@@ -137,7 +137,7 @@ links =
 aboutSection : Html msg
 aboutSection =
     section "About"
-        [ div [ class "markdown" ]
+        [ div [ class "markdown about" ]
             [ p [] [ text "関数型プログラミングのカンファレンス「関数型まつり」を開催します！" ]
             , p []
                 [ text "関数型プログラミングはメジャーな言語・フレームワークに取り入れられ、広く使われるようになりました。"

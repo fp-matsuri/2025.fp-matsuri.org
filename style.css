@@ -133,7 +133,9 @@ section {
   row-gap: 2.25rem;
 }
 
-section:has(.sponsors) {
+section:has(.about),
+section:has(.sponsors),
+section:has(.people) {
   background-color: var(--color-grey095);
 }
 
@@ -359,8 +361,8 @@ section>h2 {
 }
 
 a.person:hover {
-  background-color: #f6f6f6;
-  border-color: #eee;
+  background-color: #f9f9f9;
+  border-color: #ddd;
 }
 
 .people .person>img {
