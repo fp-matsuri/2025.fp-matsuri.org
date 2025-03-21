@@ -65,9 +65,8 @@ a {
 }
 
 .site-header>nav>a {
-  display: block;
+  display: inline-block;
   padding: 0.75rem 0.5rem;
-  font-weight: 600;
   text-decoration: inherit;
   color: inherit;
 }
