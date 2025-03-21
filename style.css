@@ -357,13 +357,6 @@ a.person:hover {
   border-color: #eee;
 }
 
-@media all and (min-width: 640px) {
-  .people a.person {
-    font-size: 16px;
-    flex-direction: row;
-  }
-}
-
 .people .person>img {
   max-width: 45px;
   border-radius: 50%;
