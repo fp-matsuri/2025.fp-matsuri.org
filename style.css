@@ -357,15 +357,9 @@ a.person:hover {
 }
 
 .people .person>img {
-  max-width: 45px;
+  max-width: 50px;
   border-radius: 50%;
   border: 1px solid hsl(0 0 0 / 0.05);
-}
-
-@media all and (min-width: 640px) {
-  .people .person>img {
-    max-width: 60px;
-  }
 }
 
 
