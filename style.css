@@ -326,13 +326,12 @@ section>h2 {
   justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   row-gap: 0.2rem;
-  column-gap: 1rem;
   list-style: none;
 }
 
 @media all and (min-width: 640px) {
   .people ul {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
 
