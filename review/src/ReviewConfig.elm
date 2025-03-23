@@ -11,9 +11,10 @@ when inside the directory containing this file.
 
 -}
 
+import NoUnused.Dependencies
 import Review.Rule exposing (Rule)
 
 
 config : List Rule
 config =
-    []
+    [ NoUnused.Dependencies.rule ]
