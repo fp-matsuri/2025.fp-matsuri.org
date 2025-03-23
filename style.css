@@ -9,12 +9,16 @@
   /* [2024年に最適なfont-familyの書き方](https://ics.media/entry/200317/) */
   --sans-serif: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 
-  --color-primary: 16 40 48;
-  --color-on-primary: 240 240 230;
-  --color-accent: 233 30 99;
+  --montserrat-sans: montserrat, sans-serif;
+
+  --color-primary: hsl(226 49% 23%);
+  --color-on-primary: white;
+  --color-accent: hsl(4 58% 58%);
+
+  --color-grey095: hsl(226 10% 95%);
 
   font-size: 12pt;
-  font-family: var(--serif);
+  font-family: var(--sans-serif);
 }
 
 * {
@@ -23,6 +27,11 @@
 
 body {
   margin: 0;
+  color: var(--color-primary);
+}
+
+a {
+  color: var(--color-accent);
 }
 
 /* ------------------------------------
@@ -58,9 +67,8 @@ body {
 }
 
 .site-header>nav>a {
-  display: block;
+  display: inline-block;
   padding: 0.75rem 0.5rem;
-  font-weight: 600;
   text-decoration: inherit;
   color: inherit;
 }
@@ -68,7 +76,6 @@ body {
 .site-footer {
   padding: 2rem;
   text-align: center;
-  color: rgb(51 65 85);
 }
 
 /* ------------------------------------
@@ -77,7 +84,6 @@ Markdown
 
 .markdown {
   max-width: 32.5em;
-  font-family: var(--sans-serif);
 }
 
 .markdown>* {
@@ -98,7 +104,6 @@ Markdown
 
 .markdown p,
 .markdown ul {
-  font-family: var(--serif);
   letter-spacing: 0.01em;
   line-height: 1.75;
 }
@@ -128,10 +133,17 @@ section {
   row-gap: 2.25rem;
 }
 
+section:has(.about),
+section:has(.sponsors),
+section:has(.people) {
+  background-color: var(--color-grey095);
+}
+
+
 
 section>h2 {
   margin: 0;
-  font-family: montserrat, sans-serif;
+  font-family: var(--montserrat-sans);
   font-optical-sizing: auto;
   line-height: 1;
   font-size: 3rem;
@@ -146,8 +158,8 @@ section>h2 {
   display: grid;
   grid-template-rows: 1fr auto 4rem auto 1fr auto;
   place-items: center;
-  background-color: hsl(226, 49%, 23%);
-  color: rgb(243, 244, 246);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .hero>.hero-main {
@@ -184,10 +196,9 @@ section>h2 {
 }
 
 .hero-main>.date {
-  font-family: montserrat, sans-serif;
+  font-family: var(--montserrat-sans);
   font-size: 1rem;
   font-weight: 300;
-  color: rgb(209, 213, 219);
 }
 
 @media all and (min-width: 640px) {
@@ -222,7 +233,7 @@ section>h2 {
   text-decoration: none;
   white-space: nowrap;
   border-radius: 6px;
-  background: rgb(var(--color-accent));
+  background: rgb(233 30 99);
   color: inherit;
 }
 
@@ -261,15 +272,15 @@ section>h2 {
   height: 100%;
 }
 
-.prose {
+.overview {
   width: 100%;
 }
 
-.prose h3 {
+.overview h3 {
   margin-top: 1.6em;
   margin-bottom: 0.6em;
-  font-family: var(--serif);
-  font-weight: bold;
+  font-family: var(--montserrat-sans);
+  font-weight: normal
 }
 
 .map {
@@ -278,15 +289,13 @@ section>h2 {
 
 .sponsors {
   padding-inline: 2rem;
-  border: 1px solid;
   border-radius: 0.75rem;
-  border-color: #000;
+  background-color: white;
 }
 
 .sponsors h3 {
   margin: 0;
   padding-block: 2rem 0.5rem;
-  font-family: var(--serif);
   text-align: center;
   line-height: 2.25rem;
   font-size: 1.875rem;
@@ -307,8 +316,7 @@ section>h2 {
 .people>h3 {
   margin: 0;
   text-align: center;
-  font-family: var(--serif);
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .people.leaders {
@@ -326,13 +334,12 @@ section>h2 {
   justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   row-gap: 0.2rem;
-  column-gap: 1rem;
   list-style: none;
 }
 
 @media all and (min-width: 640px) {
   .people ul {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
 
@@ -343,37 +350,23 @@ section>h2 {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--sans-serif);
+  text-align: center;
   font-size: 14px;
   text-decoration: none;
   color: inherit;
   border-radius: 10px;
   border: 1px solid transparent;
-  color: #666;
 }
 
 a.person:hover {
-  background-color: #f6f6f6;
-  border-color: #eee;
-}
-
-@media all and (min-width: 640px) {
-  .people a.person {
-    font-size: 16px;
-    flex-direction: row;
-  }
+  background-color: #f9f9f9;
+  border-color: #ddd;
 }
 
 .people .person>img {
-  max-width: 45px;
+  max-width: 50px;
   border-radius: 50%;
   border: 1px solid hsl(0 0 0 / 0.05);
-}
-
-@media all and (min-width: 640px) {
-  .people .person>img {
-    max-width: 60px;
-  }
 }
 
 
@@ -401,7 +394,7 @@ section.coc {
   width: calc(100% + 1em);
   translate: -0.5em;
   margin-inline: 0;
-  background-color: #F1F1F1;
+  background-color: var(--color-grey095);
   font-size: 16px;
   padding: 1em 1.5em;
   border-radius: 10px;

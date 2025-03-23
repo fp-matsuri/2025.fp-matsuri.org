@@ -15,7 +15,7 @@
     "elm": "^0.19.1-6",
     "elm-format": "^0.8.7",
     "elm-optimize-level-2": "^0.3.5",
-    "elm-pages": "3.0.19",
+    "elm-pages": "3.0.22",
     "elm-review": "^2.13.2",
     "elm-test": "^0.19.1-revision15",
     "lamdera": "^0.19.1-1.3.2",

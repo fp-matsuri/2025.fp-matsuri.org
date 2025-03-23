@@ -69,8 +69,8 @@ view _ _ =
         [ hero
         , aboutSection
         , overviewSection
-        , scheduleSection
         , sponsorsSection
+        , scheduleSection
         , teamSection
         ]
     }
@@ -137,7 +137,7 @@ links =
 aboutSection : Html msg
 aboutSection =
     section "About"
-        [ div [ class "markdown" ]
+        [ div [ class "markdown about" ]
             [ p [] [ text "関数型プログラミングのカンファレンス「関数型まつり」を開催します！" ]
             , p []
                 [ text "関数型プログラミングはメジャーな言語・フレームワークに取り入れられ、広く使われるようになりました。"
@@ -162,7 +162,7 @@ overviewSection =
                 ]
     in
     section "Overview"
-        [ div [ class "markdown prose" ]
+        [ div [ class "markdown overview" ]
             [ item "Dates"
                 "2025.6.14(土)〜15(日)"
             , item "Place"
@@ -179,6 +179,30 @@ overviewSection =
             , attribute "referrerpolicy" "no-referrer-when-downgrade"
             ]
             []
+        ]
+
+
+sponsorsSection : Html msg
+sponsorsSection =
+    section "Sponsors"
+        [ div [ class "markdown sponsors" ]
+            [ h3 [ class "text-3xl font-bold text-center py-8" ] [ text "スポンサー募集中！" ]
+            , p []
+                [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
+                ]
+            , p []
+                [ text "スポンサープランの詳細は "
+                , a [ href "https://docs.google.com/presentation/d/1zMj4lBBr9ru6oAQEUJ01jrzl9hqX1ajs0zdb-73ngto/edit?usp=sharing", Attributes.target "_blank" ] [ text "スポンサーシップのご案内" ]
+                , text " よりご確認いただけます。スポンサーには"
+                , a [ href "https://scalajp.notion.site/d5f10ec973fb4e779d96330d13b75e78", Attributes.target "_blank" ] [ text "お申し込みフォーム" ]
+                , text " からお申し込みいただけます。"
+                ]
+            , p []
+                [ text "ご不明点などありましたら、ぜひ"
+                , a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d" ] [ text "お問い合わせフォーム" ]
+                , text "よりお気軽にお問い合わせください。"
+                ]
+            ]
         ]
 
 
@@ -210,7 +234,7 @@ schedule events_ =
                         , display block
                         , width (pct 100)
                         , height (pct 100)
-                        , backgroundColor (rgb 16 40 48)
+                        , property "background-color" "var(--color-primary)"
                         ]
                     , -- タイムラインのドット部分
                       after
@@ -223,7 +247,7 @@ schedule events_ =
                         , width (px 14)
                         , height (px 14)
                         , borderRadius (pct 100)
-                        , backgroundColor (hex "FFF")
+                        , property "background-color" "var(--color-on-primary)"
                         ]
                     , firstChild
                         [ before
@@ -247,6 +271,7 @@ schedule events_ =
                         , gridRow "2"
                         , marginBlock zero
                         , fontSize (rem 1.125)
+                        , fontWeight normal
                         , withClass "highlight"
                             [ fontSize (rem 1.875) ]
                         ]
@@ -302,9 +327,7 @@ type alias Event msg =
 
 events : List (Event msg)
 events =
-    [ { label =
-            a [ href "https://fortee.jp/2025fp-matsuri/speaker/proposal/cfp", Attributes.target "_blank" ]
-                [ text "セッション応募開始" ]
+    [ { label = text "セッション応募開始"
       , at = "2025年1月20日"
       , highlight = False
       }
@@ -321,30 +344,6 @@ events =
       , highlight = True
       }
     ]
-
-
-sponsorsSection : Html msg
-sponsorsSection =
-    section "Sponsors"
-        [ div [ class "markdown sponsors" ]
-            [ h3 [ class "text-3xl font-bold text-center py-8" ] [ text "スポンサー募集中！" ]
-            , p []
-                [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
-                ]
-            , p []
-                [ text "スポンサープランの詳細は "
-                , a [ href "https://docs.google.com/presentation/d/1zMj4lBBr9ru6oAQEUJ01jrzl9hqX1ajs0zdb-73ngto/edit?usp=sharing", Attributes.target "_blank" ] [ text "スポンサーシップのご案内" ]
-                , text " よりご確認いただけます。スポンサーには"
-                , a [ href "https://scalajp.notion.site/d5f10ec973fb4e779d96330d13b75e78", Attributes.target "_blank" ] [ text "お申し込みフォーム" ]
-                , text " からお申し込みいただけます。"
-                ]
-            , p []
-                [ text "ご不明点などありましたら、ぜひ"
-                , a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d" ] [ text "お問い合わせフォーム" ]
-                , text "よりお気軽にお問い合わせください。"
-                ]
-            ]
-        ]
 
 
 teamSection : Html msg
