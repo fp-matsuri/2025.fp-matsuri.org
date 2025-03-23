@@ -1,6 +1,0 @@
-{
-  "rules": {
-    "elm-community/no-unused-imports": "warn",
-    "elm-community/no-unused-exposing": "warn"
-  }
-}
