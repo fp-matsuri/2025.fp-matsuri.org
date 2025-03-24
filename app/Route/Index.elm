@@ -144,7 +144,7 @@ newsSection =
                 -- PCの時だけ二段組にします。モバイルの時は一段組ですが日付と内容の間にgapが付きません。
                 [ css
                     [ display grid
-                    , gridColumn "1 / 3"
+                    , gridColumn "1 / -1"
                     , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                         [ property "grid-template-columns " "subgrid"
                         , alignItems center
@@ -158,11 +158,11 @@ newsSection =
             [ css
                 [ display grid
                 , maxWidth (em 32.5)
-                , columnGap (px 10)
                 , rowGap (px 15)
-                , property "grid-template-columns " "max-content 1fr"
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ rowGap (px 10)
+                    [ property "grid-template-columns " "max-content 1fr"
+                    , columnGap (px 10)
+                    , rowGap (px 10)
                     ]
                 ]
             ]
