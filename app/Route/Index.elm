@@ -2,8 +2,9 @@ module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
 import Css exposing (..)
-import Css.Extra exposing (columnGap, content_, grid, gridColumn, gridRow, marginBlock)
+import Css.Extra exposing (columnGap, content_, grid, gridColumn, gridRow, marginBlock, rowGap)
 import Css.Global exposing (withClass)
+import Css.Media as Media exposing (only, screen, withMedia)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
@@ -67,6 +68,7 @@ view _ _ =
     { title = ""
     , body =
         [ hero
+        , newsSection
         , aboutSection
         , overviewSection
         , sponsorsSection
@@ -132,6 +134,42 @@ links =
       , href = "https://fortee.jp/2025fp-matsuri"
       }
     ]
+
+
+newsSection : Html msg
+newsSection =
+    let
+        newsItem date content =
+            div
+                -- PCの時だけ二段組にします。モバイルの時は一段組ですが日付と内容の間にgapが付きません。
+                [ css
+                    [ display grid
+                    , gridColumn "1 / 3"
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ property "grid-template-columns " "subgrid"
+                        , alignItems center
+                        ]
+                    ]
+                ]
+                [ div [] [ text date ], div [] [ text content ] ]
+    in
+    section "News"
+        [ div
+            [ css
+                [ display grid
+                , maxWidth (em 32.5)
+                , columnGap (px 10)
+                , rowGap (px 15)
+                , property "grid-template-columns " "max-content 1fr"
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ rowGap (px 10)
+                    ]
+                ]
+            ]
+            [ newsItem "2025-03-02" "公募セッションの応募を締め切りました"
+            , newsItem "2025-01-20" "公募セッションの応募を開始しました"
+            ]
+        ]
 
 
 aboutSection : Html msg
