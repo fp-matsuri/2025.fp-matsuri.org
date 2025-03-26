@@ -108,7 +108,6 @@ view _ _ model =
         , overviewSection
         , sponsorsSection model.seed
         , teamSection
-        , proposalSection
         ]
     }
 
@@ -808,42 +807,3 @@ h3 attributes children =
         ]
         attributes
         children
-
-
-proposalSection : Html msg
-proposalSection =
-    Html.section
-        [ class "proposal-section"
-        , css
-            [ Css.padding2 (Css.px 40) Css.zero
-            , Css.backgroundColor (Css.rgb 249 250 251)
-            ]
-        ]
-        [ div
-            [ class "container mx-auto px-4"
-            , css [ Css.maxWidth (Css.px 800), Css.margin2 Css.zero Css.auto ]
-            ]
-            [ h2
-                [ class "text-2xl font-bold mb-4"
-                , css [ Css.marginBottom (Css.px 16) ]
-                ]
-                [ text "採択された応募" ]
-            , p
-                [ class "mb-6"
-                , css [ Css.marginBottom (Css.px 24) ]
-                ]
-                [ text "FP Matsuri 2025 で採択された応募の一覧を公開しています。" ]
-            , a
-                [ href "/proposal"
-                , class "inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                , css
-                    [ Css.backgroundColor (Css.rgb 37 99 235)
-                    , Css.color (Css.rgb 255 255 255)
-                    , Css.padding2 (Css.px 16) (Css.px 24)
-                    , Css.borderRadius (Css.px 8)
-                    , Css.hover [ Css.backgroundColor (Css.rgb 29 78 216) ]
-                    ]
-                ]
-                [ text "採択された応募一覧を見る" ]
-            ]
-        ]
