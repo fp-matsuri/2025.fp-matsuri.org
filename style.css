@@ -130,12 +130,12 @@ Markdown
 ------------------------------------ */
 
 section {
-  padding: 8rem 20px 6rem;
+  padding: 5rem 20px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 2.25rem;
+  row-gap: 3rem;
 }
 
 section:has(.about),
@@ -149,7 +149,7 @@ section > h2 {
   font-family: var(--montserrat-sans);
   font-optical-sizing: auto;
   line-height: 1;
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 300;
 }
 
