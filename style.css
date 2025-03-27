@@ -52,9 +52,9 @@ a {
 .site-header {
   padding: 0.75rem;
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 150px 1fr;
   align-items: center;
-  column-gap: 1.5rem;
+  column-gap: 2rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
 }
@@ -73,7 +73,7 @@ a {
 
 .site-header > nav > a {
   display: inline-block;
-  padding: 0.75rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   text-decoration: inherit;
   color: inherit;
 }
