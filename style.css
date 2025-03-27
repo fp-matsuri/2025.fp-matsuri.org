@@ -154,27 +154,25 @@ section > h2 {
 }
 
 .hero {
-  height: calc(100vh - var(--navbar-height));
-  height: calc(100dvh - var(--navbar-height));
-  padding: 48px;
+  padding: 90px 40px 40px;
   display: grid;
-  grid-template-rows: 1fr auto 4rem auto 1fr auto;
+  grid-template-rows: auto auto auto;
   place-items: center;
+  row-gap: 3.5rem;
   background-color: var(--color-primary);
   color: var(--color-on-primary);
 }
 
 .hero > .hero-main {
-  grid-row: 2;
   display: grid;
-  grid-template-rows: 7.5rem auto auto;
+  grid-template-rows: 7rem auto auto;
   place-items: center;
   row-gap: 1.2rem;
 }
 
 @media all and (min-width: 640px) {
   .hero > .hero-main {
-    grid-template-rows: 12rem auto auto;
+    grid-template-rows: 9rem auto auto;
   }
 }
 
@@ -186,14 +184,13 @@ section > h2 {
   margin: 0;
   line-height: 1;
   font-family: var(--serif-logo);
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: inherit;
-  letter-spacing: -0.25rem;
 }
 
 @media all and (min-width: 640px) {
   .hero-main > h1 {
-    font-size: 4.5rem;
+    font-size: 3.25rem;
   }
 }
 
@@ -210,8 +207,6 @@ section > h2 {
 }
 
 .hero .announcement {
-  grid-row: 4;
-
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
@@ -239,7 +234,6 @@ section > h2 {
 }
 
 .hero .links {
-  grid-row: 6;
   width: 100%;
   margin: 0;
   padding: 0;
