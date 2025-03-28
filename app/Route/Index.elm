@@ -192,11 +192,13 @@ aboutSection =
 overviewSection : Html msg
 overviewSection =
     let
-        item key value =
-            div [ style "min-width" "18rem" ]
+        itemHeader key contents =
+            div [style "min-width" "18rem"]
                 [ h3 [ class "font-semibold" ] [ text key ]
-                , p [] [ text value ]
+                , contents
                 ]
+        item key value =
+            itemHeader key (p [] [ text value ])
     in
     section "Overview"
         [ div [ class "markdown overview" ]
@@ -204,6 +206,11 @@ overviewSection =
                 "2025.6.14(土)〜15(日)"
             , item "Place"
                 "中野セントラルパーク カンファレンス"
+            , itemHeader "Ticket"
+              (ul []
+               [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
+               , li [] [ text "一般チケット(懇親会あり) 8,000円"]
+               ])
             ]
         , iframe
             [ class "map"
