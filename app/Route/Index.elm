@@ -193,10 +193,11 @@ overviewSection : Html msg
 overviewSection =
     let
         itemHeader key contents =
-            div [style "min-width" "18rem"]
+            div [ style "min-width" "18rem" ]
                 [ h3 [ class "font-semibold" ] [ text key ]
                 , contents
                 ]
+
         item key value =
             itemHeader key (p [] [ text value ])
     in
@@ -207,12 +208,13 @@ overviewSection =
             , item "Place"
                 "中野セントラルパーク カンファレンス"
             , itemHeader "Ticket"
-              (div [class "ticket"] [
-                (ul []
-               [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
-               , li [] [ text "一般チケット(懇親会あり) 8,000円"]
-               ])
-              ])
+                (div [ class "ticket" ]
+                    [ ul []
+                        [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
+                        , li [] [ text "一般チケット(懇親会あり) 8,000円" ]
+                        ]
+                    ]
+                )
             ]
         , iframe
             [ class "map"
