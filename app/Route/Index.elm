@@ -207,10 +207,12 @@ overviewSection =
             , item "Place"
                 "中野セントラルパーク カンファレンス"
             , itemHeader "Ticket"
-              (ul []
+              (div [class "ticket"] [
+                (ul []
                [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
                , li [] [ text "一般チケット(懇親会あり) 8,000円"]
                ])
+              ])
             ]
         , iframe
             [ class "map"
