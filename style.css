@@ -130,7 +130,7 @@ Markdown
 ------------------------------------ */
 
 section {
-  padding: 5rem 20px;
+  padding: 4rem 20px;
 
   display: flex;
   flex-direction: column;
@@ -149,23 +149,23 @@ section > h2 {
   font-family: var(--montserrat-sans);
   font-optical-sizing: auto;
   line-height: 1;
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   font-weight: 300;
 }
 
 .hero {
-  padding: 90px 40px 40px;
+  padding: 60px 40px 40px;
   display: grid;
   grid-template-rows: auto auto auto;
   place-items: center;
-  row-gap: 3.5rem;
+  row-gap: 3rem;
   background-color: var(--color-primary);
   color: var(--color-on-primary);
 }
 
 .hero > .hero-main {
   display: grid;
-  grid-template-rows: 7rem auto auto;
+  grid-template-rows: 6rem auto auto;
   place-items: center;
   row-gap: 1.2rem;
 }
@@ -184,7 +184,7 @@ section > h2 {
   margin: 0;
   line-height: 1;
   font-family: var(--serif-logo);
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: inherit;
 }
 
