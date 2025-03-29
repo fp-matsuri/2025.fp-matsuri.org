@@ -278,6 +278,13 @@ section > h2 {
   font-weight: normal;
 }
 
+.overview .ticket ul {
+  margin: 0;
+  padding: 1em 2em;
+  list-style: none;
+  background-color: var(--color-on-primary);
+}
+
 .map {
   max-width: 800px;
 }
