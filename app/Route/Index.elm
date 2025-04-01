@@ -283,7 +283,8 @@ sponsorLogos =
                 ]
     in
     div [ css [ width (pct 100) ] ]
-        [ div
+        [ sponsorPlanHeader "シルバースポンサー"
+        , div
             [ css
                 [ logoGridStyle
                 , gridTemplateColumns [ fr 1, fr 1 ]
@@ -292,7 +293,7 @@ sponsorLogos =
                 ]
             ]
             (List.map sponsorLogo silverSponsors)
-        , divider
+        , sponsorPlanHeader "ロゴスポンサー"
         , div
             [ css
                 [ logoGridStyle
@@ -334,9 +335,20 @@ sponsorLogo s =
         ]
 
 
-divider : Html msg
-divider =
-    div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
+sponsorPlanHeader : String -> Html msg
+sponsorPlanHeader name =
+    div
+        [ css
+            [ display grid
+            , property "grid-template-columns " "1fr max-content 1fr"
+            , alignItems center
+            , columnGap (px 5)
+            ]
+        ]
+        [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
+        , div [ css [ color (rgb 0x66 0x66 0x66), fontWeight bold ] ] [ text name ]
+        , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
+        ]
 
 
 scheduleSection : Html msg
