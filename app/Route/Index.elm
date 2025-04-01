@@ -278,7 +278,7 @@ sponsorLogos =
             batch
                 [ display grid
                 , columnGap (px 10)
-                , padding2 (px 30) (px 0)
+                , padding2 (px 30) zero
                 , justifyContent center
                 ]
     in
@@ -286,9 +286,9 @@ sponsorLogos =
         [ div
             [ css
                 [ logoGridStyle
-                , property "grid-template-columns " "1fr 1fr"
+                , gridTemplateColumns [ fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-columns " "306px 306px" ]
+                    [ gridTemplateColumns [ px 306, px 306 ] ]
                 ]
             ]
             (List.map sponsorLogo silverSponsors)
@@ -330,9 +330,7 @@ sponsorLogo s =
             , alt s.name
             ]
             []
-        , div
-            []
-            [ text s.name ]
+        , div [] [ text s.name ]
         ]
 
 
