@@ -94,7 +94,7 @@ hero =
                 [ div [ style "text-align" "center", style "word-break" "auto-phrase" ]
                     [ text "セッション採択結果を公開しました。" ]
                 , div [ class "buttons" ]
-                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank" ]
+                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", Attributes.target "_blank" ]
                         [ text "セッション一覧を見る" ]
                     ]
                 ]
