@@ -224,7 +224,7 @@ sponsorsSection : Html msg
 sponsorsSection =
     section "Sponsors"
         [ div [ class "markdown sponsors" ]
-            [ h3 [ class "text-3xl font-bold text-center py-8" ] [ text "スポンサー募集中！" ]
+            [ h3 [] [ text "スポンサー募集中！" ]
             , p []
                 [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
                 ]
