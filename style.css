@@ -283,22 +283,29 @@ section > h2 {
 }
 
 .sponsors {
-  padding-inline: 2rem;
+  max-width: 40em;
+  padding-inline: 1.2em;
   border-radius: 0.75rem;
   background-color: white;
 }
 
 .sponsors h3 {
   margin: 0;
-  padding-block: 2rem 0.5rem;
+  padding-top: 1.5rem;
   text-align: center;
   line-height: 2.25rem;
-  font-size: 1.875rem;
   font-weight: normal;
 }
 
 .sponsors p {
-  margin-block: 1.25rem;
+  margin-block: 1rem;
+  font-size: 14px;
+}
+
+@media all and (min-width: 640px) {
+  .sponsors p {
+    font-size: 16px;
+  }
 }
 
 .people {
