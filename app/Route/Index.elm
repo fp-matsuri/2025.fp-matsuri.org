@@ -502,7 +502,7 @@ events =
       , highlight = False
       }
     , { label = text "セッション採択結果発表"
-      , at = "2025年3月中"
+      , at = "2025年3月30日"
       , highlight = False
       }
     , { label = text "チケット販売開始"
