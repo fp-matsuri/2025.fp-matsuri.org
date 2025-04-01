@@ -92,15 +92,10 @@ hero =
         announcement =
             div [ class "announcement" ]
                 [ div [ style "text-align" "center", style "word-break" "auto-phrase" ]
-                    [ text "セッション募集は終了しました。"
-                    , br [] []
-                    , text "選考が完了するまでしばらくお待ちください。"
-                    , br [] []
-                    , text "ご応募ありがとうございました。"
-                    ]
+                    [ text "セッション採択結果を公開しました。" ]
                 , div [ class "buttons" ]
-                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", Attributes.target "_blank" ]
-                        [ text "応募中のセッション一覧を見る" ]
+                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank" ]
+                        [ text "セッション一覧を見る" ]
                     ]
                 ]
 
