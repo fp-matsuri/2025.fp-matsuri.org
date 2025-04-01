@@ -363,7 +363,7 @@ sponsorPlanHeader name =
             [ display grid
             , property "grid-template-columns " "1fr max-content 1fr"
             , alignItems center
-            , columnGap (px 5)
+            , columnGap (em 0.5)
             ]
         ]
         [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
@@ -372,7 +372,7 @@ sponsorPlanHeader name =
                 [ color (rgb 0x66 0x66 0x66)
                 , fontWeight bold
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ fontSize (pt 16) ]
+                    [ fontSize (px 16) ]
                 ]
             ]
             [ text name ]
