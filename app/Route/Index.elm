@@ -291,7 +291,7 @@ sponsorLogos =
                     ]
                 ]
     in
-    div [ css [ width (pct 100) ] ]
+    div [ css [ width (pct 100), maxWidth (em 40) ] ]
         [ sponsorPlanHeader "ゴールドスポンサー"
         , div
             [ css
