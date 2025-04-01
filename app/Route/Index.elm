@@ -256,6 +256,12 @@ type alias Sponsor =
     }
 
 
+goldSponsors : List Sponsor
+goldSponsors =
+    [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/"
+    ]
+
+
 silverSponsors : List Sponsor
 silverSponsors =
     [ Sponsor "株式会社はてな" "hatena.png" "https://hatena.co.jp"
@@ -286,7 +292,18 @@ sponsorLogos =
                 ]
     in
     div [ css [ width (pct 100) ] ]
-        [ sponsorPlanHeader "シルバースポンサー"
+        [ sponsorPlanHeader "ゴールドスポンサー"
+        , div
+            [ css
+                [ logoGridStyle
+                , paddingBottom (px 40)
+                , gridTemplateColumns [ fr 1 ]
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ gridTemplateColumns [ px 280 ] ]
+                ]
+            ]
+            (List.map sponsorLogo goldSponsors)
+        , sponsorPlanHeader "シルバースポンサー"
         , div
             [ css
                 [ logoGridStyle
