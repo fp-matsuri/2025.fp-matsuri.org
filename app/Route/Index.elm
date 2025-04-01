@@ -334,14 +334,6 @@ sponsorLogo s =
         [ href s.href
         , Attributes.rel "noopener noreferrer"
         , Attributes.target "_blank"
-        , css
-            [ textAlign center
-            , textDecoration none
-            , color inherit
-            , fontSize (pt 10)
-            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                [ fontSize (pt 12) ]
-            ]
         ]
         [ img
             [ src ("images/sponsors/" ++ s.image)
