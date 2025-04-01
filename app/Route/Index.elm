@@ -362,7 +362,6 @@ sponsorPlanHeader name =
         , div
             [ css
                 [ color (rgb 0x66 0x66 0x66)
-                , fontWeight bold
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                     [ fontSize (px 16) ]
                 ]
