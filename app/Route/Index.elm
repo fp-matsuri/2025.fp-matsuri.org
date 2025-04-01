@@ -2,7 +2,7 @@ module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
 import Css exposing (..)
-import Css.Extra exposing (columnGap, content_, grid, gridColumn, gridRow, marginBlock, rowGap)
+import Css.Extra exposing (columnGap, content_, fr, grid, gridColumn, gridRow, gridTemplateColumns, marginBlock, rowGap)
 import Css.Global exposing (withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
 import FatalError exposing (FatalError)
