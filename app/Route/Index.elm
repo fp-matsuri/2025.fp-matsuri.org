@@ -510,7 +510,7 @@ events =
       , highlight = False
       }
     , { label = text "関数型まつり開催"
-      , at = "2025.6.14-15"
+      , at = "2025年6月14-15日"
       , highlight = True
       }
     ]
