@@ -278,8 +278,11 @@ sponsorLogos =
             batch
                 [ display grid
                 , columnGap (px 10)
-                , padding2 (px 30) zero
+                , paddingTop (px 20)
                 , justifyContent center
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ paddingTop (px 30)
+                    ]
                 ]
     in
     div [ css [ width (pct 100) ] ]
@@ -287,9 +290,10 @@ sponsorLogos =
         , div
             [ css
                 [ logoGridStyle
-                , gridTemplateColumns [ fr 1, fr 1 ]
+                , paddingBottom (px 40)
+                , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 306, px 306 ] ]
+                    [ gridTemplateColumns [ px 163, px 163 ] ]
                 ]
             ]
             (List.map sponsorLogo silverSponsors)
@@ -297,9 +301,10 @@ sponsorLogos =
         , div
             [ css
                 [ logoGridStyle
-                , property "grid-template-columns " "1fr 1fr 1fr"
+                , paddingBottom (px 40)
+                , gridTemplateColumns [ fr 1, fr 1, fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-columns " "165px 165px" ]
+                    [ gridTemplateColumns [ px 116, px 116 ] ]
                 ]
             ]
             (List.map sponsorLogo logoSponsors)
@@ -331,7 +336,6 @@ sponsorLogo s =
             , alt s.name
             ]
             []
-        , div [] [ text s.name ]
         ]
 
 
@@ -346,7 +350,15 @@ sponsorPlanHeader name =
             ]
         ]
         [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-        , div [ css [ color (rgb 0x66 0x66 0x66), fontWeight bold ] ] [ text name ]
+        , div
+            [ css
+                [ color (rgb 0x66 0x66 0x66)
+                , fontWeight bold
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ fontSize (pt 16) ]
+                ]
+            ]
+            [ text name ]
         , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
         ]
 
