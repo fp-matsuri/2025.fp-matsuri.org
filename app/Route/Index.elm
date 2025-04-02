@@ -94,7 +94,7 @@ hero =
                 [ div [ style "text-align" "center", style "word-break" "auto-phrase" ]
                     [ text "セッション採択結果を公開しました。" ]
                 , div [ class "buttons" ]
-                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/all", Attributes.target "_blank" ]
+                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank" ]
                         [ text "セッション一覧を見る" ]
                     ]
                 ]
@@ -162,7 +162,7 @@ newsSection =
                 ]
             ]
             [ newsItem "2025-03-30"
-                [ a [ href "https://fortee.jp/2025fp-matsuri/proposal/all", Attributes.target "_blank", rel "noopener noreferrer" ]
+                [ a [ href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank", rel "noopener noreferrer" ]
                     [ text "セッション採択結果を公開しました" ]
                 ]
             , newsItem "2025-03-02" [ text "公募セッションの応募を締め切りました" ]
