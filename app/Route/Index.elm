@@ -8,7 +8,7 @@ import Css.Media as Media exposing (only, screen, withMedia)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, br, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
+import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src, style)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
