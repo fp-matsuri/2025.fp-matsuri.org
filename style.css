@@ -272,10 +272,12 @@ Overview
 ------------------------------------ */
 .overview {
   width: 100%;
+  display: grid;
+  row-gap: 0.8rem;
 }
 
 .overview h3 {
-  margin-top: 1.6em;
+  margin-top: 0px;
   margin-bottom: 0.6em;
   font-family: var(--montserrat-sans);
   font-weight: normal;
