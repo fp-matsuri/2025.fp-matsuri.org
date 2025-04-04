@@ -267,6 +267,9 @@ section > h2 {
   height: 100%;
 }
 
+/* ------------------------------------
+Overview
+------------------------------------ */
 .overview {
   width: 100%;
 }
@@ -278,15 +281,31 @@ section > h2 {
   font-weight: normal;
 }
 
+.overview-flex-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 1.2em;
+}
+
+@media all and (min-width: 640px) {
+  .overview-flex-box {
+    display: flex;
+    flex-direction: row;
+    max-width: 800px;
+    justify-content: center;
+  }
+}
+
 .overview .ticket ul {
   margin: 0;
-  padding: 1em 2em;
+  padding: 0;
   list-style: none;
   background-color: var(--color-on-primary);
 }
 
 .map {
-  max-width: 800px;
+  max-width: 600px;
 }
 
 .sponsors {

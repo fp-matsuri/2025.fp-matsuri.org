@@ -200,33 +200,38 @@ overviewSection =
 
         item key value =
             itemHeader key (p [] [ text value ])
+
+        information =
+            div [ class "markdown overview" ]
+                [ item "Dates"
+                    "2025.6.14(土)〜15(日)"
+                , item "Place"
+                    "中野セントラルパーク カンファレンス"
+                , itemHeader "Ticket"
+                    (div [ class "ticket" ]
+                        [ ul []
+                            [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
+                            , li [] [ text "一般チケット(懇親会あり) 8,000円" ]
+                            ]
+                        ]
+                    )
+                ]
+
+        map =
+            iframe
+                [ class "map"
+                , src "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25918.24822641297!2d139.64379899847268!3d35.707005772578796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sen!2sjp!4v1736684092765!5m2!1sen!2sjp"
+                , attribute "width" "100%"
+                , Attributes.height 400
+                , style "border" "0"
+                , attribute "allowfullscreen" ""
+                , attribute "loading" "lazy"
+                , attribute "referrerpolicy" "no-referrer-when-downgrade"
+                ]
+                []
     in
     section "Overview"
-        [ div [ class "markdown overview" ]
-            [ item "Dates"
-                "2025.6.14(土)〜15(日)"
-            , item "Place"
-                "中野セントラルパーク カンファレンス"
-            , itemHeader "Ticket"
-                (div [ class "ticket" ]
-                    [ ul []
-                        [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
-                        , li [] [ text "一般チケット(懇親会あり) 8,000円" ]
-                        ]
-                    ]
-                )
-            ]
-        , iframe
-            [ class "map"
-            , src "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25918.24822641297!2d139.64379899847268!3d35.707005772578796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sen!2sjp!4v1736684092765!5m2!1sen!2sjp"
-            , attribute "width" "100%"
-            , Attributes.height 400
-            , style "border" "0"
-            , attribute "allowfullscreen" ""
-            , attribute "loading" "lazy"
-            , attribute "referrerpolicy" "no-referrer-when-downgrade"
-            ]
-            []
+        [ div [ class "overview-flex-box" ] [ information, map ]
         ]
 
 
