@@ -218,7 +218,7 @@ overviewSection =
                             , li [] [ text "一般チケット(懇親会あり) 8,000円" ]
                             ]
                         , text "※ 1日目のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
-                        , a [ href "#" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
+                        , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
                         ]
                     ]
                 ]
