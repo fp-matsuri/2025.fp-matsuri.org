@@ -289,9 +289,10 @@ Overview
 }
 
 @media all and (min-width: 640px) {
-  .overview-flex-box {
-    display: flex;
-    flex-direction: row;
+  .overview-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 40px;
     max-width: 800px;
     justify-content: center;
     align-items: start;
@@ -305,10 +306,6 @@ Overview
   color: white;
   font-size: 20px;
   text-align: center;
-}
-
-.map {
-  max-width: 600px;
 }
 
 .sponsors {

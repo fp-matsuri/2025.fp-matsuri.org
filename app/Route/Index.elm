@@ -237,7 +237,7 @@ overviewSection =
                 []
     in
     section "Overview"
-        [ div [ class "overview-flex-box" ] [ information, map ]
+        [ div [ class "overview-box" ] [ information, map ]
         ]
 
 
