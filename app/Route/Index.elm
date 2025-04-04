@@ -194,25 +194,25 @@ overviewSection =
     let
         itemHeader key contents =
             div [ style "min-width" "18rem" ]
-                [ h3 [ class "font-semibold" ] [ text key ]
-                , contents
-                ]
+                (h3 [ class "font-semibold" ] [ text key ]
+                    :: contents
+                )
 
         item key value =
-            itemHeader key (p [] [ text value ])
+            itemHeader key [ p [] [ text value ] ]
 
         information =
             div [ class "overview" ]
                 [ itemHeader "日程"
-                    (ul []
+                    [ ul []
                         [ li [] [ text "1日目：6月14日（土）11:00〜19:00" ]
                         , li [] [ text "2日目：6月15日（日）10:00〜18:00" ]
                         ]
-                    )
+                    ]
                 , item "会場"
                     "中野セントラルパーク カンファレンス"
                 , itemHeader "チケット"
-                    (div []
+                    [ div []
                         [ ul []
                             [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
                             , li [] [ text "一般チケット(懇親会あり) 8,000円" ]
@@ -220,7 +220,7 @@ overviewSection =
                         , text "※ 1日目のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
                         , a [ href "#" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
                         ]
-                    )
+                    ]
                 ]
 
         map =
