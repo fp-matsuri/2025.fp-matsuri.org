@@ -299,7 +299,7 @@ Overview
 }
 
 .link-to-doorkeeper {
-  height: 44px;
+  padding: 8px;
   border-radius: 30px;
   background: rgba(210, 96, 88, 1);
   color: white;
