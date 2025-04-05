@@ -192,30 +192,52 @@ aboutSection =
 overviewSection : Html msg
 overviewSection =
     let
-        item key value =
+        itemHeader key contents =
             div [ style "min-width" "18rem" ]
-                [ h3 [ class "font-semibold" ] [ text key ]
-                , p [] [ text value ]
+                (h3 [ class "font-semibold" ] [ text key ]
+                    :: contents
+                )
+
+        item key value =
+            itemHeader key [ p [] [ text value ] ]
+
+        information =
+            div [ class "overview" ]
+                [ itemHeader "日程"
+                    [ ul []
+                        [ li [] [ text "1日目：6月14日（土）11:00〜19:00" ]
+                        , li [] [ text "2日目：6月15日（日）10:00〜18:00" ]
+                        ]
+                    ]
+                , item "会場"
+                    "中野セントラルパーク カンファレンス"
+                , itemHeader "チケット"
+                    [ div []
+                        [ ul []
+                            [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
+                            , li [] [ text "一般チケット(懇親会あり) 8,000円" ]
+                            ]
+                        , text "※ 1日目のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
+                        , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
+                        ]
+                    ]
                 ]
+
+        map =
+            iframe
+                [ class "map"
+                , src "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25918.24822641297!2d139.64379899847268!3d35.707005772578796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sen!2sjp!4v1736684092765!5m2!1sen!2sjp"
+                , attribute "width" "100%"
+                , Attributes.height 400
+                , style "border" "0"
+                , attribute "allowfullscreen" ""
+                , attribute "loading" "lazy"
+                , attribute "referrerpolicy" "no-referrer-when-downgrade"
+                ]
+                []
     in
     section "Overview"
-        [ div [ class "markdown overview" ]
-            [ item "Dates"
-                "2025.6.14(土)〜15(日)"
-            , item "Place"
-                "中野セントラルパーク カンファレンス"
-            ]
-        , iframe
-            [ class "map"
-            , src "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25918.24822641297!2d139.64379899847268!3d35.707005772578796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sen!2sjp!4v1736684092765!5m2!1sen!2sjp"
-            , attribute "width" "100%"
-            , Attributes.height 400
-            , style "border" "0"
-            , attribute "allowfullscreen" ""
-            , attribute "loading" "lazy"
-            , attribute "referrerpolicy" "no-referrer-when-downgrade"
-            ]
-            []
+        [ div [ class "overview-box" ] [ information, map ]
         ]
 
 
