@@ -283,13 +283,6 @@ Overview
   font-weight: bold;
 }
 
-.overview-flex-box {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0 1.2em;
-}
-
 @media all and (min-width: 640px) {
   .overview-box {
     display: grid;
