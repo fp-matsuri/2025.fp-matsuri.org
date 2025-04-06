@@ -205,8 +205,8 @@ overviewSection =
             div [ class "overview" ]
                 [ itemHeader "日程"
                     [ ul []
-                        [ li [] [ text "1日目：6月14日（土）11:00〜19:00" ]
-                        , li [] [ text "2日目：6月15日（日）10:00〜18:00" ]
+                        [ li [] [ text "Day1：6月14日（土）11:00〜19:00" ]
+                        , li [] [ text "Day2：6月15日（日）10:00〜19:00" ]
                         ]
                     ]
                 , item "会場"
@@ -214,10 +214,11 @@ overviewSection =
                 , itemHeader "チケット"
                     [ div []
                         [ ul []
-                            [ li [] [ text "一般チケット(懇親会なし) 3,000円" ]
-                            , li [] [ text "一般チケット(懇親会あり) 8,000円" ]
+                            [ li [] [ text "一般（懇親会あり）3,000円" ]
+                            , li [] [ text "一般（懇親会なし） 8,000円" ]
+                            , li [] [ text "学生（懇親会あり）1,000円" ]
                             ]
-                        , text "※ 1日目のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
+                        , text "※ Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
                         , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
                         ]
                     ]
