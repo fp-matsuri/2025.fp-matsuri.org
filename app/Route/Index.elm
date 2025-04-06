@@ -5,28 +5,68 @@ import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridTemplateColumns, rowGap)
 import Css.Global exposing (descendants)
 import Css.Media as Media exposing (only, screen, withMedia)
+import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src, style)
 import PagesMsg exposing (PagesMsg)
-import RouteBuilder exposing (App, StatelessRoute)
+import Random
+import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
 import View exposing (View)
 
 
-type alias Model =
-    {}
-
-
-type alias Msg =
-    ()
-
-
 type alias RouteParams =
     {}
+
+
+route : StatefulRoute RouteParams Data ActionData Model Msg
+route =
+    RouteBuilder.single { head = head, data = data }
+        |> RouteBuilder.buildWithLocalState
+            { init = init
+            , update = update
+            , view = view
+            , subscriptions = \_ _ _ _ -> Sub.none
+            }
+
+
+
+-- INIT
+
+
+type alias Model =
+    { seed : Int
+    }
+
+
+init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
+init _ _ =
+    ( { seed = 0 }
+    , Effect.fromCmd (Random.generate GotRandomSeed (Random.int 1 20))
+    )
+
+
+
+-- UPDATE
+
+
+type Msg
+    = GotRandomSeed Int
+
+
+update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
+update _ _ msg model =
+    case msg of
+        GotRandomSeed newSeed ->
+            ( { model | seed = newSeed }, Effect.none )
+
+
+
+-- DATA
 
 
 type alias Data =
@@ -35,12 +75,6 @@ type alias Data =
 
 type alias ActionData =
     {}
-
-
-route : StatelessRoute RouteParams Data ActionData
-route =
-    RouteBuilder.single { head = head, data = data }
-        |> RouteBuilder.buildNoState { view = view }
 
 
 data : BackendTask FatalError Data
@@ -63,15 +97,16 @@ head _ =
 view :
     App Data ActionData RouteParams
     -> Shared.Model
+    -> Model
     -> View (PagesMsg Msg)
-view _ _ =
+view _ _ model =
     { title = ""
     , body =
         [ hero
         , newsSection
         , aboutSection
         , overviewSection
-        , sponsorsSection
+        , sponsorsSection model.seed
         , teamSection
         ]
     }
@@ -280,8 +315,8 @@ overviewSection =
         ]
 
 
-sponsorsSection : Html msg
-sponsorsSection =
+sponsorsSection : Int -> Html msg
+sponsorsSection seed =
     section "Sponsors"
         [ div [ class "markdown sponsors" ]
             [ h3 [] [ text "スポンサー募集中！" ]
@@ -301,7 +336,7 @@ sponsorsSection =
                 , text "よりお気軽にお問い合わせください。"
                 ]
             ]
-        , sponsorLogos
+        , sponsorLogos seed
         ]
 
 
@@ -316,30 +351,54 @@ type alias Sponsor =
     }
 
 
-goldSponsors : List Sponsor
-goldSponsors =
-    [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/"
-    ]
+goldSponsorsShuffled : Int -> List Sponsor
+goldSponsorsShuffled seed =
+    shuffleList seed
+        [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/"
+        ]
 
 
-silverSponsors : List Sponsor
-silverSponsors =
-    [ Sponsor "株式会社はてな" "hatena.png" "https://hatena.co.jp"
-    , Sponsor "合同会社ザウエル" "zauel.png" "https://zauel.co.jp"
-    , Sponsor "株式会社ネクストビート" "nextbeat.png" "https://www.nextbeat.co.jp/"
-    , Sponsor "エムスリー株式会社" "m3.png" "https://jobs.m3.com/engineer/"
-    ]
+silverSponsorsShuffled : Int -> List Sponsor
+silverSponsorsShuffled seed =
+    shuffleList seed
+        [ Sponsor "株式会社はてな" "hatena.png" "https://hatena.co.jp"
+        , Sponsor "合同会社ザウエル" "zauel.png" "https://zauel.co.jp"
+        , Sponsor "株式会社ネクストビート" "nextbeat.png" "https://www.nextbeat.co.jp/"
+        , Sponsor "エムスリー株式会社" "m3.png" "https://jobs.m3.com/engineer/"
+        ]
 
 
-logoSponsors : List Sponsor
-logoSponsors =
-    [ Sponsor "合同会社Ignission" "ignission.png" "https://ignission.tech/"
-    , Sponsor "株式会社ギークニア" "geekneer.png" "https://geekneer.com/"
-    ]
+logoSponsorsShuffled : Int -> List Sponsor
+logoSponsorsShuffled seed =
+    shuffleList seed
+        [ Sponsor "合同会社Ignission" "ignission.png" "https://ignission.tech/"
+        , Sponsor "株式会社ギークニア" "geekneer.png" "https://geekneer.com/"
+        ]
 
 
-sponsorLogos : Html msg
-sponsorLogos =
+{-| 与えられたリストの要素をランダムな順序に並べ替えます。
+
+    1. リストの各要素に0〜1のランダムな値を割り当てる
+    2. ランダム値でソートすることでリストをシャッフル
+    3. ランダム値を取り除いて元の要素だけを返す
+
+-}
+shuffleList : Int -> List a -> List a
+shuffleList seed list =
+    let
+        generator =
+            Random.list (List.length list) (Random.float 0 1)
+    in
+    Random.initialSeed seed
+        |> Random.step generator
+        |> Tuple.first
+        |> List.map2 Tuple.pair list
+        |> List.sortBy Tuple.second
+        |> List.map Tuple.first
+
+
+sponsorLogos : Int -> Html msg
+sponsorLogos seed =
     let
         -- スポンサープランによらない、レイアウト構成を決めるようなスタイルを定義
         logoGridStyle =
@@ -364,7 +423,7 @@ sponsorLogos =
                     [ gridTemplateColumns [ px 280 ] ]
                 ]
             ]
-            (List.map sponsorLogo goldSponsors)
+            (List.map sponsorLogo (goldSponsorsShuffled seed))
         , sponsorPlanHeader "シルバースポンサー"
         , div
             [ css
@@ -375,7 +434,7 @@ sponsorLogos =
                     [ property "grid-template-columns" "repeat(auto-fit, 163px)" ]
                 ]
             ]
-            (List.map sponsorLogo silverSponsors)
+            (List.map sponsorLogo (silverSponsorsShuffled seed))
         , sponsorPlanHeader "ロゴスポンサー"
         , div
             [ css
@@ -386,7 +445,7 @@ sponsorLogos =
                     [ gridTemplateColumns [ px 116, px 116 ] ]
                 ]
             ]
-            (List.map sponsorLogo logoSponsors)
+            (List.map sponsorLogo (logoSponsorsShuffled seed))
         ]
 
 
