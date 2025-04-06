@@ -157,13 +157,14 @@ section > h2 {
 .hero {
   padding: 80px 40px 40px;
   display: grid;
-  place-items: center;
+  justify-items: center;
   row-gap: 3rem;
   background-color: var(--color-primary);
   color: var(--color-on-primary);
 }
 
 .hero > .hero-main {
+  width: 100%;
   display: grid;
   grid-template-rows: 6rem auto auto;
   place-items: center;
