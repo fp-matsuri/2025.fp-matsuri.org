@@ -122,8 +122,30 @@ links =
 
 newsSection : Html msg
 newsSection =
+    section "News"
+        [ news
+            [ NewsItem "2025-04-06"
+                [ a [ href "https://blog.fp-matsuri.org/entry/2025/04/06/101230", Attributes.target "_blank", rel "noopener noreferrer" ]
+                    [ text "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！" ]
+                ]
+            , NewsItem "2025-03-30"
+                [ a [ href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank", rel "noopener noreferrer" ]
+                    [ text "セッション採択結果を公開しました" ]
+                ]
+            , NewsItem "2025-03-02" [ text "公募セッションの応募を締め切りました" ]
+            , NewsItem "2025-01-20" [ text "公募セッションの応募を開始しました" ]
+            ]
+        ]
+
+
+type alias NewsItem msg =
+    { date : String, contents : List (Html msg) }
+
+
+news : List (NewsItem msg) -> Html msg
+news items =
     let
-        newsItem date contents =
+        newsItem { date, contents } =
             div
                 -- PCの時だけ二段組にします。モバイルの時は一段組ですが日付と内容の間にgapが付きません。
                 [ css
@@ -137,31 +159,19 @@ newsSection =
                 ]
                 [ div [] [ text date ], div [] contents ]
     in
-    section "News"
-        [ div
-            [ css
-                [ display grid
-                , maxWidth (em 32.5)
-                , rowGap (px 15)
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-columns " "max-content 1fr"
-                    , columnGap (px 10)
-                    , rowGap (px 10)
-                    ]
+    div
+        [ css
+            [ display grid
+            , maxWidth (em 32.5)
+            , rowGap (px 15)
+            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                [ property "grid-template-columns " "max-content 1fr"
+                , columnGap (px 10)
+                , rowGap (px 10)
                 ]
-            ]
-            [ newsItem "2025-04-06"
-                [ a [ href "https://blog.fp-matsuri.org/entry/2025/04/06/101230", Attributes.target "_blank", rel "noopener noreferrer" ]
-                    [ text "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！" ]
-                ]
-            , newsItem "2025-03-30"
-                [ a [ href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank", rel "noopener noreferrer" ]
-                    [ text "セッション採択結果を公開しました" ]
-                ]
-            , newsItem "2025-03-02" [ text "公募セッションの応募を締め切りました" ]
-            , newsItem "2025-01-20" [ text "公募セッションの応募を開始しました" ]
             ]
         ]
+        (List.map newsItem items)
 
 
 aboutSection : Html msg
