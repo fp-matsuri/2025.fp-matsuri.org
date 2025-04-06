@@ -150,7 +150,11 @@ newsSection =
                     ]
                 ]
             ]
-            [ newsItem "2025-03-30"
+            [ newsItem "2025-04-06"
+                [ a [ href "https://blog.fp-matsuri.org/entry/2025/04/06/101230", Attributes.target "_blank", rel "noopener noreferrer" ]
+                    [ text "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！" ]
+                ]
+            , newsItem "2025-03-30"
                 [ a [ href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank", rel "noopener noreferrer" ]
                     [ text "セッション採択結果を公開しました" ]
                 ]
