@@ -2,13 +2,13 @@ module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
 import Css exposing (..)
-import Css.Extra exposing (columnGap, content_, fr, grid, gridColumn, gridRow, gridTemplateColumns, marginBlock, rowGap)
-import Css.Global exposing (descendants, withClass)
+import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridTemplateColumns, rowGap)
+import Css.Global exposing (descendants)
 import Css.Media as Media exposing (only, screen, withMedia)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
+import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src, style)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -72,7 +72,6 @@ view _ _ =
         , aboutSection
         , overviewSection
         , sponsorsSection
-        , scheduleSection
         , teamSection
         ]
     }
@@ -431,146 +430,6 @@ sponsorPlanHeader name =
             [ text name ]
         , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
         ]
-
-
-scheduleSection : Html msg
-scheduleSection =
-    section "Schedule"
-        [ schedule events
-        , note "記載されているスケジュールの一部は予告なく変更されることがございます。"
-        ]
-
-
-schedule : List (Event msg) -> Html msg
-schedule events_ =
-    let
-        listItem event =
-            li
-                [ class "event"
-                , css
-                    [ display grid
-                    , property "grid-template-columns " "18px 1fr"
-                    , property "grid-template-rows" "2rem repeat(2, auto) 2rem"
-                    , columnGap (px 40)
-                    , listStyleType none
-                    , -- タイムラインの軸部分
-                      before
-                        [ gridColumn "1"
-                        , gridRow "1 / -1"
-                        , content_ ""
-                        , display block
-                        , width (pct 100)
-                        , height (pct 100)
-                        , property "background-color" "var(--color-primary)"
-                        ]
-                    , -- タイムラインのドット部分
-                      after
-                        [ gridColumn "1"
-                        , gridRow "1 / -1"
-                        , alignSelf center
-                        , property "justify-self" "center"
-                        , content_ ""
-                        , display block
-                        , width (px 14)
-                        , height (px 14)
-                        , borderRadius (pct 100)
-                        , property "background-color" "var(--color-on-primary)"
-                        ]
-                    , firstChild
-                        [ before
-                            [ alignSelf end
-                            , height (calc (pct 50) plus (px 9))
-                            , borderRadius4 (px 9) (px 9) zero zero
-                            ]
-                        ]
-                    , lastChild
-                        [ before
-                            [ height (calc (pct 50) plus (px 9))
-                            , borderRadius4 zero zero (px 9) (px 9)
-                            ]
-                        ]
-                    ]
-                ]
-                [ h3
-                    [ class (highlight event.highlight)
-                    , css
-                        [ gridColumn "2"
-                        , gridRow "2"
-                        , marginBlock zero
-                        , fontSize (rem 1.125)
-                        , fontWeight normal
-                        , withClass "highlight"
-                            [ fontSize (rem 1.875) ]
-                        ]
-                    ]
-                    [ event.label ]
-                , p
-                    [ css
-                        [ gridColumn "2"
-                        , gridRow "3"
-                        , marginBlock zero
-                        , fontSize (rem 0.875)
-                        ]
-                    ]
-                    [ text event.at ]
-                ]
-
-        highlight bool =
-            if bool then
-                "highlight"
-
-            else
-                ""
-    in
-    ul
-        [ css
-            [ margin zero
-            , padding zero
-            , displayFlex
-            , flexDirection column
-            ]
-        ]
-        (List.map listItem events_)
-
-
-note : String -> Html msg
-note description =
-    p
-        [ css
-            [ fontSize (rem 0.875)
-            , color (rgb 64 64 64)
-            , before [ content_ "※" ]
-            ]
-        ]
-        [ text description ]
-
-
-type alias Event msg =
-    { label : Html msg
-    , at : String
-    , highlight : Bool
-    }
-
-
-events : List (Event msg)
-events =
-    [ { label = text "セッション応募開始"
-      , at = "2025年1月20日"
-      , highlight = False
-      }
-    , { label = text "セッション採択結果発表"
-      , at = "2025年3月30日"
-      , highlight = False
-      }
-    , { label = text "チケット販売開始"
-      , at = "2025年春頃"
-      , highlight = False
-      }
-    , { label = text "関数型まつり開催"
-      , at = "2025年6月14-15日"
-      , highlight = True
-      }
-    ]
 
 
 teamSection : Html msg

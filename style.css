@@ -81,6 +81,8 @@ a {
 .site-footer {
   padding: 2rem;
   text-align: center;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 /* ------------------------------------
@@ -139,8 +141,7 @@ section {
 }
 
 section:has(.about),
-section:has(.sponsors),
-section:has(.people) {
+section:has(.sponsors) {
   background-color: var(--color-grey095);
 }
 
