@@ -46,7 +46,7 @@ type alias Model =
 init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
 init _ _ =
     ( { seed = 0 }
-    , Effect.fromCmd (Random.generate GotRandomSeed (Random.int 1 20))
+    , Effect.fromCmd (Random.generate GotRandomSeed (Random.int 0 100))
     )
 
 
