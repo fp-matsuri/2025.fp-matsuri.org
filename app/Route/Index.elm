@@ -89,16 +89,6 @@ hero =
                 , span [ style "font-size" "70%" ] [ text " sun" ]
                 ]
 
-        announcement =
-            div [ class "announcement" ]
-                [ div [ style "text-align" "center", style "word-break" "auto-phrase" ]
-                    [ text "セッション採択結果を公開しました。" ]
-                , div [ class "buttons" ]
-                    [ a [ class "button", href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank" ]
-                        [ text "セッション一覧を見る" ]
-                    ]
-                ]
-
         iconButton item =
             a [ class "icon-button", href item.href ]
                 [ img [ class item.id, src item.icon ] [] ]
@@ -109,7 +99,6 @@ hero =
             , h1 [] [ text "関数型まつり" ]
             , date
             ]
-        , announcement
         , ul [ class "links" ] (List.map (\link -> li [] [ iconButton link ]) links)
         ]
 

@@ -154,9 +154,8 @@ section > h2 {
 }
 
 .hero {
-  padding: 60px 40px 40px;
+  padding: 80px 40px 40px;
   display: grid;
-  grid-template-rows: auto auto auto;
   place-items: center;
   row-gap: 3rem;
   background-color: var(--color-primary);
