@@ -3,12 +3,12 @@ module Route.Index exposing (ActionData, Data, Model, Msg, route)
 import BackendTask exposing (BackendTask)
 import Css exposing (..)
 import Css.Extra exposing (columnGap, content_, fr, grid, gridColumn, gridRow, gridTemplateColumns, marginBlock, rowGap)
-import Css.Global exposing (withClass)
+import Css.Global exposing (descendants, withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, text, ul)
+import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src, style)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -213,12 +213,29 @@ overviewSection =
                     "中野セントラルパーク カンファレンス"
                 , itemHeader "チケット"
                     [ div []
-                        [ ul []
-                            [ li [] [ text "一般（懇親会あり） 3,000円" ]
-                            , li [] [ text "一般（懇親会なし） 8,000円" ]
-                            , li [] [ text "学生（懇親会あり） 1,000円" ]
-                            , li [] [ text "学生（懇親会なし） 6,000円" ]
-                            , li [] [ text "懇親会のみ 5,000円" ]
+                        [ Html.table [ css [ width (pct 100) ] ]
+                            [ tbody [ css [ descendants [ Css.Global.th [ textAlign left, fontWeight normal ] ] ] ]
+                                [ tr []
+                                    [ th [] [ text "一般（懇親会あり）" ]
+                                    , td [] [ text "3,000円" ]
+                                    ]
+                                , tr []
+                                    [ th [] [ text "一般（懇親会なし）" ]
+                                    , td [] [ text "8,000円" ]
+                                    ]
+                                , tr []
+                                    [ th [] [ text "学生（懇親会あり）" ]
+                                    , td [] [ text "1,000円" ]
+                                    ]
+                                , tr []
+                                    [ th [] [ text "学生（懇親会なし）" ]
+                                    , td [] [ text "6,000円" ]
+                                    ]
+                                , tr []
+                                    [ th [] [ text "懇親会のみ" ]
+                                    , td [] [ text "5,000円" ]
+                                    ]
+                                ]
                             ]
                         , text "※ Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
                         , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
