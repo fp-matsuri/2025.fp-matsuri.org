@@ -214,9 +214,11 @@ overviewSection =
                 , itemHeader "チケット"
                     [ div []
                         [ ul []
-                            [ li [] [ text "一般（懇親会あり）3,000円" ]
+                            [ li [] [ text "一般（懇親会あり） 3,000円" ]
                             , li [] [ text "一般（懇親会なし） 8,000円" ]
-                            , li [] [ text "学生（懇親会あり）1,000円" ]
+                            , li [] [ text "学生（懇親会あり） 1,000円" ]
+                            , li [] [ text "学生（懇親会なし） 6,000円" ]
+                            , li [] [ text "懇親会のみ 5,000円" ]
                             ]
                         , text "※ Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
                         , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
