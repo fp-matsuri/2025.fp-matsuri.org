@@ -326,6 +326,8 @@ silverSponsors : List Sponsor
 silverSponsors =
     [ Sponsor "株式会社はてな" "hatena.png" "https://hatena.co.jp"
     , Sponsor "合同会社ザウエル" "zauel.png" "https://zauel.co.jp"
+    , Sponsor "株式会社ネクストビート" "nextbeat.png" "https://www.nextbeat.co.jp/"
+    , Sponsor "エムスリー株式会社" "m3.png" "https://jobs.m3.com/engineer/"
     ]
 
 
@@ -351,7 +353,7 @@ sponsorLogos =
                     ]
                 ]
     in
-    div [ css [ width (pct 100), maxWidth (em 40) ] ]
+    div [ css [ width (pct 100), maxWidth (em 43) ] ]
         [ sponsorPlanHeader "ゴールドスポンサー"
         , div
             [ css
@@ -370,7 +372,7 @@ sponsorLogos =
                 , paddingBottom (px 40)
                 , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 163, px 163 ] ]
+                    [ property "grid-template-columns" "repeat(auto-fit, 163px)" ]
                 ]
             ]
             (List.map sponsorLogo silverSponsors)
