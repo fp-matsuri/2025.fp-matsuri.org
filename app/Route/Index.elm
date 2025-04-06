@@ -124,28 +124,37 @@ newsSection : Html msg
 newsSection =
     section "News"
         [ news
-            [ NewsItem "2025-04-06"
-                [ a [ href "https://blog.fp-matsuri.org/entry/2025/04/06/101230", Attributes.target "_blank", rel "noopener noreferrer" ]
-                    [ text "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！" ]
-                ]
-            , NewsItem "2025-03-30"
-                [ a [ href "https://fortee.jp/2025fp-matsuri/proposal/accepted", Attributes.target "_blank", rel "noopener noreferrer" ]
-                    [ text "セッション採択結果を公開しました" ]
-                ]
-            , NewsItem "2025-03-02" [ text "公募セッションの応募を締め切りました" ]
-            , NewsItem "2025-01-20" [ text "公募セッションの応募を開始しました" ]
+            [ { date = "2025-04-06"
+              , label = "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！"
+              , url = "https://blog.fp-matsuri.org/entry/2025/04/06/101230"
+              }
+            , { date = "2025-03-30"
+              , label = "セッション採択結果を公開しました"
+              , url = "https://fortee.jp/2025fp-matsuri/proposal/accepted"
+              }
+            , { date = "2025-03-02"
+              , label = "公募セッションの応募を締め切りました"
+              , url = ""
+              }
+            , { date = "2025-01-20"
+              , label = "公募セッションの応募を開始しました"
+              , url = ""
+              }
             ]
         ]
 
 
-type alias NewsItem msg =
-    { date : String, contents : List (Html msg) }
+type alias NewsItem =
+    { date : String
+    , label : String
+    , url : String
+    }
 
 
-news : List (NewsItem msg) -> Html msg
+news : List NewsItem -> Html msg
 news items =
     let
-        newsItem { date, contents } =
+        newsItem { date, label, url } =
             div
                 -- PCの時だけ二段組にします。モバイルの時は一段組ですが日付と内容の間にgapが付きません。
                 [ css
@@ -157,7 +166,15 @@ news items =
                         ]
                     ]
                 ]
-                [ div [] [ text date ], div [] contents ]
+                [ div [] [ text date ]
+                , div []
+                    [ if String.isEmpty url then
+                        text label
+
+                      else
+                        a [ href url, Attributes.target "_blank", rel "noopener noreferrer" ] [ text label ]
+                    ]
+                ]
     in
     div
         [ css
