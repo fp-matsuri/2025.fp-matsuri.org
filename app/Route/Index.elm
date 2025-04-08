@@ -249,13 +249,13 @@ overviewSection =
         information =
             div [ class "overview" ]
                 [ item "日程"
-                    [ ul []
+                    [ ul [ css [ padding zero, textAlign center, listStyle none ] ]
                         [ li [] [ text "Day1：6月14日（土）11:00〜19:00" ]
                         , li [] [ text "Day2：6月15日（日）10:00〜19:00" ]
                         ]
                     ]
                 , item "会場"
-                    [ text "中野セントラルパーク カンファレンス" ]
+                    [ p [ css [ textAlign center ] ] [ text "中野セントラルパーク カンファレンス" ] ]
                 , item "チケット"
                     [ div []
                         [ ticketTable
