@@ -247,7 +247,7 @@ overviewSection : Html msg
 overviewSection =
     let
         information =
-            div [ class "overview" ]
+            div []
                 [ item "日程"
                     [ ul [ css [ padding zero, textAlign center, listStyle none ] ]
                         [ li [] [ text "Day1：6月14日（土）11:00〜19:00" ]
@@ -257,20 +257,18 @@ overviewSection =
                 , item "会場"
                     [ p [ css [ textAlign center ] ] [ text "中野セントラルパーク カンファレンス" ] ]
                 , item "チケット"
-                    [ div []
-                        [ ticketTable
-                            [ ConferenceTicket { category = "一般（懇親会なし）", price = "3,000円" }
-                            , BothTicket { category = "一般（懇親会あり）", price = "8,000円" }
-                            , ConferenceTicket { category = "学生（懇親会なし）", price = "1,000円" }
-                            , BothTicket { category = "学生（懇親会あり）", price = "6,000円" }
-                            , PartyTicket { category = "懇親会のみ", price = "5,000円" }
-                            ]
-                        , note "Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
-                        , buttonLink
-                            { label = "チケットを購入（Doorkeeper）"
-                            , url = "https://fp-matsuri.doorkeeper.jp/events/182879"
-                            }
+                    [ ticketTable
+                        [ ConferenceTicket { category = "一般（懇親会なし）", price = "3,000円" }
+                        , BothTicket { category = "一般（懇親会あり）", price = "8,000円" }
+                        , ConferenceTicket { category = "学生（懇親会なし）", price = "1,000円" }
+                        , BothTicket { category = "学生（懇親会あり）", price = "6,000円" }
+                        , PartyTicket { category = "懇親会のみ", price = "5,000円" }
                         ]
+                    , note "Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
+                    , buttonLink
+                        { label = "チケットを購入（Doorkeeper）"
+                        , url = "https://fp-matsuri.doorkeeper.jp/events/182879"
+                        }
                     ]
                 ]
 
@@ -278,7 +276,8 @@ overviewSection =
             div []
                 (h3
                     [ css
-                        [ display grid
+                        [ margin zero
+                        , display grid
                         , property "grid-template-columns " "1fr max-content 1fr"
                         , alignItems center
                         , columnGap (em 0.5)
@@ -335,19 +334,34 @@ overviewSection =
 
         map =
             iframe
-                [ class "map"
-                , src "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25918.24822641297!2d139.64379899847268!3d35.707005772578796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sen!2sjp!4v1736684092765!5m2!1sen!2sjp"
-                , attribute "width" "100%"
-                , Attributes.height 400
-                , style "border" "0"
+                [ src "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25918.24822641297!2d139.64379899847268!3d35.707005772578796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sen!2sjp!4v1736684092765!5m2!1sen!2sjp"
                 , attribute "allowfullscreen" ""
                 , attribute "loading" "lazy"
                 , attribute "referrerpolicy" "no-referrer-when-downgrade"
+                , css
+                    [ width (pct 100)
+                    , height (px 400)
+                    , borderRadius (px 5)
+                    , border zero
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ height (pct 100) ]
+                    ]
                 ]
                 []
     in
     section "Overview"
-        [ div [ class "overview-box" ] [ information, map ]
+        [ div
+            [ css
+                [ display grid
+                , rowGap (em 1)
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ maxWidth (px 800)
+                    , gridTemplateColumns [ fr 1, fr 1 ]
+                    , columnGap (em 2)
+                    ]
+                ]
+            ]
+            [ information, map ]
         ]
 
 
@@ -360,7 +374,13 @@ type Ticket
 ticketTable : List Ticket -> Html msg
 ticketTable tickets =
     Html.table
-        [ css [ width (pct 100), borderCollapse collapse, borderSpacing zero ] ]
+        [ css
+            [ margin2 (em 1) zero
+            , width (pct 100)
+            , borderCollapse collapse
+            , borderSpacing zero
+            ]
+        ]
         [ thead []
             [ tr
                 [ css

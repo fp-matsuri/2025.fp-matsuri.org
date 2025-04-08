@@ -268,32 +268,6 @@ section > h2 {
   height: 100%;
 }
 
-/* ------------------------------------
-Overview
------------------------------------- */
-.overview {
-  width: 100%;
-  display: grid;
-  row-gap: 0.8rem;
-}
-
-.overview h3 {
-  margin-top: 0px;
-  margin-bottom: 0.6em;
-  font-family: var(--montserrat-sans);
-  font-weight: bold;
-}
-
-@media all and (min-width: 640px) {
-  .overview-box {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 40px;
-    max-width: 800px;
-    justify-content: center;
-    align-items: start;
-  }
-}
 
 .sponsors {
   max-width: 40em;
