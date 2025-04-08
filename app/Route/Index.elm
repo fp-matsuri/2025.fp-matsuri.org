@@ -265,7 +265,7 @@ overviewSection =
                             , BothTicket { category = "学生（懇親会あり）", price = "6,000円" }
                             , PartyTicket { category = "懇親会のみ", price = "5,000円" }
                             ]
-                        , text "※ Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
+                        , note "Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
                         , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
                         ]
                     ]
@@ -295,6 +295,22 @@ overviewSection =
                     ]
                     :: contents
                 )
+
+        note string =
+            p
+                [ css
+                    [ display grid
+                    , property "grid-template-columns" "auto 1fr"
+                    , columnGap (em 0.3)
+                    , fontSize (px 14)
+                    , before
+                        [ display block
+                        , property "content" (qt "※")
+                        , lineHeight (num 1.5)
+                        ]
+                    ]
+                ]
+                [ text string ]
 
         map =
             iframe
