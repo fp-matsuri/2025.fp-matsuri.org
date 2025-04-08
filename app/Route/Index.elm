@@ -246,26 +246,17 @@ aboutSection =
 overviewSection : Html msg
 overviewSection =
     let
-        itemHeader key contents =
-            div [ style "min-width" "18rem" ]
-                (h3 [ class "font-semibold" ] [ text key ]
-                    :: contents
-                )
-
-        item key value =
-            itemHeader key [ p [] [ text value ] ]
-
         information =
             div [ class "overview" ]
-                [ itemHeader "日程"
+                [ item "日程"
                     [ ul []
                         [ li [] [ text "Day1：6月14日（土）11:00〜19:00" ]
                         , li [] [ text "Day2：6月15日（日）10:00〜19:00" ]
                         ]
                     ]
                 , item "会場"
-                    "中野セントラルパーク カンファレンス"
-                , itemHeader "チケット"
+                    [ text "中野セントラルパーク カンファレンス" ]
+                , item "チケット"
                     [ div []
                         [ ticketTable
                             [ ConferenceTicket { category = "一般（懇親会なし）", price = "3,000円" }
@@ -279,6 +270,31 @@ overviewSection =
                         ]
                     ]
                 ]
+
+        item label contents =
+            div []
+                (h3
+                    [ css
+                        [ display grid
+                        , property "grid-template-columns " "1fr max-content 1fr"
+                        , alignItems center
+                        , columnGap (em 0.5)
+                        ]
+                    ]
+                    [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
+                    , div
+                        [ css
+                            [ color (rgb 0x66 0x66 0x66)
+                            , whiteSpace noWrap
+                            , fontSize (px 16)
+                            , fontWeight normal
+                            ]
+                        ]
+                        [ text label ]
+                    , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
+                    ]
+                    :: contents
+                )
 
         map =
             iframe
