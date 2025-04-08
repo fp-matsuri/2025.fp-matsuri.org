@@ -306,13 +306,21 @@ type Ticket
 
 ticketTable : List Ticket -> Html msg
 ticketTable tickets =
-    Html.table [ css [ width (pct 100) ] ]
-        [ thead [ css [ descendants [ Css.Global.th [ textAlign left, fontWeight normal ] ] ] ]
-            [ tr []
-                [ th [] [ text "種別" ]
-                , th [] [ text "価格" ]
-                , th [] [ text "カンファレンス" ]
-                , th [] [ text "懇親会" ]
+    Html.table
+        [ css [ width (pct 100), borderCollapse collapse, borderSpacing zero ] ]
+        [ thead []
+            [ tr
+                [ css
+                    [ descendants
+                        [ Css.Global.th
+                            [ paddingBottom (px 5), fontSize (px 12) ]
+                        ]
+                    ]
+                ]
+                [ th [ css [ textAlign left ] ] [ text "種別" ]
+                , th [ css [ textAlign center ] ] [ text "価格" ]
+                , th [ css [ textAlign center ] ] [ text "カンファレンス" ]
+                , th [ css [ textAlign center ] ] [ text "懇親会" ]
                 ]
             ]
         , tbody [] (List.map tableRow tickets)
@@ -334,9 +342,9 @@ tableRow ticket =
                     options
     in
     tr []
-        [ td [] [ text category ]
-        , td [] [ text price ]
-        , td []
+        [ td [ css [ textAlign left, fontSize (px 14) ] ] [ text category ]
+        , td [ css [ textAlign center, fontSize (px 14) ] ] [ text price ]
+        , td [ css [ textAlign center, fontSize (px 24) ] ]
             [ text
                 (case ticket of
                     ConferenceTicket _ ->
@@ -349,7 +357,7 @@ tableRow ticket =
                         "○"
                 )
             ]
-        , td []
+        , td [ css [ textAlign center, fontSize (px 24) ] ]
             [ text
                 (case ticket of
                     ConferenceTicket _ ->
