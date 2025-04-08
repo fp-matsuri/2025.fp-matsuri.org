@@ -9,7 +9,7 @@ import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, tr, ul)
+import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src, style)
 import PagesMsg exposing (PagesMsg)
 import Random
@@ -268,39 +268,41 @@ overviewSection =
                 , itemHeader "チケット"
                     [ div []
                         [ Html.table [ css [ width (pct 100) ] ]
-                            [ tbody [ css [ descendants [ Css.Global.th [ textAlign left, fontWeight normal ] ] ] ]
+                            [ thead [ css [ descendants [ Css.Global.th [ textAlign left, fontWeight normal ] ] ] ]
                                 [ tr []
                                     [ th [] [ text "種別" ]
                                     , th [] [ text "価格" ]
                                     , th [] [ text "カンファレンス" ]
                                     , th [] [ text "懇親会" ]
                                     ]
-                                , tr []
-                                    [ th [] [ text "一般（懇親会なし）" ]
+                                ]
+                            , tbody []
+                                [ tr []
+                                    [ td [] [ text "一般（懇親会なし）" ]
                                     , td [] [ text "3,000円" ]
                                     , td [] [ text "○" ]
                                     , td [] [ text "-" ]
                                     ]
                                 , tr []
-                                    [ th [] [ text "一般（懇親会あり）" ]
+                                    [ td [] [ text "一般（懇親会あり）" ]
                                     , td [] [ text "8,000円" ]
                                     , td [] [ text "○" ]
                                     , td [] [ text "○" ]
                                     ]
                                 , tr []
-                                    [ th [] [ text "学生（懇親会なし）" ]
+                                    [ td [] [ text "学生（懇親会なし）" ]
                                     , td [] [ text "1,000円" ]
                                     , td [] [ text "○" ]
                                     , td [] [ text "-" ]
                                     ]
                                 , tr []
-                                    [ th [] [ text "学生（懇親会あり）" ]
+                                    [ td [] [ text "学生（懇親会あり）" ]
                                     , td [] [ text "6,000円" ]
                                     , td [] [ text "○" ]
                                     , td [] [ text "○" ]
                                     ]
                                 , tr []
-                                    [ th [] [ text "懇親会のみ" ]
+                                    [ td [] [ text "懇親会のみ" ]
                                     , td [] [ text "5,000円" ]
                                     , td [] [ text "-" ]
                                     , td [] [ text "○" ]
