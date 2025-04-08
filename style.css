@@ -295,15 +295,6 @@ Overview
   }
 }
 
-.link-to-doorkeeper {
-  padding: 8px;
-  border-radius: 30px;
-  background: rgba(210, 96, 88, 1);
-  color: white;
-  font-size: 20px;
-  text-align: center;
-}
-
 .sponsors {
   max-width: 40em;
   padding-inline: 1.2em;

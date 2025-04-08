@@ -266,7 +266,10 @@ overviewSection =
                             , PartyTicket { category = "懇親会のみ", price = "5,000円" }
                             ]
                         , note "Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
-                        , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
+                        , buttonLink
+                            { label = "チケットを購入（Doorkeeper）"
+                            , url = "https://fp-matsuri.doorkeeper.jp/events/182879"
+                            }
                         ]
                     ]
                 ]
@@ -311,6 +314,24 @@ overviewSection =
                     ]
                 ]
                 [ text string ]
+
+        buttonLink { label, url } =
+            a
+                [ href url
+                , Attributes.target "_blank"
+                , rel "noopener noreferrer"
+                , css
+                    [ display block
+                    , padding (px 8)
+                    , textAlign center
+                    , textDecoration none
+                    , fontSize (px 16)
+                    , borderRadius (px 30)
+                    , backgroundColor (rgba 210 96 88 1)
+                    , color (rgb 255 255 255)
+                    ]
+                ]
+                [ text label ]
 
         map =
             iframe
