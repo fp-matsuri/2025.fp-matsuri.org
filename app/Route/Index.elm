@@ -267,47 +267,12 @@ overviewSection =
                     "中野セントラルパーク カンファレンス"
                 , itemHeader "チケット"
                     [ div []
-                        [ Html.table [ css [ width (pct 100) ] ]
-                            [ thead [ css [ descendants [ Css.Global.th [ textAlign left, fontWeight normal ] ] ] ]
-                                [ tr []
-                                    [ th [] [ text "種別" ]
-                                    , th [] [ text "価格" ]
-                                    , th [] [ text "カンファレンス" ]
-                                    , th [] [ text "懇親会" ]
-                                    ]
-                                ]
-                            , tbody []
-                                [ tr []
-                                    [ td [] [ text "一般（懇親会なし）" ]
-                                    , td [] [ text "3,000円" ]
-                                    , td [] [ text "○" ]
-                                    , td [] [ text "-" ]
-                                    ]
-                                , tr []
-                                    [ td [] [ text "一般（懇親会あり）" ]
-                                    , td [] [ text "8,000円" ]
-                                    , td [] [ text "○" ]
-                                    , td [] [ text "○" ]
-                                    ]
-                                , tr []
-                                    [ td [] [ text "学生（懇親会なし）" ]
-                                    , td [] [ text "1,000円" ]
-                                    , td [] [ text "○" ]
-                                    , td [] [ text "-" ]
-                                    ]
-                                , tr []
-                                    [ td [] [ text "学生（懇親会あり）" ]
-                                    , td [] [ text "6,000円" ]
-                                    , td [] [ text "○" ]
-                                    , td [] [ text "○" ]
-                                    ]
-                                , tr []
-                                    [ td [] [ text "懇親会のみ" ]
-                                    , td [] [ text "5,000円" ]
-                                    , td [] [ text "-" ]
-                                    , td [] [ text "○" ]
-                                    ]
-                                ]
+                        [ ticketTable
+                            [ ConferenceTicket { category = "一般（懇親会なし）", price = "3,000円" }
+                            , BothTicket { category = "一般（懇親会あり）", price = "8,000円" }
+                            , ConferenceTicket { category = "学生（懇親会なし）", price = "1,000円" }
+                            , BothTicket { category = "学生（懇親会あり）", price = "6,000円" }
+                            , PartyTicket { category = "懇親会のみ", price = "5,000円" }
                             ]
                         , text "※ Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
                         , a [ href "https://fp-matsuri.doorkeeper.jp/events/182879", Attributes.target "_blank" ] [ p [ class "link-to-doorkeeper" ] [ text "チケット販売サイト（Doorkeeper）" ] ]
@@ -330,6 +295,73 @@ overviewSection =
     in
     section "Overview"
         [ div [ class "overview-box" ] [ information, map ]
+        ]
+
+
+type Ticket
+    = ConferenceTicket { category : String, price : String }
+    | PartyTicket { category : String, price : String }
+    | BothTicket { category : String, price : String }
+
+
+ticketTable : List Ticket -> Html msg
+ticketTable tickets =
+    Html.table [ css [ width (pct 100) ] ]
+        [ thead [ css [ descendants [ Css.Global.th [ textAlign left, fontWeight normal ] ] ] ]
+            [ tr []
+                [ th [] [ text "種別" ]
+                , th [] [ text "価格" ]
+                , th [] [ text "カンファレンス" ]
+                , th [] [ text "懇親会" ]
+                ]
+            ]
+        , tbody [] (List.map tableRow tickets)
+        ]
+
+
+tableRow : Ticket -> Html msg
+tableRow ticket =
+    let
+        { category, price } =
+            case ticket of
+                ConferenceTicket options ->
+                    options
+
+                PartyTicket options ->
+                    options
+
+                BothTicket options ->
+                    options
+    in
+    tr []
+        [ td [] [ text category ]
+        , td [] [ text price ]
+        , td []
+            [ text
+                (case ticket of
+                    ConferenceTicket _ ->
+                        "○"
+
+                    PartyTicket _ ->
+                        "-"
+
+                    BothTicket _ ->
+                        "○"
+                )
+            ]
+        , td []
+            [ text
+                (case ticket of
+                    ConferenceTicket _ ->
+                        "-"
+
+                    PartyTicket _ ->
+                        "○"
+
+                    BothTicket _ ->
+                        "○"
+                )
+            ]
         ]
 
 
