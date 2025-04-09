@@ -482,6 +482,12 @@ type alias Sponsor =
     }
 
 
+platinumSponsorsShuffled : Int -> List Sponsor
+platinumSponsorsShuffled seed =
+    shuffleList seed
+        [ Sponsor "株式会社スリーシェイク" "3-shake.png" "https://3-shake.com/" ]
+
+
 goldSponsorsShuffled : Int -> List Sponsor
 goldSponsorsShuffled seed =
     shuffleList seed
@@ -544,7 +550,18 @@ sponsorLogos seed =
                 ]
     in
     div [ css [ width (pct 100), maxWidth (em 43) ] ]
-        [ sponsorPlanHeader "ゴールドスポンサー"
+        [ sponsorPlanHeader "プラチナスポンサー"
+        , div
+            [ css
+                [ logoGridStyle
+                , paddingBottom (px 40)
+                , gridTemplateColumns [ fr 1 ]
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ gridTemplateColumns [ px 326 ] ]
+                ]
+            ]
+            (List.map sponsorLogo (platinumSponsorsShuffled seed))
+        , sponsorPlanHeader "ゴールドスポンサー"
         , div
             [ css
                 [ logoGridStyle
