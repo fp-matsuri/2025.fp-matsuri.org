@@ -609,6 +609,7 @@ logoSponsorsShuffled seed =
     shuffleList seed
         [ Sponsor "合同会社Ignission" "ignission.png" "https://ignission.tech/"
         , Sponsor "株式会社ギークニア" "geekneer.png" "https://geekneer.com/"
+        , Sponsor "Siiibo証券株式会社" "siiibo.png" "https://siiibo.com/"
         ]
 
 
@@ -640,6 +641,7 @@ sponsorLogos seed =
         logoGridStyle =
             batch
                 [ display grid
+                , rowGap (px 10)
                 , columnGap (px 10)
                 , paddingTop (px 20)
                 , justifyContent center
@@ -689,7 +691,7 @@ sponsorLogos seed =
                 , paddingBottom (px 40)
                 , gridTemplateColumns [ fr 1, fr 1, fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 116, px 116 ] ]
+                    [ property "grid-template-columns" "repeat(auto-fit, 116px)" ]
                 ]
             ]
             (List.map sponsorLogo (logoSponsorsShuffled seed))
