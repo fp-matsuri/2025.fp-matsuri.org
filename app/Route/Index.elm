@@ -102,7 +102,7 @@ view :
 view _ _ model =
     { title = ""
     , body =
-        [ hero
+        [ hero model.seed
         , newsSection
         , aboutSection
         , overviewSection
@@ -112,8 +112,8 @@ view _ _ model =
     }
 
 
-hero : Html msg
-hero =
+hero : Int -> Html msg
+hero seed =
     let
         date =
             div
@@ -155,54 +155,85 @@ hero =
                     ]
                     []
                 ]
-    in
-    div
-        [ css
-            [ padding3 (px 80) (px 40) (px 40)
-            , display grid
-            , property "justify-items" "center"
-            , rowGap (rem 3)
-            , property "background-color" "var(--color-primary)"
-            , property "color" "var(--color-on-primary)"
-            ]
-        ]
-        [ div
-            [ css
-                [ width (pct 100)
-                , property "display" "grid"
-                , property "grid-template-rows" "6rem auto auto"
-                , property "place-items" "center"
-                , rowGap (rem 1.2)
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-rows" "9rem auto auto" ]
-                ]
-            ]
-            [ img [ src "images/logomark.svg", css [ height (pct 100) ] ] []
-            , h1
-                [ css
-                    [ margin zero
-                    , lineHeight (num 1)
-                    , property "font-family" "var(--serif-logo)"
-                    , fontSize (rem 2.2)
-                    , fontWeight inherit
+
+        platinumSponsorLogo sponsor =
+            a
+                [ href sponsor.href
+                , Attributes.rel "noopener noreferrer"
+                , Attributes.target "_blank"
+                , css
+                    [ display block
+                    , width (px 200)
                     , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ fontSize (rem 3.25) ]
+                        [ width (px 250) ]
                     ]
                 ]
-                [ text "関数型まつり" ]
-            , date
-            ]
-        , ul
+                [ img
+                    [ src ("images/sponsors/" ++ sponsor.image)
+                    , css
+                        [ backgroundColor (rgb 255 255 255)
+                        , borderRadius (px 10)
+                        , width (pct 100)
+                        ]
+                    , alt sponsor.name
+                    ]
+                    []
+                ]
+
+        platinumSponsors =
+            platinumSponsorsShuffled seed
+    in
+    div [ css [ padding3 zero (px 10) (px 10) ] ]
+        [ div
             [ css
-                [ width (pct 100)
-                , margin zero
-                , padding zero
-                , displayFlex
-                , justifyContent flexEnd
-                , columnGap (rem 1)
+                [ padding3 (px 80) (px 20) (px 20)
+                , display grid
+                , property "justify-items" "center"
+                , rowGap (rem 2.5)
+                , borderRadius (px 10)
+                , property "background-color" "var(--color-grey095)"
+                , property "color" "var(--color-primary)"
                 ]
             ]
-            (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links)
+            [ div
+                [ css
+                    [ width (pct 100)
+                    , property "display" "grid"
+                    , property "grid-template-rows" "6rem auto auto"
+                    , property "place-items" "center"
+                    , rowGap (rem 1.2)
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ property "grid-template-rows" "9rem auto auto" ]
+                    ]
+                ]
+                [ img [ src "images/logomark.svg", css [ height (pct 100) ] ] []
+                , h1
+                    [ css
+                        [ margin zero
+                        , lineHeight (num 1)
+                        , property "font-family" "var(--serif-logo)"
+                        , fontSize (rem 2.2)
+                        , fontWeight inherit
+                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                            [ fontSize (rem 3.25) ]
+                        ]
+                    ]
+                    [ text "関数型まつり" ]
+                , date
+                ]
+            , div [] (List.map platinumSponsorLogo platinumSponsors)
+            , ul
+                [ css
+                    [ width (pct 100)
+                    , margin zero
+                    , padding zero
+                    , displayFlex
+                    , justifyContent flexEnd
+                    , columnGap (rem 1)
+                    ]
+                ]
+                (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links)
+            ]
         ]
 
 
@@ -225,7 +256,7 @@ links =
 
 newsSection : Html msg
 newsSection =
-    section "News"
+    section ""
         [ news
             [ { date = "2025-04-06"
               , label = "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！"
@@ -784,6 +815,10 @@ section : String -> List (Html msg) -> Html msg
 section title children =
     let
         heading =
-            h2 [] [ text title ]
+            if title == "" then
+                text ""
+
+            else
+                h2 [] [ text title ]
     in
     Html.section [] (heading :: children)
