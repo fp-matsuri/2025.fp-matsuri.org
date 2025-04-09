@@ -62,7 +62,7 @@ route =
 
 data : BackendTask FatalError Data
 data =
-    BackendTask.Http.getJson "https://fortee.jp/2025fp-matsuri/api/proposals"
+    BackendTask.Http.getJson "https://fortee.jp/2025fp-matsuri/api/proposals/accepted"
         (Decode.map Data (Decode.field "proposals" (Decode.list proposalDecoder)))
         |> BackendTask.onError (\_ -> BackendTask.succeed { proposals = [] })
 
