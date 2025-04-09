@@ -131,31 +131,6 @@ hero seed =
                 , span [ css [ fontSize (pct 70) ] ] [ text " sun" ]
                 ]
 
-        iconButton item =
-            a
-                [ href item.href
-                , css
-                    [ width (px 44)
-                    , height (px 44)
-                    , displayFlex
-                    , alignItems center
-                    , justifyContent center
-                    , borderRadius (pct 100)
-                    , backgroundColor (rgba 255 255 255 1)
-                    ]
-                ]
-                [ img
-                    [ class item.id
-                    , src item.icon
-                    , css
-                        [ withClass "x" [ width (pct 50), height (pct 50) ]
-                        , withClass "fortee" [ width (pct 50), height (pct 50) ]
-                        , withClass "hatena_blog" [ width (pct 100), height (pct 100) ]
-                        ]
-                    ]
-                    []
-                ]
-
         platinumSponsorLogo sponsor =
             a
                 [ href sponsor.href
@@ -222,36 +197,63 @@ hero seed =
                 , date
                 ]
             , div [] (List.map platinumSponsorLogo platinumSponsors)
-            , ul
-                [ css
-                    [ width (pct 100)
-                    , margin zero
-                    , padding zero
-                    , displayFlex
-                    , justifyContent flexEnd
-                    , columnGap (rem 0.75)
-                    ]
+            , socialLinkList
+                [ { id = "x"
+                  , icon = "images/x.svg"
+                  , href = "https://x.com/fp_matsuri"
+                  }
+                , { id = "hatena_blog"
+                  , icon = "images/hatenablog.svg"
+                  , href = "https://blog.fp-matsuri.org/"
+                  }
+                , { id = "fortee"
+                  , icon = "images/fortee.svg"
+                  , href = "https://fortee.jp/2025fp-matsuri"
+                  }
                 ]
-                (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links)
             ]
         ]
 
 
-links : List { id : String, icon : String, href : String }
-links =
-    [ { id = "x"
-      , icon = "images/x.svg"
-      , href = "https://x.com/fp_matsuri"
-      }
-    , { id = "hatena_blog"
-      , icon = "images/hatenablog.svg"
-      , href = "https://blog.fp-matsuri.org/"
-      }
-    , { id = "fortee"
-      , icon = "images/fortee.svg"
-      , href = "https://fortee.jp/2025fp-matsuri"
-      }
-    ]
+socialLinkList : List { id : String, icon : String, href : String } -> Html msg
+socialLinkList links_ =
+    let
+        iconButton item =
+            a
+                [ href item.href
+                , css
+                    [ width (px 44)
+                    , height (px 44)
+                    , displayFlex
+                    , alignItems center
+                    , justifyContent center
+                    , borderRadius (pct 100)
+                    , backgroundColor (rgba 255 255 255 1)
+                    ]
+                ]
+                [ img
+                    [ class item.id
+                    , src item.icon
+                    , css
+                        [ withClass "x" [ width (pct 50), height (pct 50) ]
+                        , withClass "fortee" [ width (pct 50), height (pct 50) ]
+                        , withClass "hatena_blog" [ width (pct 100), height (pct 100) ]
+                        ]
+                    ]
+                    []
+                ]
+    in
+    ul
+        [ css
+            [ width (pct 100)
+            , margin zero
+            , padding zero
+            , displayFlex
+            , justifyContent flexEnd
+            , columnGap (rem 0.75)
+            ]
+        ]
+        (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links_)
 
 
 newsSection : Html msg
