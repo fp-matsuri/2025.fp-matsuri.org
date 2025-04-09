@@ -114,34 +114,6 @@ view _ _ model =
 
 hero : Int -> Html msg
 hero seed =
-    let
-        platinumSponsorLogo sponsor =
-            a
-                [ href sponsor.href
-                , Attributes.rel "noopener noreferrer"
-                , Attributes.target "_blank"
-                , css
-                    [ display block
-                    , width (px 200)
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ width (px 250) ]
-                    ]
-                ]
-                [ img
-                    [ src ("images/sponsors/" ++ sponsor.image)
-                    , css
-                        [ backgroundColor (rgb 255 255 255)
-                        , borderRadius (px 10)
-                        , width (pct 100)
-                        ]
-                    , alt sponsor.name
-                    ]
-                    []
-                ]
-
-        platinumSponsors =
-            platinumSponsorsShuffled seed
-    in
     div [ css [ padding3 zero (px 10) (px 10) ] ]
         [ div
             [ css
@@ -155,7 +127,7 @@ hero seed =
                 ]
             ]
             [ logoAndDate
-            , div [] (List.map platinumSponsorLogo platinumSponsors)
+            , heroSponsorsBlock (platinumSponsorsShuffled seed)
             , socialLinkList
                 [ { id = "x"
                   , icon = "images/x.svg"
@@ -222,6 +194,36 @@ logoAndDate =
             ]
         ]
         (logo ++ [ date ])
+
+
+heroSponsorsBlock : List { name : String, image : String, href : String } -> Html msg
+heroSponsorsBlock sponsors =
+    let
+        platinumSponsorLogo sponsor =
+            a
+                [ href sponsor.href
+                , Attributes.rel "noopener noreferrer"
+                , Attributes.target "_blank"
+                , css
+                    [ display block
+                    , width (px 200)
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ width (px 250) ]
+                    ]
+                ]
+                [ img
+                    [ src ("images/sponsors/" ++ sponsor.image)
+                    , css
+                        [ backgroundColor (rgb 255 255 255)
+                        , borderRadius (px 10)
+                        , width (pct 100)
+                        ]
+                    , alt sponsor.name
+                    ]
+                    []
+                ]
+    in
+    div [] (List.map platinumSponsorLogo sponsors)
 
 
 socialLinkList : List { id : String, icon : String, href : String } -> Html msg
