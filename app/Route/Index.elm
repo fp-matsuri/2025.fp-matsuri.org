@@ -135,13 +135,13 @@ hero seed =
             a
                 [ href item.href
                 , css
-                    [ width (px 56)
-                    , height (px 56)
+                    [ width (px 44)
+                    , height (px 44)
                     , displayFlex
                     , alignItems center
                     , justifyContent center
                     , borderRadius (pct 100)
-                    , backgroundColor (rgba 222 227 237 0.4)
+                    , backgroundColor (rgba 255 255 255 1)
                     ]
                 ]
                 [ img
@@ -229,7 +229,7 @@ hero seed =
                     , padding zero
                     , displayFlex
                     , justifyContent flexEnd
-                    , columnGap (rem 1)
+                    , columnGap (rem 0.75)
                     ]
                 ]
                 (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links)
