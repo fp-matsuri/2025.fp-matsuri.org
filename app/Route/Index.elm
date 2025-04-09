@@ -491,8 +491,7 @@ platinumSponsorsShuffled seed =
 goldSponsorsShuffled : Int -> List Sponsor
 goldSponsorsShuffled seed =
     shuffleList seed
-        [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/"
-        ]
+        [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/" ]
 
 
 silverSponsorsShuffled : Int -> List Sponsor
@@ -566,9 +565,9 @@ sponsorLogos seed =
             [ css
                 [ logoGridStyle
                 , paddingBottom (px 40)
-                , gridTemplateColumns [ fr 1 ]
+                , gridTemplateColumns [ fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 280 ] ]
+                    [ gridTemplateColumns [ px 257 ] ]
                 ]
             ]
             (List.map sponsorLogo (goldSponsorsShuffled seed))
