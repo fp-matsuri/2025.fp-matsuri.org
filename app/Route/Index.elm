@@ -115,22 +115,6 @@ view _ _ model =
 hero : Int -> Html msg
 hero seed =
     let
-        date =
-            div
-                [ css
-                    [ property "font-family" "var(--montserrat-sans)"
-                    , fontSize (rem 1)
-                    , fontWeight (int 300)
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ fontSize (rem 1.5) ]
-                    ]
-                ]
-                [ text "2025.6.14"
-                , span [ css [ fontSize (pct 70) ] ] [ text " sat" ]
-                , text " – 15"
-                , span [ css [ fontSize (pct 70) ] ] [ text " sun" ]
-                ]
-
         platinumSponsorLogo sponsor =
             a
                 [ href sponsor.href
@@ -170,32 +154,7 @@ hero seed =
                 , property "color" "var(--color-primary)"
                 ]
             ]
-            [ div
-                [ css
-                    [ width (pct 100)
-                    , property "display" "grid"
-                    , property "grid-template-rows" "6rem auto auto"
-                    , property "place-items" "center"
-                    , rowGap (rem 1.2)
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ property "grid-template-rows" "9rem auto auto" ]
-                    ]
-                ]
-                [ img [ src "images/logomark.svg", css [ height (pct 100) ] ] []
-                , h1
-                    [ css
-                        [ margin zero
-                        , lineHeight (num 1)
-                        , property "font-family" "var(--serif-logo)"
-                        , fontSize (rem 2.2)
-                        , fontWeight inherit
-                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ fontSize (rem 3.25) ]
-                        ]
-                    ]
-                    [ text "関数型まつり" ]
-                , date
-                ]
+            [ logoAndDate
             , div [] (List.map platinumSponsorLogo platinumSponsors)
             , socialLinkList
                 [ { id = "x"
@@ -213,6 +172,56 @@ hero seed =
                 ]
             ]
         ]
+
+
+logoAndDate : Html msg
+logoAndDate =
+    let
+        -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
+        logo =
+            [ img [ src "images/logomark.svg", css [ height (pct 100) ] ] []
+            , h1
+                [ css
+                    [ margin zero
+                    , lineHeight (num 1)
+                    , property "font-family" "var(--serif-logo)"
+                    , fontSize (rem 2.2)
+                    , fontWeight inherit
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ fontSize (rem 3.25) ]
+                    ]
+                ]
+                [ text "関数型まつり" ]
+            ]
+
+        date =
+            div
+                [ css
+                    [ property "font-family" "var(--montserrat-sans)"
+                    , fontSize (rem 1)
+                    , fontWeight (int 300)
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ fontSize (rem 1.5) ]
+                    ]
+                ]
+                [ text "2025.6.14"
+                , span [ css [ fontSize (pct 70) ] ] [ text " sat" ]
+                , text " – 15"
+                , span [ css [ fontSize (pct 70) ] ] [ text " sun" ]
+                ]
+    in
+    div
+        [ css
+            [ width (pct 100)
+            , property "display" "grid"
+            , property "grid-template-rows" "6rem auto auto"
+            , property "place-items" "center"
+            , rowGap (rem 1.2)
+            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                [ property "grid-template-rows" "9rem auto auto" ]
+            ]
+        ]
+        (logo ++ [ date ])
 
 
 socialLinkList : List { id : String, icon : String, href : String } -> Html msg
