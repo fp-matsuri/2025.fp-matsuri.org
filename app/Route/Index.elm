@@ -3,14 +3,14 @@ module Route.Index exposing (ActionData, Data, Model, Msg, route)
 import BackendTask exposing (BackendTask)
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridTemplateColumns, rowGap)
-import Css.Global exposing (descendants)
+import Css.Global exposing (descendants, withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
-import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src, style)
+import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
 import RouteBuilder exposing (App, StatefulRoute)
@@ -116,24 +116,93 @@ hero : Html msg
 hero =
     let
         date =
-            div [ class "date" ]
+            div
+                [ css
+                    [ property "font-family" "var(--montserrat-sans)"
+                    , fontSize (rem 1)
+                    , fontWeight (int 300)
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ fontSize (rem 1.5) ]
+                    ]
+                ]
                 [ text "2025.6.14"
-                , span [ style "font-size" "70%" ] [ text " sat" ]
+                , span [ css [ fontSize (pct 70) ] ] [ text " sat" ]
                 , text " – 15"
-                , span [ style "font-size" "70%" ] [ text " sun" ]
+                , span [ css [ fontSize (pct 70) ] ] [ text " sun" ]
                 ]
 
         iconButton item =
-            a [ class "icon-button", href item.href ]
-                [ img [ class item.id, src item.icon ] [] ]
+            a
+                [ href item.href
+                , css
+                    [ width (px 56)
+                    , height (px 56)
+                    , displayFlex
+                    , alignItems center
+                    , justifyContent center
+                    , borderRadius (pct 100)
+                    , backgroundColor (rgba 222 227 237 0.4)
+                    ]
+                ]
+                [ img
+                    [ class item.id
+                    , src item.icon
+                    , css
+                        [ withClass "x" [ width (pct 50), height (pct 50) ]
+                        , withClass "fortee" [ width (pct 50), height (pct 50) ]
+                        , withClass "hatena_blog" [ width (pct 100), height (pct 100) ]
+                        ]
+                    ]
+                    []
+                ]
     in
-    div [ class "hero" ]
-        [ div [ class "hero-main" ]
-            [ img [ class "logomark", src "images/logomark.svg" ] []
-            , h1 [] [ text "関数型まつり" ]
+    div
+        [ css
+            [ padding3 (px 80) (px 40) (px 40)
+            , display grid
+            , property "justify-items" "center"
+            , rowGap (rem 3)
+            , property "background-color" "var(--color-primary)"
+            , property "color" "var(--color-on-primary)"
+            ]
+        ]
+        [ div
+            [ css
+                [ width (pct 100)
+                , property "display" "grid"
+                , property "grid-template-rows" "6rem auto auto"
+                , property "place-items" "center"
+                , rowGap (rem 1.2)
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ property "grid-template-rows" "9rem auto auto" ]
+                ]
+            ]
+            [ img [ src "images/logomark.svg", css [ height (pct 100) ] ] []
+            , h1
+                [ css
+                    [ margin zero
+                    , lineHeight (num 1)
+                    , property "font-family" "var(--serif-logo)"
+                    , fontSize (rem 2.2)
+                    , fontWeight inherit
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ fontSize (rem 3.25) ]
+                    ]
+                ]
+                [ text "関数型まつり" ]
             , date
             ]
-        , ul [ class "links" ] (List.map (\link -> li [] [ iconButton link ]) links)
+        , ul
+            [ css
+                [ width (pct 100)
+                , margin zero
+                , padding zero
+                , displayFlex
+                , justifyContent flexEnd
+                , columnGap (rem 1)
+                ]
+            ]
+            (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links)
         ]
 
 
