@@ -9,7 +9,7 @@ import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
+import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
@@ -386,30 +386,7 @@ overviewSection =
                 ]
 
         item label contents =
-            div []
-                (h3
-                    [ css
-                        [ margin zero
-                        , display grid
-                        , property "grid-template-columns " "1fr max-content 1fr"
-                        , alignItems center
-                        , columnGap (em 0.5)
-                        ]
-                    ]
-                    [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-                    , div
-                        [ css
-                            [ color (rgb 0x66 0x66 0x66)
-                            , whiteSpace noWrap
-                            , fontSize (px 16)
-                            , fontWeight normal
-                            ]
-                        ]
-                        [ text label ]
-                    , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-                    ]
-                    :: contents
-                )
+            div [] (h3 [] [ text label ] :: contents)
 
         note string =
             p
@@ -563,7 +540,7 @@ sponsorsSection : Int -> Html msg
 sponsorsSection seed =
     section "Sponsors"
         [ div [ class "markdown sponsors" ]
-            [ h3 [] [ text "スポンサー募集中！" ]
+            [ Html.h3 [] [ text "スポンサー募集中！" ]
             , p []
                 [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
                 ]
@@ -733,26 +710,8 @@ sponsorLogo s =
 
 sponsorPlanHeader : String -> Html msg
 sponsorPlanHeader name =
-    div
-        [ css
-            [ display grid
-            , property "grid-template-columns " "1fr max-content 1fr"
-            , alignItems center
-            , columnGap (em 0.5)
-            ]
-        ]
-        [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-        , div
-            [ css
-                [ color (rgb 0x66 0x66 0x66)
-                , whiteSpace noWrap
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ fontSize (px 16) ]
-                ]
-            ]
-            [ text name ]
-        , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-        ]
+    h3 [ css [ color (rgb 0x66 0x66 0x66) ] ]
+        [ text name ]
 
 
 teamSection : Html msg
@@ -768,11 +727,11 @@ teamSection =
     in
     section "Team"
         [ div [ class "people leaders" ]
-            [ h3 [] [ text "座長" ]
+            [ Html.h3 [] [ text "座長" ]
             , ul [] (List.map listItem staff.leader)
             ]
         , div [ class "people staff" ]
-            [ h3 [] [ text "スタッフ" ]
+            [ Html.h3 [] [ text "スタッフ" ]
             , ul [] (List.map listItem staff.members)
             ]
         ]
@@ -837,3 +796,29 @@ section title children =
                 h2 [] [ text title ]
     in
     Html.section [] (heading :: children)
+
+
+h3 : List (Attribute msg) -> List (Html msg) -> Html msg
+h3 attributes children =
+    let
+        pseudoDividerStyles =
+            [ property "content" (qt "")
+            , display block
+            , height (px 1)
+            , backgroundColor (rgba 30 44 88 0.1)
+            ]
+    in
+    Html.styled Html.h3
+        [ margin zero
+        , display grid
+        , property "grid-template-columns " "1fr max-content 1fr"
+        , alignItems center
+        , columnGap (em 0.5)
+        , whiteSpace noWrap
+        , fontSize (px 16)
+        , fontWeight normal
+        , before pseudoDividerStyles
+        , after pseudoDividerStyles
+        ]
+        attributes
+        children
