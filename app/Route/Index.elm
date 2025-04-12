@@ -625,65 +625,57 @@ shuffleList seed list =
 
 
 sponsorLogos : Int -> Html msg
-sponsorLogos seed =
-    let
-        -- スポンサープランによらない、レイアウト構成を決めるようなスタイルを定義
-        logoGridStyle =
-            batch
-                [ display grid
-                , rowGap (px 10)
-                , columnGap (px 10)
-                , justifyContent center
-                ]
-    in
+sponsorLogos randomSeed =
     div
         [ css
             [ width (pct 100)
             , maxWidth (em 43)
             , display grid
-            , rowGap (px 35)
+            , rowGap (px 40)
             ]
         ]
-        [ sponsorPlanHeader "プラチナスポンサー"
+        [ sponsorPlan "プラチナスポンサー"
+            { mobileColumnsCount = 1, desktopColumnWidth = "326px" }
+            (platinumSponsorsShuffled randomSeed)
+        , sponsorPlan "ゴールドスポンサー"
+            { mobileColumnsCount = 2, desktopColumnWidth = "257px" }
+            (goldSponsorsShuffled randomSeed)
+        , sponsorPlan "シルバースポンサー"
+            { mobileColumnsCount = 3, desktopColumnWidth = "163px" }
+            (silverSponsorsShuffled randomSeed)
+        , sponsorPlan "ロゴスポンサー"
+            { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
+            (logoSponsorsShuffled randomSeed)
+        ]
+
+
+sponsorPlan :
+    String
+    -> { mobileColumnsCount : Int, desktopColumnWidth : String }
+    -> List Sponsor
+    -> Html msg
+sponsorPlan title { mobileColumnsCount, desktopColumnWidth } sponsors =
+    div
+        [ css
+            [ display grid
+            , rowGap (px 20)
+            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                [ rowGap (px 30) ]
+            ]
+        ]
+        [ h3 [ css [ color (rgb 0x66 0x66 0x66) ] ] [ text title ]
         , div
             [ css
-                [ logoGridStyle
-                , gridTemplateColumns [ fr 1 ]
+                [ display grid
+                , rowGap (px 10)
+                , columnGap (px 10)
+                , justifyContent center
+                , gridTemplateColumns (List.repeat mobileColumnsCount (fr 1))
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 326 ] ]
+                    [ property "grid-template-columns" ("repeat(auto-fit, " ++ desktopColumnWidth ++ ")") ]
                 ]
             ]
-            (List.map sponsorLogo (platinumSponsorsShuffled seed))
-        , sponsorPlanHeader "ゴールドスポンサー"
-        , div
-            [ css
-                [ logoGridStyle
-                , gridTemplateColumns [ fr 1, fr 1 ]
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 257 ] ]
-                ]
-            ]
-            (List.map sponsorLogo (goldSponsorsShuffled seed))
-        , sponsorPlanHeader "シルバースポンサー"
-        , div
-            [ css
-                [ logoGridStyle
-                , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-columns" "repeat(auto-fit, 163px)" ]
-                ]
-            ]
-            (List.map sponsorLogo (silverSponsorsShuffled seed))
-        , sponsorPlanHeader "ロゴスポンサー"
-        , div
-            [ css
-                [ logoGridStyle
-                , gridTemplateColumns [ fr 1, fr 1, fr 1, fr 1 ]
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-columns" "repeat(auto-fit, 116px)" ]
-                ]
-            ]
-            (List.map sponsorLogo (logoSponsorsShuffled seed))
+            (List.map sponsorLogo sponsors)
         ]
 
 
@@ -705,12 +697,6 @@ sponsorLogo s =
             ]
             []
         ]
-
-
-sponsorPlanHeader : String -> Html msg
-sponsorPlanHeader name =
-    h3 [ css [ color (rgb 0x66 0x66 0x66) ] ]
-        [ text name ]
 
 
 teamSection : Html msg
