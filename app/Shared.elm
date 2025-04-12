@@ -101,7 +101,7 @@ view _ _ _ _ pageView =
                     ]
                 , nav []
                     [ a [ href "/code-of-conduct/" ] [ text "行動規範" ]
-                    , a [ href "/proposal" ] [ text "セッション一覧" ]
+                    , a [ href "/schedule" ] [ text "スケジュール" ]
                     ]
                 ]
             , main_ [] pageView.body

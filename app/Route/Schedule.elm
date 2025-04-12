@@ -1,4 +1,4 @@
-module Route.Proposal exposing (ActionData, Data, Model, Msg, route)
+module Route.Schedule exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
 import BackendTask.Http

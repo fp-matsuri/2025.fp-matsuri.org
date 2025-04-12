@@ -60,7 +60,7 @@ makeSitemapEntries getStaticRoutes =
                 Index ->
                     Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
 
-                Proposal ->
+                Schedule ->
                     Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
 
                 Slug_ routeParam ->
