@@ -17,7 +17,7 @@ import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
 import View exposing (View)
- 
+
 
 type alias RouteParams =
     {}
