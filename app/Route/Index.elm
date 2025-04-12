@@ -727,11 +727,11 @@ teamSection =
     in
     section "Team"
         [ div [ class "people leaders" ]
-            [ Html.h3 [] [ text "座長" ]
+            [ h3 [] [ text "座長" ]
             , ul [] (List.map listItem staff.leader)
             ]
         , div [ class "people staff" ]
-            [ Html.h3 [] [ text "スタッフ" ]
+            [ h3 [] [ text "スタッフ" ]
             , ul [] (List.map listItem staff.members)
             ]
         ]
