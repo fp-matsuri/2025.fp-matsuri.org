@@ -7,7 +7,7 @@ import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, div, h1, li, text, ul)
-import Html.Styled.Attributes exposing (class, css)
+import Html.Styled.Attributes exposing (css)
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -101,21 +101,14 @@ view app _ =
     { title = "採択された応募一覧"
     , body =
         [ div
-            [ class "container mx-auto px-4 py-8"
-            , css
+            [ css
                 [ Css.maxWidth (Css.px 800)
                 , Css.margin2 Css.zero Css.auto
                 ]
             ]
-            [ h1
-                [ class "text-3xl font-bold mb-8"
-                , css [ Css.marginBottom (Css.px 32) ]
-                ]
+            [ h1 [ css [ Css.marginBottom (Css.px 32) ] ]
                 [ text "採択された応募一覧" ]
-            , ul
-                [ class "space-y-4"
-                , css [ Css.listStyle Css.none, Css.padding Css.zero ]
-                ]
+            , ul [ css [ Css.listStyle Css.none, Css.padding Css.zero ] ]
                 (List.map viewProposal app.data.proposals)
             ]
         ]
@@ -125,21 +118,14 @@ view app _ =
 viewProposal : Proposal -> Html msg
 viewProposal proposal =
     li
-        [ class "p-4 border rounded-lg"
-        , css
+        [ css
             [ Css.borderColor (Css.rgb 229 231 235)
             , Css.borderWidth (Css.px 1)
             , Css.borderRadius (Css.px 8)
             ]
         ]
-        [ div
-            [ class "font-bold text-lg mb-2"
-            , css [ Css.marginBottom (Css.px 8) ]
-            ]
+        [ div [ css [ Css.marginBottom (Css.px 8) ] ]
             [ text proposal.title ]
-        , div
-            [ class "text-gray-600"
-            , css [ Css.color (Css.rgb 75 85 99) ]
-            ]
+        , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
             [ text ("発表者: " ++ proposal.speaker.name) ]
         ]
