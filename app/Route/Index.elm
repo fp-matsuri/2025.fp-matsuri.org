@@ -633,19 +633,21 @@ sponsorLogos seed =
                 [ display grid
                 , rowGap (px 10)
                 , columnGap (px 10)
-                , paddingTop (px 20)
                 , justifyContent center
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ paddingTop (px 30)
-                    ]
                 ]
     in
-    div [ css [ width (pct 100), maxWidth (em 43) ] ]
+    div
+        [ css
+            [ width (pct 100)
+            , maxWidth (em 43)
+            , display grid
+            , rowGap (px 35)
+            ]
+        ]
         [ sponsorPlanHeader "プラチナスポンサー"
         , div
             [ css
                 [ logoGridStyle
-                , paddingBottom (px 40)
                 , gridTemplateColumns [ fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                     [ gridTemplateColumns [ px 326 ] ]
@@ -656,7 +658,6 @@ sponsorLogos seed =
         , div
             [ css
                 [ logoGridStyle
-                , paddingBottom (px 40)
                 , gridTemplateColumns [ fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                     [ gridTemplateColumns [ px 257 ] ]
@@ -667,7 +668,6 @@ sponsorLogos seed =
         , div
             [ css
                 [ logoGridStyle
-                , paddingBottom (px 40)
                 , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                     [ property "grid-template-columns" "repeat(auto-fit, 163px)" ]
@@ -678,7 +678,6 @@ sponsorLogos seed =
         , div
             [ css
                 [ logoGridStyle
-                , paddingBottom (px 40)
                 , gridTemplateColumns [ fr 1, fr 1, fr 1, fr 1 ]
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                     [ property "grid-template-columns" "repeat(auto-fit, 116px)" ]
