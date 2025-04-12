@@ -5,8 +5,8 @@
   "scripts": {
     "start": "elm-pages dev",
     "build": "elm-pages build",
-    "format": "elm-format --yes .",
-    "validate": "elm-format --yes --validate .",
+    "format": "elm-format --yes ./src ./app ./tests ./review",
+    "validate": "elm-format --yes --validate ./src ./app ./tests ./review",
     "test": "elm-test",
     "lint": "elm-review",
     "fix": "elm-review --fix && elm-format --yes ."
