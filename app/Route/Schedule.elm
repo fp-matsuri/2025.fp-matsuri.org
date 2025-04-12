@@ -9,7 +9,7 @@ import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, div, h1, text)
 import Html.Styled.Attributes exposing (css)
-import Json.Decode as Decode exposing (Decoder, bool, field, maybe, nullable, string)
+import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
@@ -33,19 +33,30 @@ type alias Data =
     { timetable : List TimetableItem }
 
 
-type alias TimetableItem =
-    { --  type_ : String
-      uuid : String
-    , url : Maybe String
-    , title : String
+type TimetableItem
+    = Talk TalkProps
+    | Timeslot TimeslotProps
 
-    -- , abstract : Maybe String
-    -- , accepted : Maybe Bool
-    , tags : Maybe (List Tag)
-    , speaker : Maybe Speaker
-    , track : Maybe Track
-    , startsAt : Maybe String
-    , lengthMin : Maybe Int
+
+type alias TalkProps =
+    { type_ : String
+    , uuid : String
+    , url : String
+    , title : String
+    , abstract : String
+    , accepted : Bool
+    , tags : List Tag
+    , speaker : Speaker
+    }
+
+
+type alias TimeslotProps =
+    { type_ : String
+    , uuid : String
+    , title : String
+    , track : Track
+    , startsAt : String
+    , lengthMin : Int
     }
 
 
@@ -87,18 +98,33 @@ data =
 
 timetableItemDecoder : Decoder TimetableItem
 timetableItemDecoder =
-    Decode.map8 TimetableItem
-        -- (field "type" string)
-        (field "uuid" string)
-        (maybe (field "url" string))
-        (field "title" string)
-        -- (field "abstract" (nullable string))
-        -- (maybe (field "accepted" bool))
-        (maybe (field "tags" (Decode.list tagDecoder)))
-        (maybe (field "speaker" speakerDecoder))
-        (maybe (field "track" trackDecoder))
-        (maybe (field "starts_at" string))
-        (maybe (field "length_min" Decode.int))
+    Decode.oneOf [ talkDecoder, timeslotDecoder ]
+
+
+talkDecoder : Decoder TimetableItem
+talkDecoder =
+    Decode.map Talk <|
+        Decode.map8 TalkProps
+            (field "type" string)
+            (field "uuid" string)
+            (field "url" string)
+            (field "title" string)
+            (field "abstract" string)
+            (field "accepted" bool)
+            (field "tags" (Decode.list tagDecoder))
+            (field "speaker" speakerDecoder)
+
+
+timeslotDecoder : Decoder TimetableItem
+timeslotDecoder =
+    Decode.map Timeslot <|
+        Decode.map6 TimeslotProps
+            (field "type" string)
+            (field "uuid" string)
+            (field "title" string)
+            (field "track" trackDecoder)
+            (field "starts_at" string)
+            (field "length_min" Decode.int)
 
 
 tagDecoder : Decoder Tag
@@ -161,16 +187,31 @@ view app _ =
 
 viewTimetableItem : TimetableItem -> Html msg
 viewTimetableItem timetableItem =
-    div
-        [ css
-            [ padding (px 10)
-            , borderRadius (px 10)
-            , fontSize (px 14)
-            , property "background-color" "var(--color-grey095)"
-            ]
-        ]
-        [ div [ css [ Css.marginBottom (Css.px 8) ] ]
-            [ text timetableItem.title ]
-        , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
-            [ text ("発表者: " ++ (Maybe.withDefault "" <| Maybe.map .name timetableItem.speaker)) ]
-        ]
+    case timetableItem of
+        Talk talk ->
+            div
+                [ css
+                    [ padding (px 10)
+                    , borderRadius (px 10)
+                    , fontSize (px 14)
+                    , property "background-color" "var(--color-grey095)"
+                    ]
+                ]
+                [ div [ css [ Css.marginBottom (Css.px 8) ] ]
+                    [ text talk.title ]
+                , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
+                    [ text ("発表者: " ++ talk.speaker.name) ]
+                ]
+
+        Timeslot timeslot ->
+            div
+                [ css
+                    [ padding (px 10)
+                    , borderRadius (px 10)
+                    , fontSize (px 14)
+                    , property "background-color" "var(--color-grey095)"
+                    ]
+                ]
+                [ div [ css [ Css.marginBottom (Css.px 8) ] ]
+                    [ text timeslot.title ]
+                ]
