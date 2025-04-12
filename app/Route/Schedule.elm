@@ -9,7 +9,7 @@ import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, div, h1, text)
 import Html.Styled.Attributes exposing (css)
-import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
+import Json.Decode as Decode exposing (Decoder, bool, field, maybe, nullable, string)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
@@ -30,16 +30,29 @@ type alias RouteParams =
 
 
 type alias Data =
-    { proposals : List Proposal }
+    { timetable : List TimetableItem }
 
 
-type alias Proposal =
-    { uuid : String
+type alias TimetableItem =
+    { --  type_ : String
+      uuid : String
+    , url : Maybe String
     , title : String
-    , abstract : String
-    , accepted : Bool
-    , speaker : Speaker
-    , created : String
+
+    -- , abstract : Maybe String
+    -- , accepted : Maybe Bool
+    , tags : Maybe (List Tag)
+    , speaker : Maybe Speaker
+    , track : Maybe Track
+    , startsAt : Maybe String
+    , lengthMin : Maybe Int
+    }
+
+
+type alias Tag =
+    { name : String
+    , colorText : String
+    , colorBackground : String
     }
 
 
@@ -49,6 +62,10 @@ type alias Speaker =
     , twitter : Maybe String
     , avatarUrl : Maybe String
     }
+
+
+type alias Track =
+    { name : String, sort : Int }
 
 
 type alias ActionData =
@@ -63,20 +80,33 @@ route =
 
 data : BackendTask FatalError Data
 data =
-    BackendTask.Http.getJson "https://fortee.jp/2025fp-matsuri/api/proposals/accepted"
-        (Decode.map Data (Decode.field "proposals" (Decode.list proposalDecoder)))
-        |> BackendTask.onError (\_ -> BackendTask.succeed { proposals = [] })
+    BackendTask.Http.getJson "https://fortee.jp/2025fp-matsuri/api/timetable"
+        (Decode.map Data (Decode.field "timetable" (Decode.list timetableItemDecoder)))
+        |> BackendTask.onError (\_ -> BackendTask.succeed { timetable = [] })
 
 
-proposalDecoder : Decoder Proposal
-proposalDecoder =
-    Decode.map6 Proposal
+timetableItemDecoder : Decoder TimetableItem
+timetableItemDecoder =
+    Decode.map8 TimetableItem
+        -- (field "type" string)
         (field "uuid" string)
+        (maybe (field "url" string))
         (field "title" string)
-        (field "abstract" string)
-        (field "accepted" bool)
-        (field "speaker" speakerDecoder)
-        (field "created" string)
+        -- (field "abstract" (nullable string))
+        -- (maybe (field "accepted" bool))
+        (maybe (field "tags" (Decode.list tagDecoder)))
+        (maybe (field "speaker" speakerDecoder))
+        (maybe (field "track" trackDecoder))
+        (maybe (field "starts_at" string))
+        (maybe (field "length_min" Decode.int))
+
+
+tagDecoder : Decoder Tag
+tagDecoder =
+    Decode.map3 Tag
+        (field "name" string)
+        (field "color_text" string)
+        (field "color_background" string)
 
 
 speakerDecoder : Decoder Speaker
@@ -86,6 +116,13 @@ speakerDecoder =
         (field "kana" string)
         (maybe (field "twitter" string))
         (maybe (field "avatar_url" string))
+
+
+trackDecoder : Decoder Track
+trackDecoder =
+    Decode.map2 Track
+        (field "name" string)
+        (field "sort" Decode.int)
 
 
 head : App Data ActionData RouteParams -> List Head.Tag
@@ -116,14 +153,14 @@ view app _ =
                     , gap (px 10)
                     ]
                 ]
-                (List.map viewProposal app.data.proposals)
+                (List.map viewTimetableItem app.data.timetable)
             ]
         ]
     }
 
 
-viewProposal : Proposal -> Html msg
-viewProposal proposal =
+viewTimetableItem : TimetableItem -> Html msg
+viewTimetableItem timetableItem =
     div
         [ css
             [ padding (px 10)
@@ -133,7 +170,7 @@ viewProposal proposal =
             ]
         ]
         [ div [ css [ Css.marginBottom (Css.px 8) ] ]
-            [ text proposal.title ]
+            [ text timetableItem.title ]
         , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
-            [ text ("発表者: " ++ proposal.speaker.name) ]
+            [ text ("発表者: " ++ (Maybe.withDefault "" <| Maybe.map .name timetableItem.speaker)) ]
         ]
