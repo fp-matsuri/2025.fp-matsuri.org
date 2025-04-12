@@ -10,7 +10,7 @@ import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
-import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
+import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, id, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
 import RouteBuilder exposing (App, StatefulRoute)
@@ -563,7 +563,7 @@ sponsorsSection : Int -> Html msg
 sponsorsSection seed =
     section "Sponsors"
         [ div [ class "markdown sponsors" ]
-            [ h3 [] [ text "スポンサー募集中！" ]
+            [ h3 [ id "sponsor" ] [ text "スポンサー募集中！" ]
             , p []
                 [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
                 ]

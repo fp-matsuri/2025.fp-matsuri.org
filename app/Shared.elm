@@ -7,7 +7,7 @@ import BackendTask exposing (BackendTask)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Html exposing (Html)
-import Html.Styled exposing (a, footer, h1, header, img, main_, nav, text)
+import Html.Styled exposing (a, br, div, footer, h4, header, img, main_, nav, text)
 import Html.Styled.Attributes exposing (alt, class, href, src)
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
@@ -102,7 +102,22 @@ view _ _ _ _ pageView =
                 , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
                 ]
             , main_ [] pageView.body
-            , footer [ class "site-footer" ] [ text "© 2025 関数型まつり準備委員会" ]
+            , footer [ class "site-footer" ]
+                [ div [ class "footer-navigation" ]
+                    [ h4 [] [ text "サイトマップ" ]
+                    , nav [] [ a [ href "/" ] [ text "トップページ" ] ]
+                    , nav [] [ a [ href "/#sponsor" ] [ text "スポンサー" ] ]
+                    , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
+                    , br [] []
+                    , h4 [] [ text "公式アカウント" ]
+                    , nav [] [ a [ href "https://x.com/fp_matsuri" ] [ text "X" ] ]
+                    , nav [] [ a [ href "https://bsky.app/profile/fp-matsuri.bsky.social" ] [ text "Bluesky" ] ]
+                    , nav [] [ a [ href "https://blog.fp-matsuri.org/" ] [ text "ブログ" ] ]
+                    , nav [] [ a [ href "https://fortee.jp/2025fp-matsuri" ] [ text "fortee" ] ]
+                    , br [] []
+                    ]
+                , text "© 2025 関数型まつり準備委員会"
+                ]
             ]
     , title =
         if pageView.title /= "" then

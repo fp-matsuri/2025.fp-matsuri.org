@@ -83,6 +83,18 @@ a {
   color: var(--color-on-primary);
 }
 
+.site-footer > .footer-navigation {
+  text-align: left;
+}
+
+.site-footer > .footer-navigation > nav > a {
+  display: inline-block;
+  padding: 0.5rem 0.5rem;
+  text-decoration: inherit;
+  color: inherit;
+  line-height: 1;
+}
+
 /* ------------------------------------
 Markdown
 ------------------------------------ */
