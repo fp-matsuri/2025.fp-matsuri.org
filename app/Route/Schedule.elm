@@ -3,10 +3,11 @@ module Route.Schedule exposing (ActionData, Data, Model, Msg, route)
 import BackendTask exposing (BackendTask)
 import BackendTask.Http
 import Css exposing (..)
+import Css.Extra exposing (fr, gap, grid, gridTemplateColumns)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, div, h1, li, text, ul)
+import Html.Styled as Html exposing (Html, div, h1, text)
 import Html.Styled.Attributes exposing (css)
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import PagesMsg exposing (PagesMsg)
@@ -89,7 +90,7 @@ speakerDecoder =
 
 head : App Data ActionData RouteParams -> List Head.Tag
 head _ =
-    Site.summaryLarge { pageTitle = "採択された応募一覧" }
+    Site.summaryLarge { pageTitle = "開催スケジュール" }
         |> Head.Seo.website
 
 
@@ -98,7 +99,7 @@ view :
     -> Shared.Model
     -> View (PagesMsg ())
 view app _ =
-    { title = "採択された応募一覧"
+    { title = "開催スケジュール"
     , body =
         [ div
             [ css
@@ -107,8 +108,14 @@ view app _ =
                 ]
             ]
             [ h1 [ css [ Css.marginBottom (Css.px 32) ] ]
-                [ text "採択された応募一覧" ]
-            , ul [ css [ Css.listStyle Css.none, Css.padding Css.zero ] ]
+                [ text "開催スケジュール" ]
+            , div
+                [ css
+                    [ display grid
+                    , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+                    , gap (px 10)
+                    ]
+                ]
                 (List.map viewProposal app.data.proposals)
             ]
         ]
@@ -117,11 +124,12 @@ view app _ =
 
 viewProposal : Proposal -> Html msg
 viewProposal proposal =
-    li
+    div
         [ css
-            [ Css.borderColor (Css.rgb 229 231 235)
-            , Css.borderWidth (Css.px 1)
-            , Css.borderRadius (Css.px 8)
+            [ padding (px 10)
+            , borderRadius (px 10)
+            , fontSize (px 14)
+            , property "background-color" "var(--color-grey095)"
             ]
         ]
         [ div [ css [ Css.marginBottom (Css.px 8) ] ]
