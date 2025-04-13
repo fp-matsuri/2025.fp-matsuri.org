@@ -431,7 +431,7 @@ scott =
         , title = "Scott Wlaschinさんによるセッション"
         , abstract = "Scott"
         , accepted = True
-        , tags = []
+        , tags = [ { name = "招待セッション", colorText = "#ffffff", colorBackground = "#ff8f00" } ]
         , speaker =
             { name = "Scott Wlaschin"
             , kana = "スコット"
@@ -448,6 +448,18 @@ viewTimetableItem timetableItem =
             let
                 { track, code, row } =
                     trackFromUuid talk.uuid
+
+                invitedTag =
+                    List.filter (\tag -> tag.name == "招待セッション") talk.tags
+                        |> List.head
+
+                filteredTags =
+                    talk.tags
+                        |> List.filter
+                            (\tag ->
+                                List.all (\name -> tag.name /= name)
+                                    [ "招待セッション", "公募セッション", "スタッフセッション", "Beginner", "Intermediate", "Advanced" ]
+                            )
             in
             div
                 [ css
@@ -460,10 +472,16 @@ viewTimetableItem timetableItem =
                     ]
                 ]
                 [ text code
+                , text " "
+                , invitedTag
+                    |> Maybe.map viewTag
+                    |> Maybe.withDefault (text "")
                 , div [ css [ Css.marginBottom (Css.px 8) ] ]
                     [ text talk.title ]
                 , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
                     [ text ("発表者: " ++ talk.speaker.name) ]
+                , div [ css [ displayFlex, flexWrap wrap, gap (px 4) ] ]
+                    (List.map (\tag -> { tag | colorBackground = "#454854" } |> viewTag) filteredTags)
                 ]
 
         Timeslot timeslot ->
@@ -512,3 +530,18 @@ trackToString track =
 
         TrackC ->
             "Track C"
+
+
+viewTag : Tag -> Html msg
+viewTag tag =
+    div
+        [ css
+            [ display inlineBlock
+            , padding2 (px 2) (px 6)
+            , borderRadius (px 4)
+            , fontSize (px 12)
+            , backgroundColor (hex tag.colorBackground)
+            , color (hex tag.colorText)
+            ]
+        ]
+        [ text tag.name ]
