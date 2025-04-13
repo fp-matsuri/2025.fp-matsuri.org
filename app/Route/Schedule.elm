@@ -9,11 +9,15 @@ import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, br, div, h1, text)
 import Html.Styled.Attributes as Attributes exposing (css, href, rel)
+import Iso8601
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Site
+import Time exposing (Month(..), Posix)
+import Time.Extra exposing (Interval(..))
+import TimeZone
 import View exposing (View)
 
 
@@ -55,7 +59,7 @@ type alias TimeslotProps =
     , uuid : String
     , title : String
     , track : Track
-    , startsAt : String
+    , startsAt : Posix
     , lengthMin : Int
     }
 
@@ -126,7 +130,7 @@ timeslotDecoder =
             (field "uuid" string)
             (field "title" string)
             (field "track" trackDecoder)
-            (field "starts_at" string)
+            (field "starts_at" iso8601Decoder)
             (field "length_min" Decode.int)
 
 
@@ -167,211 +171,231 @@ trackDecoder =
             )
 
 
+iso8601Decoder : Decoder Posix
+iso8601Decoder =
+    string
+        |> Decode.andThen
+            (\str ->
+                case Iso8601.toTime str of
+                    Ok posix ->
+                        Decode.succeed posix
+
+                    Err _ ->
+                        Decode.fail "Invalid ISO8601 date format"
+            )
+
+
+parseIso8601 : String -> Posix
+parseIso8601 isoString =
+    Iso8601.toTime isoString
+        |> Result.withDefault (Time.millisToPosix 0)
+
+
 trackFromUuid :
     String
     ->
         { track : Track
         , code : String
         , row : String
-        , startsAt : String
+        , startsAt : Posix
         , lengthMin : Int
         }
 trackFromUuid uuid =
     case uuid of
         -- 型システムを知りたい人のための型検査器作成入門
         "5699c262-e04d-4f58-a6f5-34c390f36d0d" ->
-            { track = TrackA, code = "A-101", row = "3", startsAt = "2025-06-14T11:30:00+09:00", lengthMin = 50 }
+            { track = TrackA, code = "A-101", row = "3", startsAt = parseIso8601 "2025-06-14T11:30:00+09:00", lengthMin = 50 }
 
         -- Rust世界の二つのモナド──Rust でも do 式をしてプログラムを直感的に記述する件について
         "a8cd6d02-37c5-4009-90a4-9495c3189420" ->
-            { track = TrackA, code = "A-102", row = "5", startsAt = "2025-06-14T14:00:00+09:00", lengthMin = 50 }
+            { track = TrackA, code = "A-102", row = "5", startsAt = parseIso8601 "2025-06-14T14:00:00+09:00", lengthMin = 50 }
 
         -- 関数型言語を採用し、維持し、継続する
         "76a0de1e-bf79-4c82-b50e-86caedaf1eb9" ->
-            { track = TrackA, code = "A-103", row = "6", startsAt = "2025-06-14T15:00:00+09:00", lengthMin = 50 }
+            { track = TrackA, code = "A-103", row = "6", startsAt = parseIso8601 "2025-06-14T15:00:00+09:00", lengthMin = 50 }
 
         -- AWS と定理証明 〜ポリシー言語 Cedar 開発の舞台裏〜
         "8bb407b5-5df3-48bb-a934-0ca6ca628c9a" ->
-            { track = TrackA, code = "A-104", row = "8", startsAt = "2025-06-14T16:30:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-104", row = "8", startsAt = parseIso8601 "2025-06-14T16:30:00+09:00", lengthMin = 25 }
 
         -- Effectの双対、Coeffect
         "67557418-7561-47ec-8594-9d6c0926a6ab" ->
-            { track = TrackA, code = "A-105", row = "9", startsAt = "2025-06-14T17:00:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-105", row = "9", startsAt = parseIso8601 "2025-06-14T17:00:00+09:00", lengthMin = 25 }
 
         -- Scott Wlaschinさんによるセッション
         "scott" ->
-            { track = All, code = "A-106", row = "10", startsAt = "2025-06-14T17:30:00+09:00", lengthMin = 50 }
+            { track = All, code = "A-106", row = "10", startsAt = parseIso8601 "2025-06-14T17:30:00+09:00", lengthMin = 50 }
 
         -- Elixir で IoT 開発、 Nerves なら簡単にできる！？
         "b952a4f0-7db5-4d67-a911-a7a5d8a840ac" ->
-            { track = TrackB, code = "B-101", row = "3", startsAt = "2025-06-14T11:30:00+09:00", lengthMin = 50 }
+            { track = TrackB, code = "B-101", row = "3", startsAt = parseIso8601 "2025-06-14T11:30:00+09:00", lengthMin = 50 }
 
         -- Hasktorchで学ぶ関数型ディープラーニング：型安全なニューラルネットワークとその実践
         "b7a97e49-8624-4eae-848a-68f70205ad2a" ->
-            { track = TrackB, code = "B-102", row = "5", startsAt = "2025-06-14T14:00:00+09:00", lengthMin = 50 }
+            { track = TrackB, code = "B-102", row = "5", startsAt = parseIso8601 "2025-06-14T14:00:00+09:00", lengthMin = 50 }
 
         -- `interact`のススメ — できるかぎり「関数的」に書きたいあなたに
         "6109f011-c590-4c89-9add-89ad12cc9631" ->
-            { track = TrackB, code = "B-103", row = "6", startsAt = "2025-06-14T15:00:00+09:00", lengthMin = 50 }
+            { track = TrackB, code = "B-103", row = "6", startsAt = parseIso8601 "2025-06-14T15:00:00+09:00", lengthMin = 50 }
 
         -- 「ElixirでIoT!!」のこれまでとこれから
         "f75e5cab-c677-44bb-a77a-2acf36083457" ->
-            { track = TrackB, code = "B-104", row = "8", startsAt = "2025-06-14T16:30:00+09:00", lengthMin = 25 }
+            { track = TrackB, code = "B-104", row = "8", startsAt = parseIso8601 "2025-06-14T16:30:00+09:00", lengthMin = 25 }
 
         -- 産業機械をElixirで制御する
         "6edaa6b5-b591-490c-855f-731a9d318192" ->
-            { track = TrackB, code = "B-105", row = "9", startsAt = "2025-06-14T17:00:00+09:00", lengthMin = 25 }
+            { track = TrackB, code = "B-105", row = "9", startsAt = parseIso8601 "2025-06-14T17:00:00+09:00", lengthMin = 25 }
 
         -- ドメインモデリングにおける抽象の役割、tagless-finalによるDSL構築、そして型安全な最適化
         "f3a8809b-d498-4ac2-bf42-5c32ce1595ea" ->
-            { track = TrackC, code = "C-101", row = "3", startsAt = "2025-06-14T11:30:00+09:00", lengthMin = 50 }
+            { track = TrackC, code = "C-101", row = "3", startsAt = parseIso8601 "2025-06-14T11:30:00+09:00", lengthMin = 50 }
 
         -- 関数型言語テイスティング: Haskell, Scala, Clojure, Elixirを比べて味わう関数型プログラミングの旨さ
         "f7646b8b-29b0-4ac4-8ec3-46cabaa8ef1a" ->
-            { track = TrackC, code = "C-102", row = "5", startsAt = "2025-06-14T14:00:00+09:00", lengthMin = 50 }
+            { track = TrackC, code = "C-102", row = "5", startsAt = parseIso8601 "2025-06-14T14:00:00+09:00", lengthMin = 50 }
 
         -- AIと共に進化する開発手法：形式手法と関数型プログラミングの可能性
         "56b9175d-1468-4ab0-8063-180491bb16ed" ->
-            { track = TrackC, code = "C-103", row = "6", startsAt = "2025-06-14T15:00:00+09:00", lengthMin = 50 }
+            { track = TrackC, code = "C-103", row = "6", startsAt = parseIso8601 "2025-06-14T15:00:00+09:00", lengthMin = 50 }
 
         -- Elmのパフォーマンス、実際どうなの？ベンチマークに入門してみた
         "3760ed3e-5b38-48b9-9db2-f101af1e580f" ->
-            { track = TrackC, code = "C-104", row = "8", startsAt = "2025-06-14T16:30:00+09:00", lengthMin = 25 }
+            { track = TrackC, code = "C-104", row = "8", startsAt = parseIso8601 "2025-06-14T16:30:00+09:00", lengthMin = 25 }
 
         -- 高階関数を用いたI/O方法の公開 - DIコンテナから高階関数への更改 -
         "350e2f70-0b02-4b79-b9f6-254a9d614706" ->
-            { track = TrackC, code = "C-105", row = "9", startsAt = "2025-06-14T17:00:00+09:00", lengthMin = 25 }
+            { track = TrackC, code = "C-105", row = "9", startsAt = parseIso8601 "2025-06-14T17:00:00+09:00", lengthMin = 25 }
 
         -- SML＃ オープンコンパイラプロジェクト
         "61fb241f-cfaa-448a-892d-277e93577198" ->
-            { track = TrackA, code = "A-201", row = "3", startsAt = "2025-06-15T10:30:00+09:00", lengthMin = 50 }
+            { track = TrackA, code = "A-201", row = "3", startsAt = parseIso8601 "2025-06-15T10:30:00+09:00", lengthMin = 50 }
 
         -- Haskell でアルゴリズムを抽象化する 〜 関数型言語で競技プログラミング
         "ad0d29f8-46a2-463b-beeb-39257f9c5306" ->
-            { track = TrackA, code = "A-202", row = "4", startsAt = "2025-06-15T11:30:00+09:00", lengthMin = 50 }
+            { track = TrackA, code = "A-202", row = "4", startsAt = parseIso8601 "2025-06-15T11:30:00+09:00", lengthMin = 50 }
 
         -- ラムダ計算と抽象機械と非同期ランタイム
         "3bdbadb9-7d77-4de0-aa37-5a7a38c577c3" ->
-            { track = TrackA, code = "A-203", row = "6", startsAt = "2025-06-15T14:00:00+09:00", lengthMin = 50 }
+            { track = TrackA, code = "A-203", row = "6", startsAt = parseIso8601 "2025-06-15T14:00:00+09:00", lengthMin = 50 }
 
         -- より安全で単純な関数定義
         "75644660-9bf1-473f-8d6d-01f2202bf2f2" ->
-            { track = TrackA, code = "A-204", row = "7", startsAt = "2025-06-15T15:00:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-204", row = "7", startsAt = parseIso8601 "2025-06-15T15:00:00+09:00", lengthMin = 25 }
 
         -- 数理論理学からの『型システム入門』入門？
         "a6badfbb-ca70-474d-9abd-f285f24d9380" ->
-            { track = TrackA, code = "A-205", row = "8", startsAt = "2025-06-15T15:30:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-205", row = "8", startsAt = parseIso8601 "2025-06-15T15:30:00+09:00", lengthMin = 25 }
 
         -- Gleamという選択肢
         "e9df1f36-cf2f-4a85-aa36-4e07ae742a69" ->
-            { track = TrackA, code = "A-206", row = "10", startsAt = "2025-06-15T16:30:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-206", row = "10", startsAt = parseIso8601 "2025-06-15T16:30:00+09:00", lengthMin = 25 }
 
         -- Scala の関数型ライブラリを活用した型安全な業務アプリケーション開発
         "02f89c3a-672e-4294-ae31-69e02e049005" ->
-            { track = TrackA, code = "A-207", row = "11/13", startsAt = "2025-06-15T17:00:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-207", row = "11/13", startsAt = parseIso8601 "2025-06-15T17:00:00+09:00", lengthMin = 25 }
 
         -- continuations: continued and to be continued
         "ea9fd8fc-4ae3-40c7-8ef5-1a8041e64606" ->
-            { track = TrackA, code = "A-208", row = "13/15", startsAt = "2025-06-15T17:30:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-208", row = "13/15", startsAt = parseIso8601 "2025-06-15T17:30:00+09:00", lengthMin = 25 }
 
         -- 関数プログラミングに見る再帰
         "034e486c-9a1c-48d7-910a-14aa82237eaa" ->
-            { track = TrackA, code = "A-209", row = "15/18", startsAt = "2025-06-15T18:00:00+09:00", lengthMin = 25 }
+            { track = TrackA, code = "A-209", row = "15/18", startsAt = parseIso8601 "2025-06-15T18:00:00+09:00", lengthMin = 25 }
 
         -- 「Haskellは純粋関数型言語だから副作用がない」っていうの、そろそろ止めにしませんか？
         "d19de11e-d9a2-4b22-866e-2f95b8ac5c95" ->
-            { track = TrackB, code = "B-201", row = "3", startsAt = "2025-06-15T10:30:00+09:00", lengthMin = 50 }
+            { track = TrackB, code = "B-201", row = "3", startsAt = parseIso8601 "2025-06-15T10:30:00+09:00", lengthMin = 50 }
 
         -- SML#コンパイラを速くする：タスク並列、末尾呼び出し、部分評価機構の開発
         "b69688cf-06a2-4070-839c-4a6ec299c39c" ->
-            { track = TrackB, code = "B-202", row = "4", startsAt = "2025-06-15T11:30:00+09:00", lengthMin = 50 }
+            { track = TrackB, code = "B-202", row = "4", startsAt = parseIso8601 "2025-06-15T11:30:00+09:00", lengthMin = 50 }
 
         -- Julia という言語について
         "4ca1dabd-dbbe-47ca-a813-bc4c9700ccc9" ->
-            { track = TrackB, code = "B-203", row = "6", startsAt = "2025-06-15T14:00:00+09:00", lengthMin = 50 }
+            { track = TrackB, code = "B-203", row = "6", startsAt = parseIso8601 "2025-06-15T14:00:00+09:00", lengthMin = 50 }
 
         -- Leanで正規表現エンジンをつくる。そして正しさを証明する
         "af94193a-4acb-4079-82a9-36bacfae3a20" ->
-            { track = TrackB, code = "B-204", row = "7", startsAt = "2025-06-15T15:00:00+09:00", lengthMin = 25 }
+            { track = TrackB, code = "B-204", row = "7", startsAt = parseIso8601 "2025-06-15T15:00:00+09:00", lengthMin = 25 }
 
         -- 型付きアクターモデルがもたらす分散シミュレーションの未来
         "82478074-a43b-4d46-87a8-0742ed790e86" ->
-            { track = TrackB, code = "B-205", row = "8", startsAt = "2025-06-15T15:30:00+09:00", lengthMin = 25 }
+            { track = TrackB, code = "B-205", row = "8", startsAt = parseIso8601 "2025-06-15T15:30:00+09:00", lengthMin = 25 }
 
         -- Scalaだったらこう書けるのに~Scalaが恋しくて~(TypeScript編、Python編)
         "2ceb7498-b203-44ee-b064-c0fbbe4a6948" ->
-            { track = TrackB, code = "B-206", row = "10", startsAt = "2025-06-15T16:30:00+09:00", lengthMin = 25 }
+            { track = TrackB, code = "B-206", row = "10", startsAt = parseIso8601 "2025-06-15T16:30:00+09:00", lengthMin = 25 }
 
         -- ClojureScript (Squint) で React フロントエンド開発 2025 年版
         "e7f30174-d4b9-40a7-9398-9f15c71009a9" ->
-            { track = TrackB, code = "B-207", row = "11/13", startsAt = "2025-06-15T17:00:00+09:00", lengthMin = 25 }
+            { track = TrackB, code = "B-207", row = "11/13", startsAt = parseIso8601 "2025-06-15T17:00:00+09:00", lengthMin = 25 }
 
         -- Lean言語は新世代の純粋関数型言語になれるか？
         "73b09de0-c72e-4bbd-9089-af5c002f9506" ->
-            { track = TrackB, code = "B-208", row = "13", startsAt = "2025-06-15T17:30:00+09:00", lengthMin = 10 }
+            { track = TrackB, code = "B-208", row = "13", startsAt = parseIso8601 "2025-06-15T17:30:00+09:00", lengthMin = 10 }
 
         -- 成立するElixirの再束縛（再代入）可という選択
         "8acfb03f-19ea-476a-b6e6-0cb4b03fec1f" ->
-            { track = TrackB, code = "B-209", row = "14", startsAt = "2025-06-15T17:40:00+09:00", lengthMin = 10 }
+            { track = TrackB, code = "B-209", row = "14", startsAt = parseIso8601 "2025-06-15T17:40:00+09:00", lengthMin = 10 }
 
         -- Lispは関数型言語(ではない)
         "92b697d1-206c-426a-90c9-9ff3486cce6f" ->
-            { track = TrackB, code = "B-210", row = "15", startsAt = "2025-06-15T18:00:00+09:00", lengthMin = 10 }
+            { track = TrackB, code = "B-210", row = "15", startsAt = parseIso8601 "2025-06-15T18:00:00+09:00", lengthMin = 10 }
 
         -- Kotlinで学ぶSealed classと代数的データ型
         "e436393d-c322-477d-b8cb-0e6ac8ce8cc6" ->
-            { track = TrackB, code = "B-211", row = "16", startsAt = "2025-06-15T18:10:00+09:00", lengthMin = 10 }
+            { track = TrackB, code = "B-211", row = "16", startsAt = parseIso8601 "2025-06-15T18:10:00+09:00", lengthMin = 10 }
 
         -- F#の設計と妥協点 - .NET上で実現する関数型パラダイム
         "a916dd5a-7342-416a-980d-84f180a8e0a2" ->
-            { track = TrackC, code = "C-201", row = "3", startsAt = "2025-06-15T10:30:00+09:00", lengthMin = 50 }
+            { track = TrackC, code = "C-201", row = "3", startsAt = parseIso8601 "2025-06-15T10:30:00+09:00", lengthMin = 50 }
 
         -- マイクロサービス内で動くAPIをF#で書いている
         "7a342a71-90d4-43f9-9c4a-ce801fc9b49a" ->
-            { track = TrackC, code = "C-202", row = "4", startsAt = "2025-06-15T11:30:00+09:00", lengthMin = 50 }
+            { track = TrackC, code = "C-202", row = "4", startsAt = parseIso8601 "2025-06-15T11:30:00+09:00", lengthMin = 50 }
 
         -- はじめて関数型言語の機能に触れるエンジニア向けの学び方/教え方
         "7cc6ecef-94c8-4add-abc0-23b500dbf498" ->
-            { track = TrackC, code = "C-204", row = "7", startsAt = "2025-06-15T15:00:00+09:00", lengthMin = 25 }
+            { track = TrackC, code = "C-204", row = "7", startsAt = parseIso8601 "2025-06-15T15:00:00+09:00", lengthMin = 25 }
 
         -- iOSアプリ開発で関数型プログラミングを実現するThe Composable Architectureの紹介
         "71fbd521-9dc5-458d-89f6-cbff8e84e3cc" ->
-            { track = TrackC, code = "C-205", row = "8", startsAt = "2025-06-15T15:30:00+09:00", lengthMin = 25 }
+            { track = TrackC, code = "C-205", row = "8", startsAt = parseIso8601 "2025-06-15T15:30:00+09:00", lengthMin = 25 }
 
         -- デコーダーパターンによる3Dジオメトリの読み込み
         "a82127a7-f84a-43c1-a3de-483e1d973a94" ->
-            { track = TrackC, code = "C-206", row = "10", startsAt = "2025-06-15T16:30:00+09:00", lengthMin = 25 }
+            { track = TrackC, code = "C-206", row = "10", startsAt = parseIso8601 "2025-06-15T16:30:00+09:00", lengthMin = 25 }
 
         -- ラムダ計算って何だっけ？関数型の神髄に迫る
         "81cea14c-255c-46ff-929d-5141c5715832" ->
-            { track = TrackC, code = "C-207", row = "11", startsAt = "2025-06-15T17:00:00+09:00", lengthMin = 10 }
+            { track = TrackC, code = "C-207", row = "11", startsAt = parseIso8601 "2025-06-15T17:00:00+09:00", lengthMin = 10 }
 
         -- Underground 型システム
         "e0274da9-d863-47fe-a945-42eb04185bb9" ->
-            { track = TrackC, code = "C-208", row = "12", startsAt = "2025-06-15T17:10:00+09:00", lengthMin = 10 }
+            { track = TrackC, code = "C-208", row = "12", startsAt = parseIso8601 "2025-06-15T17:10:00+09:00", lengthMin = 10 }
 
         -- Excelで関数型プログラミング
         "37899705-7d88-4ca4-bd5b-f674fc372d4e" ->
-            { track = TrackC, code = "C-209", row = "13", startsAt = "2025-06-15T17:30:00+09:00", lengthMin = 10 }
+            { track = TrackC, code = "C-209", row = "13", startsAt = parseIso8601 "2025-06-15T17:30:00+09:00", lengthMin = 10 }
 
         -- XSLTで作るBrainfuck処理系 ― XSLTは関数型言語たり得るか？
         "8dcaecb5-4541-4262-a047-3e330a7bcdb8" ->
-            { track = TrackC, code = "C-210", row = "14", startsAt = "2025-06-15T17:40:00+09:00", lengthMin = 10 }
+            { track = TrackC, code = "C-210", row = "14", startsAt = parseIso8601 "2025-06-15T17:40:00+09:00", lengthMin = 10 }
 
         -- 堅牢な認証基盤の実現: TypeScriptで代数的データ型を活用する
         "267ff4c1-8f3c-473b-8cab-e62d0d468af5" ->
-            { track = TrackC, code = "C-211", row = "15", startsAt = "2025-06-15T18:00:00+09:00", lengthMin = 10 }
+            { track = TrackC, code = "C-211", row = "15", startsAt = parseIso8601 "2025-06-15T18:00:00+09:00", lengthMin = 10 }
 
         -- CoqのProgram機構の紹介 〜型を活用した安全なプログラミング〜
         "983d1021-3636-4778-be58-149f1995e8a5" ->
-            { track = TrackC, code = "C-212", row = "16", startsAt = "2025-06-15T18:10:00+09:00", lengthMin = 10 }
+            { track = TrackC, code = "C-212", row = "16", startsAt = parseIso8601 "2025-06-15T18:10:00+09:00", lengthMin = 10 }
 
         -- F#で自在につくる静的ブログサイト
         "b6c70e2d-856b-47c5-9107-481883527634" ->
-            { track = TrackC, code = "C-213", row = "17", startsAt = "2025-06-15T18:20:00+09:00", lengthMin = 10 }
+            { track = TrackC, code = "C-213", row = "17", startsAt = parseIso8601 "2025-06-15T18:20:00+09:00", lengthMin = 10 }
 
         _ ->
-            { track = All, code = "", row = "50", startsAt = "2025-06-14T10:00:00+09:00", lengthMin = 50 }
+            { track = All, code = "", row = "50", startsAt = parseIso8601 "2025-06-14T10:00:00+09:00", lengthMin = 50 }
 
 
 head : App Data ActionData RouteParams -> List Head.Tag
@@ -402,7 +426,7 @@ view app _ =
                     , gap (px 10)
                     ]
                 ]
-                (List.map viewTimetableItem (scott :: List.filter (\item -> String.startsWith "2025-06-14" (getStartsAt item)) app.data.timetable))
+                (List.map viewTimetableItem (scott :: List.filter (isItemOnDate 2025 Jun 14) app.data.timetable))
             , div
                 [ css
                     [ display grid
@@ -410,20 +434,29 @@ view app _ =
                     , gap (px 10)
                     ]
                 ]
-                (List.map viewTimetableItem (List.filter (\item -> String.startsWith "2025-06-15" (getStartsAt item)) app.data.timetable))
+                (List.map viewTimetableItem (List.filter (isItemOnDate 2025 Jun 15) app.data.timetable))
             ]
         ]
     }
 
 
-getStartsAt : TimetableItem -> String
-getStartsAt item =
-    case item of
-        Talk talk ->
-            trackFromUuid talk.uuid |> .startsAt
+{-| アイテムが指定した日付かどうかを判定する関数
+-}
+isItemOnDate : Int -> Month -> Int -> TimetableItem -> Bool
+isItemOnDate year month day item =
+    let
+        startsAt =
+            case item of
+                Talk talk ->
+                    trackFromUuid talk.uuid |> .startsAt
 
-        Timeslot timeslot ->
-            timeslot.startsAt
+                Timeslot timeslot ->
+                    timeslot.startsAt
+
+        parts =
+            Time.Extra.posixToParts (TimeZone.asia__tokyo ()) startsAt
+    in
+    parts.year == year && parts.month == month && parts.day == day
 
 
 scott : TimetableItem
@@ -544,31 +577,27 @@ viewTag tag =
         [ text tag.name ]
 
 
-formatTimeRange : String -> Int -> String
-formatTimeRange startsAt lengthMin =
+formatTimeRange : Posix -> Int -> String
+formatTimeRange startPosix lengthMin =
     let
-        startTimeString =
-            String.dropLeft 11 startsAt |> String.left 5
+        jst =
+            TimeZone.asia__tokyo ()
 
-        startHour =
-            String.dropLeft 11 startsAt |> String.left 2 |> String.toInt |> Maybe.withDefault 0
+        endPosix =
+            Time.Extra.add Minute lengthMin jst startPosix
 
-        startMinute =
-            String.dropLeft 14 startsAt |> String.left 2 |> String.toInt |> Maybe.withDefault 0
+        formatTime posix =
+            let
+                hour =
+                    Time.toHour jst posix
+                        |> String.fromInt
+                        |> String.padLeft 2 '0'
 
-        totalMinutes =
-            startHour * 60 + startMinute + lengthMin
-
-        endHour =
-            totalMinutes // 60
-
-        endMinute =
-            modBy 60 totalMinutes
-
-        formatTime hour minute =
-            String.padLeft 2 '0' (String.fromInt hour) ++ ":" ++ String.padLeft 2 '0' (String.fromInt minute)
-
-        endTimeString =
-            formatTime endHour endMinute
+                minute =
+                    Time.toMinute jst posix
+                        |> String.fromInt
+                        |> String.padLeft 2 '0'
+            in
+            hour ++ ":" ++ minute
     in
-    startTimeString ++ "-" ++ endTimeString
+    formatTime startPosix ++ "-" ++ formatTime endPosix
