@@ -206,57 +206,21 @@ trackFromUuid uuid =
         "76a0de1e-bf79-4c82-b50e-86caedaf1eb9" ->
             { code = "A-103", row = "6" }
 
-        -- AWS と定理証明 〜ポリシー言語 Cedar 開発の舞台裏〜
-        "8bb407b5-5df3-48bb-a934-0ca6ca628c9a" ->
-            { code = "A-208", row = "13/17" }
+        -- 関数プログラミングに見る再帰
+        "034e486c-9a1c-48d7-910a-14aa82237eaa" ->
+            { code = "A-104", row = "8" }
 
         -- Effectの双対、Coeffect
         "67557418-7561-47ec-8594-9d6c0926a6ab" ->
             { code = "A-105", row = "9" }
 
+        -- continuations: continued and to be continued
+        "ea9fd8fc-4ae3-40c7-8ef5-1a8041e64606" ->
+            { code = "A-106", row = "10/12" }
+
         -- Scott Wlaschinさんによるセッション
         "scott" ->
             { code = "A-107", row = "12" }
-
-        -- Elixir で IoT 開発、 Nerves なら簡単にできる！？
-        "b952a4f0-7db5-4d67-a911-a7a5d8a840ac" ->
-            { code = "B-101", row = "3" }
-
-        -- Hasktorchで学ぶ関数型ディープラーニング：型安全なニューラルネットワークとその実践
-        "b7a97e49-8624-4eae-848a-68f70205ad2a" ->
-            { code = "B-102", row = "5" }
-
-        -- `interact`のススメ — できるかぎり「関数的」に書きたいあなたに
-        "6109f011-c590-4c89-9add-89ad12cc9631" ->
-            { code = "B-103", row = "6" }
-
-        -- 「ElixirでIoT!!」のこれまでとこれから
-        "f75e5cab-c677-44bb-a77a-2acf36083457" ->
-            { code = "B-104", row = "8" }
-
-        -- 産業機械をElixirで制御する
-        "6edaa6b5-b591-490c-855f-731a9d318192" ->
-            { code = "B-105", row = "9" }
-
-        -- ドメインモデリングにおける抽象の役割、tagless-finalによるDSL構築、そして型安全な最適化
-        "f3a8809b-d498-4ac2-bf42-5c32ce1595ea" ->
-            { code = "C-101", row = "3" }
-
-        -- 関数型言語テイスティング: Haskell, Scala, Clojure, Elixirを比べて味わう関数型プログラミングの旨さ
-        "f7646b8b-29b0-4ac4-8ec3-46cabaa8ef1a" ->
-            { code = "C-102", row = "5" }
-
-        -- AIと共に進化する開発手法：形式手法と関数型プログラミングの可能性
-        "56b9175d-1468-4ab0-8063-180491bb16ed" ->
-            { code = "C-103", row = "6" }
-
-        -- Elmのパフォーマンス、実際どうなの？ベンチマークに入門してみた
-        "3760ed3e-5b38-48b9-9db2-f101af1e580f" ->
-            { code = "C-104", row = "8" }
-
-        -- 高階関数を用いたI/O方法の公開 - DIコンテナから高階関数への更改 -
-        "350e2f70-0b02-4b79-b9f6-254a9d614706" ->
-            { code = "C-105", row = "9" }
 
         -- SML＃ オープンコンパイラプロジェクト
         "61fb241f-cfaa-448a-892d-277e93577198" ->
@@ -286,13 +250,37 @@ trackFromUuid uuid =
         "02f89c3a-672e-4294-ae31-69e02e049005" ->
             { code = "A-207", row = "11/13" }
 
-        -- continuations: continued and to be continued
-        "ea9fd8fc-4ae3-40c7-8ef5-1a8041e64606" ->
-            { code = "A-106", row = "10/12" }
+        -- AWS と定理証明 〜ポリシー言語 Cedar 開発の舞台裏〜
+        "8bb407b5-5df3-48bb-a934-0ca6ca628c9a" ->
+            { code = "A-208", row = "13/17" }
 
-        -- 関数プログラミングに見る再帰
-        "034e486c-9a1c-48d7-910a-14aa82237eaa" ->
-            { code = "A-104", row = "8" }
+        -- Elixir で IoT 開発、 Nerves なら簡単にできる！？
+        "b952a4f0-7db5-4d67-a911-a7a5d8a840ac" ->
+            { code = "B-101", row = "3" }
+
+        -- Hasktorchで学ぶ関数型ディープラーニング：型安全なニューラルネットワークとその実践
+        "b7a97e49-8624-4eae-848a-68f70205ad2a" ->
+            { code = "B-102", row = "5" }
+
+        -- `interact`のススメ — できるかぎり「関数的」に書きたいあなたに
+        "6109f011-c590-4c89-9add-89ad12cc9631" ->
+            { code = "B-103", row = "6" }
+
+        -- 「ElixirでIoT!!」のこれまでとこれから
+        "f75e5cab-c677-44bb-a77a-2acf36083457" ->
+            { code = "B-104", row = "8" }
+
+        -- 産業機械をElixirで制御する
+        "6edaa6b5-b591-490c-855f-731a9d318192" ->
+            { code = "B-105", row = "9" }
+
+        -- 成立するElixirの再束縛（再代入）可という選択
+        "8acfb03f-19ea-476a-b6e6-0cb4b03fec1f" ->
+            { code = "B-106", row = "10" }
+
+        -- Lean言語は新世代の純粋関数型言語になれるか？
+        "73b09de0-c72e-4bbd-9089-af5c002f9506" ->
+            { code = "B-107", row = "11" }
 
         -- 「Haskellは純粋関数型言語だから副作用がない」っていうの、そろそろ止めにしませんか？
         "d19de11e-d9a2-4b22-866e-2f95b8ac5c95" ->
@@ -322,14 +310,6 @@ trackFromUuid uuid =
         "e7f30174-d4b9-40a7-9398-9f15c71009a9" ->
             { code = "B-207", row = "11/13" }
 
-        -- Lean言語は新世代の純粋関数型言語になれるか？
-        "73b09de0-c72e-4bbd-9089-af5c002f9506" ->
-            { code = "B-107", row = "11" }
-
-        -- 成立するElixirの再束縛（再代入）可という選択
-        "8acfb03f-19ea-476a-b6e6-0cb4b03fec1f" ->
-            { code = "B-106", row = "10" }
-
         -- Lispは関数型言語(ではない)
         "92b697d1-206c-426a-90c9-9ff3486cce6f" ->
             { code = "B-208", row = "13/15" }
@@ -337,6 +317,34 @@ trackFromUuid uuid =
         -- Kotlinで学ぶSealed classと代数的データ型
         "e436393d-c322-477d-b8cb-0e6ac8ce8cc6" ->
             { code = "B-209", row = "15/17" }
+
+        -- ドメインモデリングにおける抽象の役割、tagless-finalによるDSL構築、そして型安全な最適化
+        "f3a8809b-d498-4ac2-bf42-5c32ce1595ea" ->
+            { code = "C-101", row = "3" }
+
+        -- 関数型言語テイスティング: Haskell, Scala, Clojure, Elixirを比べて味わう関数型プログラミングの旨さ
+        "f7646b8b-29b0-4ac4-8ec3-46cabaa8ef1a" ->
+            { code = "C-102", row = "5" }
+
+        -- AIと共に進化する開発手法：形式手法と関数型プログラミングの可能性
+        "56b9175d-1468-4ab0-8063-180491bb16ed" ->
+            { code = "C-103", row = "6" }
+
+        -- Elmのパフォーマンス、実際どうなの？ベンチマークに入門してみた
+        "3760ed3e-5b38-48b9-9db2-f101af1e580f" ->
+            { code = "C-104", row = "8" }
+
+        -- 高階関数を用いたI/O方法の公開 - DIコンテナから高階関数への更改 -
+        "350e2f70-0b02-4b79-b9f6-254a9d614706" ->
+            { code = "C-105", row = "9" }
+
+        -- Excelで関数型プログラミング
+        "37899705-7d88-4ca4-bd5b-f674fc372d4e" ->
+            { code = "C-106", row = "10" }
+
+        -- XSLTで作るBrainfuck処理系 ― XSLTは関数型言語たり得るか？
+        "8dcaecb5-4541-4262-a047-3e330a7bcdb8" ->
+            { code = "C-107", row = "11" }
 
         -- F#の設計と妥協点 - .NET上で実現する関数型パラダイム
         "a916dd5a-7342-416a-980d-84f180a8e0a2" ->
@@ -365,14 +373,6 @@ trackFromUuid uuid =
         -- Underground 型システム
         "e0274da9-d863-47fe-a945-42eb04185bb9" ->
             { code = "C-208", row = "12" }
-
-        -- Excelで関数型プログラミング
-        "37899705-7d88-4ca4-bd5b-f674fc372d4e" ->
-            { code = "C-106", row = "10" }
-
-        -- XSLTで作るBrainfuck処理系 ― XSLTは関数型言語たり得るか？
-        "8dcaecb5-4541-4262-a047-3e330a7bcdb8" ->
-            { code = "C-107", row = "11" }
 
         -- 堅牢な認証基盤の実現: TypeScriptで代数的データ型を活用する
         "267ff4c1-8f3c-473b-8cab-e62d0d468af5" ->
