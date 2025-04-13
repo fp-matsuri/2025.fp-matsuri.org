@@ -487,7 +487,7 @@ viewTimetableItem timetableItem =
                 ]
                 [ text code
                 , text " "
-                , text ((String.dropLeft 11 startsAt |> String.left 5) ++ "〜")
+                , text (formatTimeRange startsAt lengthMin)
                 , text ("（" ++ String.fromInt lengthMin ++ "min）")
                 , div [ css [ Css.marginBottom (Css.px 8) ] ]
                     [ text talk.title ]
@@ -507,7 +507,7 @@ viewTimetableItem timetableItem =
                     , property "background-color" "var(--color-grey095)"
                     ]
                 ]
-                [ text ((String.dropLeft 11 timeslot.startsAt |> String.left 5) ++ "〜")
+                [ text (formatTimeRange timeslot.startsAt timeslot.lengthMin)
                 , br [] []
                 , text timeslot.title
                 ]
@@ -542,3 +542,33 @@ viewTag tag =
             ]
         ]
         [ text tag.name ]
+
+
+formatTimeRange : String -> Int -> String
+formatTimeRange startsAt lengthMin =
+    let
+        startTimeString =
+            String.dropLeft 11 startsAt |> String.left 5
+
+        startHour =
+            String.dropLeft 11 startsAt |> String.left 2 |> String.toInt |> Maybe.withDefault 0
+
+        startMinute =
+            String.dropLeft 14 startsAt |> String.left 2 |> String.toInt |> Maybe.withDefault 0
+
+        totalMinutes =
+            startHour * 60 + startMinute + lengthMin
+
+        endHour =
+            totalMinutes // 60
+
+        endMinute =
+            modBy 60 totalMinutes
+
+        formatTime hour minute =
+            String.padLeft 2 '0' (String.fromInt hour) ++ ":" ++ String.padLeft 2 '0' (String.fromInt minute)
+
+        endTimeString =
+            formatTime endHour endMinute
+    in
+    startTimeString ++ "-" ++ endTimeString
