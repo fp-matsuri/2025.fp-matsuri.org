@@ -7,8 +7,8 @@ import Css.Extra exposing (fr, gap, grid, gridColumn, gridRow, gridTemplateColum
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, div, h1, text)
-import Html.Styled.Attributes exposing (css)
+import Html.Styled as Html exposing (Html, a, div, h1, text)
+import Html.Styled.Attributes as Attributes exposing (css, href, rel)
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -461,14 +461,20 @@ viewTimetableItem timetableItem =
                                     [ "招待セッション", "公募セッション", "スタッフセッション", "Beginner", "Intermediate", "Advanced" ]
                             )
             in
-            div
-                [ css
+            a
+                [ href talk.url
+                , Attributes.target "_blank"
+                , rel "noopener noreferrer"
+                , css
                     [ gridColumn (columnFromTrack track)
                     , gridRow row
                     , padding (px 10)
                     , borderRadius (px 10)
                     , fontSize (px 14)
+                    , textDecoration none
                     , property "background-color" "var(--color-grey095)"
+                    , color inherit
+                    , hover [ property "color" "var(--color-accent)" ]
                     ]
                 ]
                 [ text code
