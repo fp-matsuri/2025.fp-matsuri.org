@@ -453,16 +453,20 @@ viewTimetableItem timetableItem =
                 { track, code, row, startsAt, lengthMin } =
                     trackFromUuid talk.uuid
 
-                invitedTag =
-                    List.filter (\tag -> tag.name == "招待セッション") talk.tags
-                        |> List.head
-
                 filteredTags =
                     talk.tags
                         |> List.filter
                             (\tag ->
                                 List.all (\name -> tag.name /= name)
-                                    [ "招待セッション", "公募セッション", "スタッフセッション", "Beginner", "Intermediate", "Advanced" ]
+                                    [ "公募セッション", "スタッフセッション", "Beginner", "Intermediate", "Advanced" ]
+                            )
+                        |> List.map
+                            (\tag ->
+                                if tag.name == "招待セッション" then
+                                    tag
+
+                                else
+                                    { tag | colorBackground = "#454854" }
                             )
             in
             a
@@ -485,16 +489,12 @@ viewTimetableItem timetableItem =
                 , text " "
                 , text ((String.dropLeft 11 startsAt |> String.left 5) ++ "〜")
                 , text ("（" ++ String.fromInt lengthMin ++ "min）")
-                , text " "
-                , invitedTag
-                    |> Maybe.map viewTag
-                    |> Maybe.withDefault (text "")
                 , div [ css [ Css.marginBottom (Css.px 8) ] ]
                     [ text talk.title ]
                 , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
-                    [ text ("発表者: " ++ talk.speaker.name) ]
+                    [ text ("by " ++ talk.speaker.name) ]
                 , div [ css [ displayFlex, flexWrap wrap, gap (px 4) ] ]
-                    (List.map (\tag -> { tag | colorBackground = "#454854" } |> viewTag) filteredTags)
+                    (List.map viewTag filteredTags)
                 ]
 
         Timeslot timeslot ->
