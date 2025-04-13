@@ -208,7 +208,7 @@ trackFromUuid uuid =
 
         -- AWS と定理証明 〜ポリシー言語 Cedar 開発の舞台裏〜
         "8bb407b5-5df3-48bb-a934-0ca6ca628c9a" ->
-            { code = "A-104", row = "8" }
+            { code = "A-208", row = "13/17" }
 
         -- Effectの双対、Coeffect
         "67557418-7561-47ec-8594-9d6c0926a6ab" ->
@@ -216,7 +216,7 @@ trackFromUuid uuid =
 
         -- Scott Wlaschinさんによるセッション
         "scott" ->
-            { code = "A-106", row = "10" }
+            { code = "A-107", row = "12" }
 
         -- Elixir で IoT 開発、 Nerves なら簡単にできる！？
         "b952a4f0-7db5-4d67-a911-a7a5d8a840ac" ->
@@ -288,11 +288,11 @@ trackFromUuid uuid =
 
         -- continuations: continued and to be continued
         "ea9fd8fc-4ae3-40c7-8ef5-1a8041e64606" ->
-            { code = "A-208", row = "13/15" }
+            { code = "A-106", row = "10/12" }
 
         -- 関数プログラミングに見る再帰
         "034e486c-9a1c-48d7-910a-14aa82237eaa" ->
-            { code = "A-209", row = "15/18" }
+            { code = "A-104", row = "8" }
 
         -- 「Haskellは純粋関数型言語だから副作用がない」っていうの、そろそろ止めにしませんか？
         "d19de11e-d9a2-4b22-866e-2f95b8ac5c95" ->
@@ -324,19 +324,19 @@ trackFromUuid uuid =
 
         -- Lean言語は新世代の純粋関数型言語になれるか？
         "73b09de0-c72e-4bbd-9089-af5c002f9506" ->
-            { code = "B-208", row = "13" }
+            { code = "B-107", row = "11" }
 
         -- 成立するElixirの再束縛（再代入）可という選択
         "8acfb03f-19ea-476a-b6e6-0cb4b03fec1f" ->
-            { code = "B-209", row = "14" }
+            { code = "B-106", row = "10" }
 
         -- Lispは関数型言語(ではない)
         "92b697d1-206c-426a-90c9-9ff3486cce6f" ->
-            { code = "B-210", row = "15" }
+            { code = "B-208", row = "13/15" }
 
         -- Kotlinで学ぶSealed classと代数的データ型
         "e436393d-c322-477d-b8cb-0e6ac8ce8cc6" ->
-            { code = "B-211", row = "16" }
+            { code = "B-209", row = "15/17" }
 
         -- F#の設計と妥協点 - .NET上で実現する関数型パラダイム
         "a916dd5a-7342-416a-980d-84f180a8e0a2" ->
@@ -368,23 +368,23 @@ trackFromUuid uuid =
 
         -- Excelで関数型プログラミング
         "37899705-7d88-4ca4-bd5b-f674fc372d4e" ->
-            { code = "C-209", row = "13" }
+            { code = "C-106", row = "10" }
 
         -- XSLTで作るBrainfuck処理系 ― XSLTは関数型言語たり得るか？
         "8dcaecb5-4541-4262-a047-3e330a7bcdb8" ->
-            { code = "C-210", row = "14" }
+            { code = "C-107", row = "11" }
 
         -- 堅牢な認証基盤の実現: TypeScriptで代数的データ型を活用する
         "267ff4c1-8f3c-473b-8cab-e62d0d468af5" ->
-            { code = "C-211", row = "15" }
+            { code = "C-208", row = "13" }
 
         -- CoqのProgram機構の紹介 〜型を活用した安全なプログラミング〜
         "983d1021-3636-4778-be58-149f1995e8a5" ->
-            { code = "C-212", row = "16" }
+            { code = "C-209", row = "14/16" }
 
         -- F#で自在につくる静的ブログサイト
         "b6c70e2d-856b-47c5-9107-481883527634" ->
-            { code = "C-213", row = "17" }
+            { code = "C-210", row = "16" }
 
         _ ->
             { code = "", row = "50" }
@@ -418,7 +418,28 @@ view app _ =
                     , gap (px 10)
                     ]
                 ]
-                (List.map viewTimetableItem (scott :: List.filter (isItemOnDate 2025 Jun 14) app.data.timetable))
+                (List.map viewTimetableItem
+                    (app.data.timetable
+                        |> List.filter (isItemOnDate 2025 Jun 14)
+                        |> List.filter (getCommonProps >> .title >> (/=) "Scott Wlaschinさんによるセッション")
+                        |> (::)
+                            (Talk
+                                { type_ = "talk"
+                                , uuid = "scott"
+                                , title = "Scott Wlaschinさんによるセッション"
+                                , track = All
+                                , startsAt = parseIso8601 "2025-06-14T18:00:00+09:00"
+                                , lengthMin = 50
+                                }
+                                { url = ""
+                                , abstract = "Domain Modeling Made Functional (『関数型ドメインモデリング』)の著者として知られるScott Wlaschinさんによる招待セッション"
+                                , accepted = True
+                                , tags = []
+                                , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
+                                }
+                            )
+                    )
+                )
             , div
                 [ css
                     [ display grid
@@ -430,6 +451,16 @@ view app _ =
             ]
         ]
     }
+
+
+getCommonProps : TimetableItem -> CommonProps
+getCommonProps item =
+    case item of
+        Talk c _ ->
+            c
+
+        Timeslot c ->
+            c
 
 
 {-| アイテムが指定した日付かどうかを判定する関数
@@ -451,29 +482,6 @@ isItemOnDate year month day item =
     parts.year == year && parts.month == month && parts.day == day
 
 
-scott : TimetableItem
-scott =
-    Talk
-        { type_ = "talk"
-        , uuid = "scott"
-        , title = "Scott Wlaschinさんによるセッション"
-        , track = All
-        , startsAt = parseIso8601 "2025-06-14T17:30:00+09:00"
-        , lengthMin = 50
-        }
-        { url = "https://scott.com"
-        , abstract = "Scott Wlaschinさんによるセッション"
-        , accepted = True
-        , tags = [ { name = "招待セッション", colorText = "#ffffff", colorBackground = "#ff8f00" } ]
-        , speaker =
-            { name = "Scott Wlaschin"
-            , kana = "スコット"
-            , twitter = Nothing
-            , avatarUrl = Nothing
-            }
-        }
-
-
 viewTimetableItem : TimetableItem -> Html msg
 viewTimetableItem timetableItem =
     case timetableItem of
@@ -484,19 +492,21 @@ viewTimetableItem timetableItem =
 
                 filteredTags =
                     talk.tags
-                        |> List.filter
-                            (\tag ->
-                                List.all (\name -> tag.name /= name)
-                                    [ "公募セッション", "スタッフセッション", "Beginner", "Intermediate", "Advanced" ]
-                            )
-                        |> List.map
-                            (\tag ->
-                                if tag.name == "招待セッション" then
-                                    tag
+                        |> List.filter (\tag -> List.all (\name -> tag.name /= name) [ "Intermediate", "Advanced" ])
+                        |> List.map (\tag -> { tag | colorBackground = "#454854" })
+                        |> (\tags ->
+                                if
+                                    List.any (\id -> c.uuid == id)
+                                        [ "scott"
+                                        , "5699c262-e04d-4f58-a6f5-34c390f36d0d"
+                                        , "61fb241f-cfaa-448a-892d-277e93577198"
+                                        ]
+                                then
+                                    { name = "招待セッション", colorText = "#ffffff", colorBackground = "#ff8f00" } :: tags
 
                                 else
-                                    { tag | colorBackground = "#454854" }
-                            )
+                                    tags
+                           )
             in
             a
                 [ href talk.url
