@@ -38,33 +38,26 @@ type alias Data =
 
 
 type TimetableItem
-    = Talk TalkProps
-    | Timeslot TimeslotProps
+    = Talk CommonProps TalkProps
+    | Timeslot CommonProps
 
 
-type alias TalkProps =
-    { -- type_ : String
-      uuid : String
-    , url : String
-    , title : String
-
-    -- , abstract : String
-    -- , accepted : Bool
-    , track : Track
-    , startsAt : Posix
-    , lengthMin : Int
-    , tags : List Tag
-    , speaker : Speaker
-    }
-
-
-type alias TimeslotProps =
+type alias CommonProps =
     { type_ : String
     , uuid : String
     , title : String
     , track : Track
     , startsAt : Posix
     , lengthMin : Int
+    }
+
+
+type alias TalkProps =
+    { url : String
+    , abstract : String
+    , accepted : Bool
+    , tags : List Tag
+    , speaker : Speaker
     }
 
 
@@ -114,31 +107,31 @@ timetableItemDecoder =
 
 talkDecoder : Decoder TimetableItem
 talkDecoder =
-    Decode.map Talk <|
-        Decode.map8 TalkProps
-            -- (field "type" string)
-            (field "uuid" string)
+    Decode.map2 Talk
+        commonDecoder
+        (Decode.map5 TalkProps
             (field "url" string)
-            (field "title" string)
-            -- (field "abstract" string)
-            -- (field "accepted" bool)
-            (field "track" trackDecoder)
-            (field "starts_at" iso8601Decoder)
-            (field "length_min" Decode.int)
+            (field "abstract" string)
+            (field "accepted" bool)
             (field "tags" (Decode.list tagDecoder))
             (field "speaker" speakerDecoder)
+        )
 
 
 timeslotDecoder : Decoder TimetableItem
 timeslotDecoder =
-    Decode.map Timeslot <|
-        Decode.map6 TimeslotProps
-            (field "type" string)
-            (field "uuid" string)
-            (field "title" string)
-            (field "track" trackDecoder)
-            (field "starts_at" iso8601Decoder)
-            (field "length_min" Decode.int)
+    Decode.map Timeslot commonDecoder
+
+
+commonDecoder : Decoder CommonProps
+commonDecoder =
+    Decode.map6 CommonProps
+        (field "type" string)
+        (field "uuid" string)
+        (field "title" string)
+        (field "track" trackDecoder)
+        (field "starts_at" iso8601Decoder)
+        (field "length_min" Decode.int)
 
 
 tagDecoder : Decoder Tag
@@ -446,11 +439,11 @@ isItemOnDate year month day item =
     let
         startsAt =
             case item of
-                Talk talk ->
-                    talk.startsAt
+                Talk c _ ->
+                    c.startsAt
 
-                Timeslot timeslot ->
-                    timeslot.startsAt
+                Timeslot c ->
+                    c.startsAt
 
         parts =
             Time.Extra.posixToParts (TimeZone.asia__tokyo ()) startsAt
@@ -461,12 +454,16 @@ isItemOnDate year month day item =
 scott : TimetableItem
 scott =
     Talk
-        { uuid = "scott"
-        , url = "https://scott.com"
+        { type_ = "talk"
+        , uuid = "scott"
         , title = "Scott Wlaschinさんによるセッション"
         , track = All
         , startsAt = parseIso8601 "2025-06-14T17:30:00+09:00"
         , lengthMin = 50
+        }
+        { url = "https://scott.com"
+        , abstract = "Scott Wlaschinさんによるセッション"
+        , accepted = True
         , tags = [ { name = "招待セッション", colorText = "#ffffff", colorBackground = "#ff8f00" } ]
         , speaker =
             { name = "Scott Wlaschin"
@@ -480,10 +477,10 @@ scott =
 viewTimetableItem : TimetableItem -> Html msg
 viewTimetableItem timetableItem =
     case timetableItem of
-        Talk talk ->
+        Talk c talk ->
             let
                 { code, row } =
-                    trackFromUuid talk.uuid
+                    trackFromUuid c.uuid
 
                 filteredTags =
                     talk.tags
@@ -506,7 +503,7 @@ viewTimetableItem timetableItem =
                 , Attributes.target "_blank"
                 , rel "noopener noreferrer"
                 , css
-                    [ gridColumn (columnFromTrack talk.track)
+                    [ gridColumn (columnFromTrack c.track)
                     , gridRow row
                     , padding (px 10)
                     , borderRadius (px 10)
@@ -519,29 +516,29 @@ viewTimetableItem timetableItem =
                 ]
                 [ text code
                 , text " "
-                , text (formatTimeRange talk.startsAt talk.lengthMin)
-                , text ("（" ++ String.fromInt talk.lengthMin ++ "min）")
+                , text (formatTimeRange c.startsAt c.lengthMin)
+                , text ("（" ++ String.fromInt c.lengthMin ++ "min）")
                 , div [ css [ Css.marginBottom (Css.px 8) ] ]
-                    [ text talk.title ]
+                    [ text c.title ]
                 , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
                     [ text ("by " ++ talk.speaker.name) ]
                 , div [ css [ displayFlex, flexWrap wrap, gap (px 4) ] ]
                     (List.map viewTag filteredTags)
                 ]
 
-        Timeslot timeslot ->
+        Timeslot c ->
             div
                 [ css
-                    [ gridColumn (columnFromTrack timeslot.track)
+                    [ gridColumn (columnFromTrack c.track)
                     , padding (px 10)
                     , borderRadius (px 10)
                     , fontSize (px 14)
                     , property "background-color" "var(--color-grey095)"
                     ]
                 ]
-                [ text (formatTimeRange timeslot.startsAt timeslot.lengthMin)
+                [ text (formatTimeRange c.startsAt c.lengthMin)
                 , br [] []
-                , text timeslot.title
+                , text c.title
                 ]
 
 
