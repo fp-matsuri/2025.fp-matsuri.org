@@ -7,7 +7,7 @@ import Css.Extra exposing (fr, gap, grid, gridColumn, gridRow, gridTemplateColum
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, div, h1, text)
+import Html.Styled as Html exposing (Html, a, br, div, h1, text)
 import Html.Styled.Attributes as Attributes exposing (css, href, rel)
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import PagesMsg exposing (PagesMsg)
@@ -500,9 +500,9 @@ viewTimetableItem timetableItem =
                     , property "background-color" "var(--color-grey095)"
                     ]
                 ]
-                [ text (trackToString timeslot.track)
-                , div [ css [ Css.marginBottom (Css.px 8) ] ]
-                    [ text timeslot.title ]
+                [ text ((String.dropLeft 11 timeslot.startsAt |> String.left 5) ++ "〜")
+                , br [] []
+                , text timeslot.title
                 ]
 
 
@@ -520,22 +520,6 @@ columnFromTrack track =
 
         TrackC ->
             "3"
-
-
-trackToString : Track -> String
-trackToString track =
-    case track of
-        All ->
-            "All"
-
-        TrackA ->
-            "Track A"
-
-        TrackB ->
-            "Track B"
-
-        TrackC ->
-            "Track C"
 
 
 viewTag : Tag -> Html msg
