@@ -556,14 +556,24 @@ timetable title items =
                             ]
                         ]
                     ]
-                    [ trackHeader "Track A"
-                    , trackHeader "Track B"
-                    , trackHeader "Track C"
+                    [ trackHeader "Track A" { bgColor = hsla 1 0.53 0.53 0.1, textColor = hex "#CE3F3D" }
+                    , trackHeader "Track B" { bgColor = hsla 36 1 0.5 0.1, textColor = hex "#ff8f00" }
+                    , trackHeader "Track C" { bgColor = hsla 241 0.32 0.47 0.1, textColor = hex "#5352A0" }
                     ]
                 ]
 
-        trackHeader label =
-            div [ css [ textAlign center, fontSize (px 14) ] ] [ text label ]
+        trackHeader label { bgColor, textColor } =
+            div
+                [ css
+                    [ padding (px 5)
+                    , borderRadius (px 5)
+                    , textAlign center
+                    , fontSize (px 14)
+                    , backgroundColor bgColor
+                    , color textColor
+                    ]
+                ]
+                [ text label ]
     in
     div [ css [ display grid, rowGap (px 15) ] ]
         [ stickyHeader
@@ -593,7 +603,6 @@ timetableItem item =
                 filteredTags =
                     talk.tags
                         |> List.filter (\tag -> List.all (\name -> tag.name /= name) [ "Intermediate", "Advanced" ])
-                        |> List.map (\tag -> { tag | colorBackground = "#f1f2f4", colorText = "#454854" })
                         |> (\tags ->
                                 if
                                     List.any (\id -> c.uuid == id)
@@ -607,6 +616,10 @@ timetableItem item =
                                 else
                                     tags
                            )
+                        |> List.map (\tag -> { name = tag.name, colorBackground = hex "#f1f2f4", colorText = hex "#454854" })
+
+                { bgColor, textColor } =
+                    trackColorConfig c.track
             in
             a
                 [ href talk.url
@@ -628,8 +641,8 @@ timetableItem item =
                     , hover [ borderColor (hsl 20 0.8 0.6) ]
                     ]
                 ]
-                [ header [ css [ displayFlex, gap (px 5) ] ]
-                    [ viewTag { name = code, colorText = "#ffffff", colorBackground = "#454854" }
+                [ header [ css [ displayFlex, gap (px 5), alignItems center ] ]
+                    [ viewTag { name = code, colorText = textColor, colorBackground = bgColor }
                     , div []
                         [ span [ css [ fontWeight bold ] ] [ text (formatTimeRange c.startsAt c.lengthMin) ]
                         , span [ css [ fontSize (px 12) ] ] [ text ("（" ++ String.fromInt c.lengthMin ++ "min）") ]
@@ -701,16 +714,17 @@ columnFromTrack track =
             "3"
 
 
-viewTag : Tag -> Html msg
+viewTag : { name : String, colorText : Css.Color, colorBackground : Css.Color } -> Html msg
 viewTag tag =
     div
         [ css
             [ display inlineBlock
             , padding2 (px 2) (px 6)
             , borderRadius (px 4)
+            , whiteSpace noWrap
             , fontSize (px 12)
-            , backgroundColor (hex tag.colorBackground)
-            , color (hex tag.colorText)
+            , backgroundColor tag.colorBackground
+            , color tag.colorText
             ]
         ]
         [ text tag.name ]
@@ -740,3 +754,19 @@ formatTimeRange startPosix lengthMin =
             hour ++ ":" ++ minute
     in
     formatTime startPosix ++ "-" ++ formatTime endPosix
+
+
+trackColorConfig : Track -> { bgColor : Css.Color, textColor : Css.Color }
+trackColorConfig track =
+    case track of
+        All ->
+            { bgColor = hex "#CE3F3D", textColor = hex "#FFFFFF" }
+
+        TrackA ->
+            { bgColor = hex "#CE3F3D", textColor = hex "#FFFFFF" }
+
+        TrackB ->
+            { bgColor = hex "#ff8f00", textColor = hex "#FFFFFF" }
+
+        TrackC ->
+            { bgColor = hex "#5352A0", textColor = hex "#FFFFFF" }
