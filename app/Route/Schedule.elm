@@ -408,7 +408,7 @@ view app _ =
     , body =
         [ div
             [ css
-                [ maxWidth (px 800)
+                [ maxWidth (px 850)
                 , margin2 zero auto
                 , display grid
                 , rowGap (px 30)
@@ -672,7 +672,9 @@ timetableItem item =
                     [ gridColumn (columnFromTrack c.track)
                     , padding (px 10)
                     , display grid
-                    , rowGap (px 5)
+                    , property "grid-template-columns" "auto 1fr"
+                    , alignItems center
+                    , columnGap (px 10)
                     , borderRadius (px 10)
                     , fontSize (px 14)
                     , backgroundColor (hsl 226 0.1 0.92)
