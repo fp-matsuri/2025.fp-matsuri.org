@@ -7,7 +7,7 @@ import Css.Extra exposing (fr, gap, grid, gridColumn, gridRow, gridTemplateColum
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, br, div, h1, text)
+import Html.Styled as Html exposing (Html, a, br, div, h1, h2, text)
 import Html.Styled.Attributes as Attributes exposing (css, href, rel)
 import Iso8601
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
@@ -411,6 +411,7 @@ view app _ =
             ]
             [ h1 [ css [ Css.marginBottom (Css.px 32) ] ]
                 [ text "開催スケジュール" ]
+            , h2 [] [ text "Day 1：2025年6月14日" ]
             , div
                 [ css
                     [ display grid
@@ -440,6 +441,7 @@ view app _ =
                             )
                     )
                 )
+            , h2 [] [ text "Day 2：2025年6月15日" ]
             , div
                 [ css
                     [ display grid
