@@ -3,15 +3,15 @@ module Route.Schedule exposing (ActionData, Data, Model, Msg, route)
 import BackendTask exposing (BackendTask)
 import BackendTask.Http
 import Css exposing (..)
-import Css.Extra exposing (fr, gap, grid, gridColumn, gridRow, gridTemplateColumns)
+import Css.Extra exposing (columnGap, fr, gap, grid, gridColumn, gridRow, gridTemplateColumns, rowGap)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Dict
 import Dict.Extra
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, br, div, h1, h2, text)
-import Html.Styled.Attributes as Attributes exposing (css, href, rel)
+import Html.Styled as Html exposing (Html, a, div, h1, h2, header, img, span, text)
+import Html.Styled.Attributes as Attributes exposing (alt, css, href, rel, src)
 import Iso8601
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import PagesMsg exposing (PagesMsg)
@@ -408,12 +408,13 @@ view app _ =
     , body =
         [ div
             [ css
-                [ Css.maxWidth (Css.px 800)
-                , Css.margin2 Css.zero Css.auto
+                [ maxWidth (px 800)
+                , margin2 zero auto
+                , display grid
+                , rowGap (px 10)
                 ]
             ]
-            [ h1 [ css [ Css.marginBottom (Css.px 32) ] ]
-                [ text "開催スケジュール" ]
+            [ h1 [] [ text "開催スケジュール" ]
             , h2 [] [ text "Day 1：2025年6月14日" ]
             , timetable
                 (app.data.timetable
@@ -556,7 +557,7 @@ timetableItem item =
                 filteredTags =
                     talk.tags
                         |> List.filter (\tag -> List.all (\name -> tag.name /= name) [ "Intermediate", "Advanced" ])
-                        |> List.map (\tag -> { tag | colorBackground = "#454854" })
+                        |> List.map (\tag -> { tag | colorBackground = "#f1f2f4", colorText = "#454854" })
                         |> (\tags ->
                                 if
                                     List.any (\id -> c.uuid == id)
@@ -579,22 +580,52 @@ timetableItem item =
                     [ gridColumn (columnFromTrack c.track)
                     , gridRow row
                     , padding (px 10)
+                    , display grid
+                    , property "grid-template-rows" "auto auto auto 1fr"
+                    , alignItems start
+                    , rowGap (px 5)
                     , borderRadius (px 10)
                     , fontSize (px 14)
                     , textDecoration none
-                    , property "background-color" "var(--color-grey095)"
+                    , border3 (px 1.5) solid (hsl 226 0.1 0.9)
                     , color inherit
-                    , hover [ property "color" "var(--color-accent)" ]
+                    , hover [ borderColor (hsl 20 0.8 0.6) ]
                     ]
                 ]
-                [ text code
-                , text " "
-                , text (formatTimeRange c.startsAt c.lengthMin)
-                , text ("（" ++ String.fromInt c.lengthMin ++ "min）")
-                , div [ css [ Css.marginBottom (Css.px 8) ] ]
-                    [ text c.title ]
-                , div [ css [ Css.color (Css.rgb 75 85 99) ] ]
-                    [ text ("by " ++ talk.speaker.name) ]
+                [ header [ css [ displayFlex, gap (px 5) ] ]
+                    [ viewTag { name = code, colorText = "#ffffff", colorBackground = "#454854" }
+                    , div []
+                        [ span [ css [ fontWeight bold ] ] [ text (formatTimeRange c.startsAt c.lengthMin) ]
+                        , span [ css [ fontSize (px 12) ] ] [ text ("（" ++ String.fromInt c.lengthMin ++ "min）") ]
+                        ]
+                    ]
+                , div [] [ text c.title ]
+                , div
+                    [ css
+                        [ displayFlex
+                        , alignItems center
+                        , columnGap (px 5)
+                        , property "color" "#454854"
+                        ]
+                    ]
+                    [ case talk.speaker.avatarUrl of
+                        Just avatarUrl ->
+                            img
+                                [ src avatarUrl
+                                , alt talk.speaker.name
+                                , css
+                                    [ width (px 20)
+                                    , height (px 20)
+                                    , borderRadius (pct 50)
+                                    , border3 (px 1) solid (hsla 0 0 0 0.05)
+                                    ]
+                                ]
+                                []
+
+                        Nothing ->
+                            text ""
+                    , div [] [ text talk.speaker.name ]
+                    ]
                 , div [ css [ displayFlex, flexWrap wrap, gap (px 4) ] ]
                     (List.map viewTag filteredTags)
                 ]
@@ -604,13 +635,14 @@ timetableItem item =
                 [ css
                     [ gridColumn (columnFromTrack c.track)
                     , padding (px 10)
+                    , display grid
+                    , rowGap (px 5)
                     , borderRadius (px 10)
                     , fontSize (px 14)
-                    , property "background-color" "var(--color-grey095)"
+                    , backgroundColor (hsl 226 0.1 0.92)
                     ]
                 ]
-                [ text (formatTimeRange c.startsAt c.lengthMin)
-                , br [] []
+                [ div [ css [ fontWeight bold ] ] [ text (formatTimeRange c.startsAt c.lengthMin) ]
                 , text c.title
                 ]
 
