@@ -4,6 +4,9 @@ import BackendTask exposing (BackendTask)
 import BackendTask.Http
 import Css exposing (..)
 import Css.Extra exposing (fr, gap, grid, gridColumn, gridRow, gridTemplateColumns)
+import Css.Media as Media exposing (only, screen, withMedia)
+import Dict
+import Dict.Extra
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
@@ -415,6 +418,7 @@ view app _ =
             , timetable
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 14)
+                    |> filterDuplicateTimeslots
                     |> List.filter (getCommonProps >> .title >> (/=) "Scott Wlaschinさんによるセッション")
                     |> (::)
                         (Talk
@@ -432,10 +436,15 @@ view app _ =
                             , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
                             }
                         )
+                    |> List.sortBy (getCommonProps >> .startsAt >> Time.posixToMillis)
                 )
             , h2 [] [ text "Day 2：2025年6月15日" ]
             , timetable
-                (List.filter (isItemOnDate 2025 Jun 15) app.data.timetable)
+                (app.data.timetable
+                    |> List.filter (isItemOnDate 2025 Jun 15)
+                    |> filterDuplicateTimeslots
+                    |> List.sortBy (getCommonProps >> .startsAt >> Time.posixToMillis)
+                )
             ]
         ]
     }
@@ -470,13 +479,75 @@ isItemOnDate year month day item =
     parts.year == year && parts.month == month && parts.day == day
 
 
+{-| 同じ内容のTimeslotがある場合、TrackA以外を除外し、残したTrackAのtrackをAllに変更する
+-}
+filterDuplicateTimeslots : List TimetableItem -> List TimetableItem
+filterDuplicateTimeslots items =
+    let
+        -- トークとTimeslotを分ける
+        ( talks, timeslots ) =
+            List.partition
+                (\item ->
+                    case item of
+                        Talk _ _ ->
+                            True
+
+                        _ ->
+                            False
+                )
+                items
+
+        -- キー生成関数
+        makeKey item =
+            case item of
+                Timeslot c ->
+                    ( c.title, Time.posixToMillis c.startsAt, c.lengthMin )
+
+                Talk c _ ->
+                    ( c.title, Time.posixToMillis c.startsAt, c.lengthMin )
+
+        -- 処理済みのTimeslot
+        processedTimeslots =
+            timeslots
+                |> Dict.Extra.groupBy makeKey
+                |> Dict.toList
+                |> List.concatMap
+                    (\( _, group ) ->
+                        if List.length group >= 3 then
+                            -- TrackAのものを見つけてAllに変更
+                            List.filterMap
+                                (\item ->
+                                    case item of
+                                        Timeslot c ->
+                                            if c.track == TrackA then
+                                                Just (Timeslot { c | track = All })
+
+                                            else
+                                                Nothing
+
+                                        _ ->
+                                            Nothing
+                                )
+                                group
+
+                        else
+                            group
+                    )
+    in
+    talks ++ processedTimeslots
+
+
 timetable : List TimetableItem -> Html msg
 timetable items =
     div
         [ css
-            [ display grid
-            , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+            [ displayFlex
+            , flexDirection column
             , gap (px 10)
+            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                [ display grid
+                , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+                ]
             ]
         ]
         (List.map timetableItem items)
