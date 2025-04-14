@@ -412,44 +412,30 @@ view app _ =
             [ h1 [ css [ Css.marginBottom (Css.px 32) ] ]
                 [ text "開催スケジュール" ]
             , h2 [] [ text "Day 1：2025年6月14日" ]
-            , div
-                [ css
-                    [ display grid
-                    , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
-                    , gap (px 10)
-                    ]
-                ]
-                (List.map viewTimetableItem
-                    (app.data.timetable
-                        |> List.filter (isItemOnDate 2025 Jun 14)
-                        |> List.filter (getCommonProps >> .title >> (/=) "Scott Wlaschinさんによるセッション")
-                        |> (::)
-                            (Talk
-                                { type_ = "talk"
-                                , uuid = "scott"
-                                , title = "Scott Wlaschinさんによるセッション"
-                                , track = All
-                                , startsAt = parseIso8601 "2025-06-14T18:00:00+09:00"
-                                , lengthMin = 50
-                                }
-                                { url = ""
-                                , abstract = "Domain Modeling Made Functional (『関数型ドメインモデリング』)の著者として知られるScott Wlaschinさんによる招待セッション"
-                                , accepted = True
-                                , tags = []
-                                , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
-                                }
-                            )
-                    )
+            , timetable
+                (app.data.timetable
+                    |> List.filter (isItemOnDate 2025 Jun 14)
+                    |> List.filter (getCommonProps >> .title >> (/=) "Scott Wlaschinさんによるセッション")
+                    |> (::)
+                        (Talk
+                            { type_ = "talk"
+                            , uuid = "scott"
+                            , title = "Scott Wlaschinさんによるセッション"
+                            , track = All
+                            , startsAt = parseIso8601 "2025-06-14T18:00:00+09:00"
+                            , lengthMin = 50
+                            }
+                            { url = ""
+                            , abstract = "Domain Modeling Made Functional (『関数型ドメインモデリング』)の著者として知られるScott Wlaschinさんによる招待セッション"
+                            , accepted = True
+                            , tags = []
+                            , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
+                            }
+                        )
                 )
             , h2 [] [ text "Day 2：2025年6月15日" ]
-            , div
-                [ css
-                    [ display grid
-                    , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
-                    , gap (px 10)
-                    ]
-                ]
-                (List.map viewTimetableItem (List.filter (isItemOnDate 2025 Jun 15) app.data.timetable))
+            , timetable
+                (List.filter (isItemOnDate 2025 Jun 15) app.data.timetable)
             ]
         ]
     }
@@ -484,9 +470,21 @@ isItemOnDate year month day item =
     parts.year == year && parts.month == month && parts.day == day
 
 
-viewTimetableItem : TimetableItem -> Html msg
-viewTimetableItem timetableItem =
-    case timetableItem of
+timetable : List TimetableItem -> Html msg
+timetable items =
+    div
+        [ css
+            [ display grid
+            , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+            , gap (px 10)
+            ]
+        ]
+        (List.map timetableItem items)
+
+
+timetableItem : TimetableItem -> Html msg
+timetableItem item =
+    case item of
         Talk c talk ->
             let
                 { code, row } =
