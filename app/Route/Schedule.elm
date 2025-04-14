@@ -10,7 +10,7 @@ import Dict.Extra
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, div, h1, h2, header, img, span, text)
+import Html.Styled as Html exposing (Html, a, div, h1, header, img, span, text)
 import Html.Styled.Attributes as Attributes exposing (alt, css, href, rel, src)
 import Iso8601
 import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
@@ -411,12 +411,11 @@ view app _ =
                 [ maxWidth (px 800)
                 , margin2 zero auto
                 , display grid
-                , rowGap (px 10)
+                , rowGap (px 30)
                 ]
             ]
             [ h1 [] [ text "開催スケジュール" ]
-            , h2 [] [ text "Day 1：2025年6月14日" ]
-            , timetable
+            , timetable "Day 1：2025年6月14日"
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 14)
                     |> filterDuplicateTimeslots
@@ -439,8 +438,7 @@ view app _ =
                         )
                     |> List.sortBy timetableItemSortKey
                 )
-            , h2 [] [ text "Day 2：2025年6月15日" ]
-            , timetable
+            , timetable "Day 2：2025年6月15日"
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 15)
                     |> filterDuplicateTimeslots
@@ -530,20 +528,58 @@ filterDuplicateTimeslots items =
             )
 
 
-timetable : List TimetableItem -> Html msg
-timetable items =
-    div
-        [ css
-            [ displayFlex
-            , flexDirection column
-            , gap (px 10)
-            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                [ display grid
-                , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+timetable : String -> List TimetableItem -> Html msg
+timetable title items =
+    let
+        stickyHeader =
+            header
+                [ css
+                    [ position sticky
+                    , top (px 0)
+                    , zIndex (int 1)
+                    , padding2 (px 10) zero
+                    , display grid
+                    , rowGap (px 10)
+                    , backgroundColor (hex "#fff")
+                    , borderBottom3 (px 1) solid (hsl 226 0.1 0.9)
+                    ]
+                ]
+                [ div [ css [ fontSize (px 18), fontWeight bold ] ]
+                    [ text title ]
+                , div
+                    [ css
+                        [ display none
+                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                            [ display grid
+                            , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+                            , columnGap (px 10)
+                            ]
+                        ]
+                    ]
+                    [ trackHeader "Track A"
+                    , trackHeader "Track B"
+                    , trackHeader "Track C"
+                    ]
+                ]
+
+        trackHeader label =
+            div [ css [ textAlign center, fontSize (px 14) ] ] [ text label ]
+    in
+    div [ css [ display grid, rowGap (px 15) ] ]
+        [ stickyHeader
+        , div
+            [ css
+                [ displayFlex
+                , flexDirection column
+                , gap (px 10)
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ display grid
+                    , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+                    ]
                 ]
             ]
+            (List.map timetableItem items)
         ]
-        (List.map timetableItem items)
 
 
 timetableItem : TimetableItem -> Html msg
