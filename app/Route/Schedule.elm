@@ -436,18 +436,41 @@ view app _ =
                             , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
                             }
                         )
-                    |> List.sortBy (getCommonProps >> .startsAt >> Time.posixToMillis)
+                    |> List.sortBy timetableItemSortKey
                 )
             , h2 [] [ text "Day 2：2025年6月15日" ]
             , timetable
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 15)
                     |> filterDuplicateTimeslots
-                    |> List.sortBy (getCommonProps >> .startsAt >> Time.posixToMillis)
+                    |> List.sortBy timetableItemSortKey
                 )
             ]
         ]
     }
+
+
+timetableItemSortKey : TimetableItem -> ( Int, Int )
+timetableItemSortKey item =
+    let
+        { track, startsAt } =
+            getCommonProps item
+
+        trackOrder =
+            case track of
+                All ->
+                    0
+
+                TrackA ->
+                    1
+
+                TrackB ->
+                    2
+
+                TrackC ->
+                    3
+    in
+    ( Time.posixToMillis startsAt, trackOrder )
 
 
 getCommonProps : TimetableItem -> CommonProps
