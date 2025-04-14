@@ -479,62 +479,31 @@ isItemOnDate year month day item =
     parts.year == year && parts.month == month && parts.day == day
 
 
-{-| 同じ内容のTimeslotがある場合、TrackA以外を除外し、残したTrackAのtrackをAllに変更する
+{-| 全てのTrackに共通する内容のTimeslotがある場合、重複を削除し、Track.Allに統合する
 -}
 filterDuplicateTimeslots : List TimetableItem -> List TimetableItem
 filterDuplicateTimeslots items =
-    let
-        -- トークとTimeslotを分ける
-        ( talks, timeslots ) =
-            List.partition
-                (\item ->
-                    case item of
-                        Talk _ _ ->
-                            True
+    items
+        -- 同じ内容の　TimetableItem　をグループ化
+        |> Dict.Extra.groupBy
+            (\item ->
+                let
+                    c =
+                        getCommonProps item
+                in
+                ( c.title, Time.posixToMillis c.startsAt, c.lengthMin )
+            )
+        |> Dict.toList
+        |> List.concatMap
+            -- グループ内のTimeslotが3つある場合、1つを残しTrack.Allとして扱う
+            (\( _, items_ ) ->
+                case ( List.length items_ >= 3, List.head items_ ) of
+                    ( True, Just (Timeslot c) ) ->
+                        [ Timeslot { c | track = All } ]
 
-                        _ ->
-                            False
-                )
-                items
-
-        -- キー生成関数
-        makeKey item =
-            case item of
-                Timeslot c ->
-                    ( c.title, Time.posixToMillis c.startsAt, c.lengthMin )
-
-                Talk c _ ->
-                    ( c.title, Time.posixToMillis c.startsAt, c.lengthMin )
-
-        -- 処理済みのTimeslot
-        processedTimeslots =
-            timeslots
-                |> Dict.Extra.groupBy makeKey
-                |> Dict.toList
-                |> List.concatMap
-                    (\( _, group ) ->
-                        if List.length group >= 3 then
-                            -- TrackAのものを見つけてAllに変更
-                            List.filterMap
-                                (\item ->
-                                    case item of
-                                        Timeslot c ->
-                                            if c.track == TrackA then
-                                                Just (Timeslot { c | track = All })
-
-                                            else
-                                                Nothing
-
-                                        _ ->
-                                            Nothing
-                                )
-                                group
-
-                        else
-                            group
-                    )
-    in
-    talks ++ processedTimeslots
+                    _ ->
+                        items_
+            )
 
 
 timetable : List TimetableItem -> Html msg
