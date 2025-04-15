@@ -620,12 +620,21 @@ timetableItem item =
 
                 { bgColor, textColor } =
                     trackColorConfig c.track
-            in
-            a
-                [ href talk.url
-                , Attributes.target "_blank"
-                , rel "noopener noreferrer"
-                , css
+
+                wrapper =
+                    if talk.url == "" then
+                        div
+                            [ css wrapperStyles ]
+
+                    else
+                        a
+                            [ href talk.url
+                            , Attributes.target "_blank"
+                            , rel "noopener noreferrer"
+                            , css (wrapperStyles ++ [ hover [ borderColor (hsl 20 0.8 0.6) ] ])
+                            ]
+
+                wrapperStyles =
                     [ gridColumn (columnFromTrack c.track)
                     , gridRow row
                     , padding (px 10)
@@ -638,9 +647,9 @@ timetableItem item =
                     , textDecoration none
                     , border3 (px 1.5) solid (hsl 226 0.1 0.9)
                     , color inherit
-                    , hover [ borderColor (hsl 20 0.8 0.6) ]
                     ]
-                ]
+            in
+            wrapper
                 [ header [ css [ displayFlex, gap (px 5), alignItems center ] ]
                     [ viewTag { name = code, colorText = textColor, colorBackground = bgColor }
                     , div []
