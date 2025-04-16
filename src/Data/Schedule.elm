@@ -5,7 +5,7 @@ module Data.Schedule exposing
     , getCommonProps, getStartsAtMillis
     )
 
-{-|
+{-| タイムテーブル関連のデータ型と関数を提供するモジュール
 
 @docs TimetableItem, timetableItemDecoder
 @docs CommonProps, Track
@@ -19,11 +19,17 @@ import Json.Decode as Decode exposing (Decoder, bool, field, maybe, string)
 import Time exposing (Posix)
 
 
+{-| タイムテーブルの項目を表す型
+Talk: 講演セッション
+Timeslot: 休憩や開場などの時間枠
+-}
 type TimetableItem
     = Talk CommonProps TalkProps
     | Timeslot CommonProps
 
 
+{-| TalkとTimeslotに共通のプロパティ
+-}
 type alias CommonProps =
     { type_ : String
     , uuid : String
@@ -34,6 +40,8 @@ type alias CommonProps =
     }
 
 
+{-| Talk特有のプロパティ
+-}
 type alias TalkProps =
     { url : String
     , abstract : String
@@ -65,6 +73,8 @@ type alias Speaker =
     }
 
 
+{-| タイムテーブル項目をJSONからデコードする
+-}
 timetableItemDecoder : Decoder TimetableItem
 timetableItemDecoder =
     Decode.oneOf [ talkDecoder, timeslotDecoder ]
@@ -150,6 +160,8 @@ iso8601Decoder =
             )
 
 
+{-| タイムテーブル項目から共通プロパティを取得する
+-}
 getCommonProps : TimetableItem -> CommonProps
 getCommonProps item =
     case item of
@@ -160,6 +172,8 @@ getCommonProps item =
             c
 
 
+{-| タイムテーブル項目の開始時刻をミリ秒で取得する
+-}
 getStartsAtMillis : TimetableItem -> Int
 getStartsAtMillis =
     getCommonProps >> .startsAt >> Time.posixToMillis

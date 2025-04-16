@@ -1,5 +1,8 @@
 module Data.Schedule.TalkId exposing (calcTalkId, calcTalkIdWithOverride)
 
+{-| トークIDの算出に関する機能を提供するモジュール
+-}
+
 import Data.Schedule exposing (CommonProps, TimetableItem(..), Track(..), getStartsAtMillis)
 import List.Extra
 import Time exposing (Month(..), Posix)
@@ -7,6 +10,9 @@ import Time.Extra
 import TimeZone
 
 
+{-| トークアイテムのIDを計算する
+「(トラック)-(日付)(インデックス)」（例：A-101）
+-}
 calcTalkId : List TimetableItem -> ( Track, Posix ) -> String
 calcTalkId allItems ( track, startsAt ) =
     trackPrefix track ++ "-" ++ dayPrefix startsAt ++ indexStr allItems ( track, startsAt )
@@ -83,6 +89,7 @@ indexStr allItems ( track, startsAt ) =
         isSameDay d1 d2 =
             d1.year == d2.year && d1.month == d2.month && d1.day == d2.day
     in
+    -- 同じ日の同じトラックのセッションを時間順に並べ、何番目かを2桁の数字で表す
     allItems
         |> List.filter isSameTrackAndDay
         |> List.sortBy getStartsAtMillis
@@ -91,6 +98,8 @@ indexStr allItems ( track, startsAt ) =
         |> Maybe.withDefault "XX"
 
 
+{-| 特定のトークに対して独自のIDを割り当てる場合に使用する
+-}
 calcTalkIdWithOverride : List TimetableItem -> ({ uuid : String } -> String -> String) -> CommonProps -> String
 calcTalkIdWithOverride allItems overrideFn { uuid, track, startsAt } =
     calcTalkId allItems ( track, startsAt )
