@@ -130,15 +130,15 @@ hero seed =
             , heroSponsorsBlock (platinumSponsorsShuffled seed)
             , socialLinkList
                 [ { id = "x"
-                  , icon = "images/x.svg"
+                  , icon = "/images/x.svg"
                   , href = "https://x.com/fp_matsuri"
                   }
                 , { id = "hatena_blog"
-                  , icon = "images/hatenablog.svg"
+                  , icon = "/images/hatenablog.svg"
                   , href = "https://blog.fp-matsuri.org/"
                   }
                 , { id = "fortee"
-                  , icon = "images/fortee.svg"
+                  , icon = "/images/fortee.svg"
                   , href = "https://fortee.jp/2025fp-matsuri"
                   }
                 ]
@@ -151,7 +151,7 @@ logoAndDate =
     let
         -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
         logo =
-            [ img [ src "images/logomark.svg", css [ height (pct 100) ] ] []
+            [ img [ src "/images/logomark.svg", css [ height (pct 100) ] ] []
             , h1
                 [ css
                     [ margin zero
@@ -212,7 +212,7 @@ heroSponsorsBlock sponsors =
                     ]
                 ]
                 [ img
-                    [ src ("images/sponsors/" ++ sponsor.image)
+                    [ src ("/images/sponsors/" ++ sponsor.image)
                     , css
                         [ backgroundColor (rgb 255 255 255)
                         , borderRadius (px 10)
@@ -687,7 +687,7 @@ sponsorLogo s =
         , Attributes.target "_blank"
         ]
         [ img
-            [ src ("images/sponsors/" ++ s.image)
+            [ src ("/images/sponsors/" ++ s.image)
             , css
                 [ backgroundColor (rgb 255 255 255)
                 , borderRadius (px 10)

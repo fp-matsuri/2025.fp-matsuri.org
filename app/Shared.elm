@@ -95,7 +95,7 @@ view _ { route } _ _ pageView =
             [ header [ class "site-header" ]
                 [ a [ class "site-logo", href "/" ]
                     [ img
-                        [ src "images/logotype.svg"
+                        [ src "/images/logotype.svg"
                         , alt "関数型まつり"
                         ]
                         []
