@@ -1,4 +1,4 @@
-module Route.Schedule exposing (ActionData, Data, Model, Msg, route)
+module Route.Schedule exposing (ActionData, Data, Model, Msg, overrideTalkId, route)
 
 import BackendTask exposing (BackendTask)
 import BackendTask.Http
@@ -450,6 +450,45 @@ timetable title items =
             ]
             (List.map timetableItem items)
         ]
+
+
+overrideTalkId : { uuid : String } -> String -> String
+overrideTalkId { uuid } previousId =
+    case uuid of
+        -- はじめて関数型言語の機能に触れるエンジニア向けの学び方/教え方
+        "7cc6ecef-94c8-4add-abc0-23b500dbf498" ->
+            "C-204"
+
+        -- iOSアプリ開発で関数型プログラミングを実現するThe Composable Architectureの紹介
+        "71fbd521-9dc5-458d-89f6-cbff8e84e3cc" ->
+            "C-205"
+
+        -- デコーダーパターンによる3Dジオメトリの読み込み
+        "a82127a7-f84a-43c1-a3de-483e1d973a94" ->
+            "C-206"
+
+        -- ラムダ計算って何だっけ？関数型の神髄に迫る
+        "81cea14c-255c-46ff-929d-5141c5715832" ->
+            "C-207"
+
+        -- Underground 型システム
+        "e0274da9-d863-47fe-a945-42eb04185bb9" ->
+            "C-208"
+
+        -- 堅牢な認証基盤の実現: TypeScriptで代数的データ型を活用する
+        "267ff4c1-8f3c-473b-8cab-e62d0d468af5" ->
+            "C-209"
+
+        -- CoqのProgram機構の紹介 〜型を活用した安全なプログラミング〜
+        "983d1021-3636-4778-be58-149f1995e8a5" ->
+            "C-210"
+
+        -- F#で自在につくる静的ブログサイト
+        "b6c70e2d-856b-47c5-9107-481883527634" ->
+            "C-211"
+
+        _ ->
+            previousId
 
 
 timetableItem : TimetableItem -> Html msg
