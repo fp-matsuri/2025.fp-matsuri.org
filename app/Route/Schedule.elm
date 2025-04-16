@@ -65,6 +65,8 @@ parseIso8601 isoString =
         |> Result.withDefault (Time.millisToPosix 0)
 
 
+{-| UUIDからグリッドレイアウト用の行番号を取得する
+-}
 trackFromUuid : String -> { row : String }
 trackFromUuid uuid =
     case uuid of
@@ -320,6 +322,9 @@ view app _ =
     }
 
 
+{-| タイムテーブル項目のソートキーを計算する
+トークの開始時間とトラック順に基づいてソートする
+-}
 timetableItemSortKey : TimetableItem -> ( Int, Int )
 timetableItemSortKey item =
     let
@@ -462,6 +467,9 @@ timetable title items =
         ]
 
 
+{-| トークIDをオーバーライドする関数
+特定のUUIDに対して独自のトークIDを設定する
+-}
 overrideTalkId : { uuid : String } -> String -> String
 overrideTalkId { uuid } previousId =
     case uuid of
@@ -511,8 +519,10 @@ timetableItem talkId item =
 
                 filteredTags =
                     talk.tags
+                        -- 重要度の低いタグを除外（TODO：必要に応じて解禁する）
                         |> List.filter (\tag -> List.all (\name -> tag.name /= name) [ "Intermediate", "Advanced" ])
                         |> (\tags ->
+                                -- 招待セッションの場合はタグを追加
                                 if
                                     List.any (\id -> c.uuid == id)
                                         [ "scott"
@@ -616,6 +626,8 @@ timetableItem talkId item =
                 ]
 
 
+{-| トラックからグリッドの列指定を取得する
+-}
 columnFromTrack : Track -> String
 columnFromTrack track =
     case track of
@@ -648,6 +660,8 @@ viewTag tag =
         [ text tag.name ]
 
 
+{-| 開始時刻と長さから時間範囲を「HH:MM-HH:MM」形式でフォーマットする
+-}
 formatTimeRange : Posix -> Int -> String
 formatTimeRange startPosix lengthMin =
     let
@@ -674,6 +688,8 @@ formatTimeRange startPosix lengthMin =
     formatTime startPosix ++ "-" ++ formatTime endPosix
 
 
+{-| トラックに応じた色設定を取得する
+-}
 trackColorConfig : Track -> { bgColor : Css.Color, textColor : Css.Color }
 trackColorConfig track =
     case track of
