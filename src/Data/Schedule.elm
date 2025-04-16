@@ -2,7 +2,7 @@ module Data.Schedule exposing
     ( TimetableItem(..), timetableItemDecoder
     , CommonProps, Track(..)
     , TalkProps, Speaker
-    , getCommonProps
+    , getCommonProps, getStartsAtMillis
     )
 
 {-|
@@ -10,7 +10,7 @@ module Data.Schedule exposing
 @docs TimetableItem, timetableItemDecoder
 @docs CommonProps, Track
 @docs TalkProps, Speaker
-@docs getCommonProps
+@docs getCommonProps, getStartsAtMillis
 
 -}
 
@@ -158,3 +158,8 @@ getCommonProps item =
 
         Timeslot c ->
             c
+
+
+getStartsAtMillis : TimetableItem -> Int
+getStartsAtMillis =
+    getCommonProps >> .startsAt >> Time.posixToMillis
