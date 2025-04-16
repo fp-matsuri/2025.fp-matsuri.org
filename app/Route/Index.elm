@@ -581,7 +581,9 @@ platinumSponsorsShuffled seed =
 goldSponsorsShuffled : Int -> List Sponsor
 goldSponsorsShuffled seed =
     shuffleList seed
-        [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/" ]
+        [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/"
+        , Sponsor "株式会社ヌーラボ" "nulab.png" "https://nulab.com/ja/"
+        ]
 
 
 silverSponsorsShuffled : Int -> List Sponsor
