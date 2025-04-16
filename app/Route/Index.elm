@@ -591,6 +591,7 @@ silverSponsorsShuffled seed =
         , Sponsor "合同会社ザウエル" "zauel.png" "https://zauel.co.jp"
         , Sponsor "株式会社ネクストビート" "nextbeat.png" "https://www.nextbeat.co.jp/"
         , Sponsor "エムスリー株式会社" "m3.png" "https://jobs.m3.com/engineer/"
+        , Sponsor "ルームクリップ株式会社" "roomclip.png" "https://roomclip.jp"
         ]
 
 
