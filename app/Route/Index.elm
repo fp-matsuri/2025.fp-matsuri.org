@@ -600,6 +600,7 @@ logoSponsorsShuffled seed =
         [ Sponsor "合同会社Ignission" "ignission.png" "https://ignission.tech/"
         , Sponsor "株式会社ギークニア" "geekneer.png" "https://geekneer.com/"
         , Sponsor "Siiibo証券株式会社" "siiibo.png" "https://siiibo.com/"
+        , Sponsor "合同会社コトイコンサルタンシー" "kxc.png" "https://kxc.inc"
         ]
 
 
