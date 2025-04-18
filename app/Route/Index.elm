@@ -643,7 +643,7 @@ sponsorLogos randomSeed =
             { mobileColumnsCount = 1, desktopColumnWidth = "326px" }
             (platinumSponsorsShuffled randomSeed)
         , sponsorPlan "ゴールドスポンサー"
-            { mobileColumnsCount = 2, desktopColumnWidth = "257px" }
+            { mobileColumnsCount = 2, desktopColumnWidth = "222px" }
             (goldSponsorsShuffled randomSeed)
         , sponsorPlan "シルバースポンサー"
             { mobileColumnsCount = 3, desktopColumnWidth = "163px" }
