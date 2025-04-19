@@ -7,6 +7,7 @@ import Css.Global exposing (descendants, withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
+import FpMatsuri.Logo
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
@@ -151,7 +152,7 @@ logoAndDate =
     let
         -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
         logo =
-            [ img [ src "/images/logomark.svg", css [ height (pct 100) ] ] []
+            [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark
             , h1
                 [ css
                     [ margin zero
