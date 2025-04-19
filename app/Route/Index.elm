@@ -12,7 +12,6 @@ import Head
 import Head.Seo
 import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
-import Html.Styled.Events exposing (onClick)
 import PagesMsg exposing (PagesMsg)
 import Random
 import RouteBuilder exposing (App, StatefulRoute)
@@ -88,18 +87,17 @@ generateRandomLogoPositions seed count =
     let
         generator =
             Random.list count
-                (Random.map5
-                    LogoPosition
-                    (Random.float 0 100)
+                (Random.map5 LogoPosition
                     -- x位置 (%)
-                    (Random.float 0 100)
+                    (Random.float -10 110)
                     -- y位置 (%)
-                    (Random.float 30 150)
+                    (Random.float -10 110)
                     -- サイズ (px)
-                    (Random.float 0 360)
+                    (Random.float 50 200)
                     -- 回転 (deg)
-                    (Random.float 0.05 0.2)
-                 -- 透明度
+                    (Random.float 0 360)
+                    -- 透明度
+                    (Random.float 0.03 0.1)
                 )
     in
     Random.initialSeed seed
@@ -165,7 +163,6 @@ hero seed logoPositions =
                 , property "justify-items" "center"
                 , rowGap (rem 2.5)
                 , borderRadius (px 10)
-                , property "background-color" "var(--color-grey095)"
                 , property "color" "var(--color-primary)"
                 , position relative
                 , zIndex (int 1)
