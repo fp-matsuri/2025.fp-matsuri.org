@@ -13,6 +13,7 @@ import Head
 import Head.Seo
 import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, id, rel, src)
+import Html.Styled.Events exposing (onClick)
 import PagesMsg exposing (PagesMsg)
 import Random
 import Route.Sponsors as Sponsors
@@ -43,12 +44,24 @@ route =
 
 type alias Model =
     { seed : Int
+    , logoPositions : List LogoPosition
+    }
+
+
+type alias LogoPosition =
+    { x : Float
+    , y : Float
+    , size : Float
+    , rotation : Float
+    , opacity : Float
     }
 
 
 init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
 init _ _ =
-    ( { seed = 0 }
+    ( { seed = 0
+      , logoPositions = []
+      }
     , Effect.fromCmd (Random.generate GotRandomSeed (Random.int 0 100))
     )
 
@@ -65,7 +78,35 @@ update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Mo
 update _ _ msg model =
     case msg of
         GotRandomSeed newSeed ->
-            ( { model | seed = newSeed }, Effect.none )
+            let
+                randomPositions =
+                    generateRandomLogoPositions newSeed 8
+            in
+            ( { model | seed = newSeed, logoPositions = randomPositions }, Effect.none )
+
+
+generateRandomLogoPositions : Int -> Int -> List LogoPosition
+generateRandomLogoPositions seed count =
+    let
+        generator =
+            Random.list count
+                (Random.map5
+                    LogoPosition
+                    (Random.float 0 100)
+                    -- x位置 (%)
+                    (Random.float 0 100)
+                    -- y位置 (%)
+                    (Random.float 30 150)
+                    -- サイズ (px)
+                    (Random.float 0 360)
+                    -- 回転 (deg)
+                    (Random.float 0.05 0.2)
+                 -- 透明度
+                )
+    in
+    Random.initialSeed seed
+        |> Random.step generator
+        |> Tuple.first
 
 
 
@@ -105,7 +146,7 @@ view :
 view app _ model =
     { title = ""
     , body =
-        [ hero model.seed app.data.sponsors
+        [ hero model.seed app.data.sponsors model.logoPositions
         , newsSection
         , aboutSection
         , overviewSection
@@ -115,8 +156,8 @@ view app _ model =
     }
 
 
-hero : Int -> Sponsors.Data -> Html msg
-hero seed sponsorsData =
+hero : Int -> Sponsors.Data -> List LogoPosition -> Html msg
+hero seed sponsorsData logoPositions =
     let
         -- Get platinum sponsors for hero section
         platinumSponsors =
@@ -130,8 +171,9 @@ hero seed sponsorsData =
                     )
                 |> shuffleList seed
     in
-    div [ css [ padding3 zero (px 10) (px 10) ] ]
-        [ div
+    div [ css [ padding3 zero (px 10) (px 10), position relative ] ]
+        [ heroBackgroundLogos logoPositions
+        , div
             [ css
                 [ padding3 (px 80) (px 20) (px 20)
                 , display grid
@@ -140,6 +182,8 @@ hero seed sponsorsData =
                 , borderRadius (px 10)
                 , property "background-color" "var(--color-grey095)"
                 , property "color" "var(--color-primary)"
+                , position relative
+                , zIndex (int 1)
                 ]
             ]
             [ logoAndDate
@@ -160,6 +204,44 @@ hero seed sponsorsData =
                 ]
             ]
         ]
+
+
+heroBackgroundLogos : List LogoPosition -> Html msg
+heroBackgroundLogos positions =
+    div
+        [ css
+            [ position absolute
+            , top zero
+            , left zero
+            , width (pct 100)
+            , height (pct 100)
+            , zIndex (int 0)
+            , overflow hidden
+            ]
+        ]
+        (List.map renderBackgroundLogo positions)
+
+
+renderBackgroundLogo : LogoPosition -> Html msg
+renderBackgroundLogo { x, y, size, rotation, opacity } =
+    div
+        [ css
+            [ position absolute
+            , left (pct x)
+            , top (pct y)
+            , width (px size)
+            , height (px size)
+            , Css.opacity (Css.num opacity)
+            , transform (rotate (deg rotation))
+            , property "filter" "blur(1px)"
+            , property "transition" "transform 10s ease-in-out, opacity 8s ease-in-out"
+            , hover
+                [ Css.opacity (Css.num (opacity * 2))
+                , transform (rotate (deg (rotation + 10)))
+                ]
+            ]
+        ]
+        [ Html.fromUnstyled FpMatsuri.Logo.logoMark ]
 
 
 logoAndDate : Html msg
