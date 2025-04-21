@@ -57,13 +57,16 @@ makeSitemapEntries getStaticRoutes =
                         }
             in
             case route of
+                Index ->
+                    Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
+
+                Schedule ->
+                    Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
+
                 Slug_ routeParam ->
                     Route__slug_.data routeParam
                         |> BackendTask.andThen (\_ -> routeSource (Iso8601.fromTime Pages.builtAt))
                         |> Just
-
-                Index ->
-                    Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
     in
     getStaticRoutes
         |> BackendTask.map (List.filterMap build)

@@ -9,7 +9,7 @@ import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
+import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, id, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
@@ -130,15 +130,15 @@ hero seed =
             , heroSponsorsBlock (platinumSponsorsShuffled seed)
             , socialLinkList
                 [ { id = "x"
-                  , icon = "images/x.svg"
+                  , icon = "/images/x.svg"
                   , href = "https://x.com/fp_matsuri"
                   }
                 , { id = "hatena_blog"
-                  , icon = "images/hatenablog.svg"
+                  , icon = "/images/hatenablog.svg"
                   , href = "https://blog.fp-matsuri.org/"
                   }
                 , { id = "fortee"
-                  , icon = "images/fortee.svg"
+                  , icon = "/images/fortee.svg"
                   , href = "https://fortee.jp/2025fp-matsuri"
                   }
                 ]
@@ -151,7 +151,7 @@ logoAndDate =
     let
         -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
         logo =
-            [ img [ src "images/logomark.svg", css [ height (pct 100) ] ] []
+            [ img [ src "/images/logomark.svg", css [ height (pct 100) ] ] []
             , h1
                 [ css
                     [ margin zero
@@ -212,7 +212,7 @@ heroSponsorsBlock sponsors =
                     ]
                 ]
                 [ img
-                    [ src ("images/sponsors/" ++ sponsor.image)
+                    [ src ("/images/sponsors/" ++ sponsor.image)
                     , css
                         [ backgroundColor (rgb 255 255 255)
                         , borderRadius (px 10)
@@ -271,7 +271,11 @@ newsSection : Html msg
 newsSection =
     section ""
         [ news
-            [ { date = "2025-04-06"
+            [ { date = "2025-04-18"
+              , label = "当日スタッフの募集を開始しました"
+              , url = "/extra-staff"
+              }
+            , { date = "2025-04-06"
               , label = "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！"
               , url = "https://blog.fp-matsuri.org/entry/2025/04/06/101230"
               }
@@ -386,30 +390,7 @@ overviewSection =
                 ]
 
         item label contents =
-            div []
-                (h3
-                    [ css
-                        [ margin zero
-                        , display grid
-                        , property "grid-template-columns " "1fr max-content 1fr"
-                        , alignItems center
-                        , columnGap (em 0.5)
-                        ]
-                    ]
-                    [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-                    , div
-                        [ css
-                            [ color (rgb 0x66 0x66 0x66)
-                            , whiteSpace noWrap
-                            , fontSize (px 16)
-                            , fontWeight normal
-                            ]
-                        ]
-                        [ text label ]
-                    , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-                    ]
-                    :: contents
-                )
+            div [] (h3 [] [ text label ] :: contents)
 
         note string =
             p
@@ -563,7 +544,7 @@ sponsorsSection : Int -> Html msg
 sponsorsSection seed =
     section "Sponsors"
         [ div [ class "markdown sponsors" ]
-            [ h3 [ id "sponsor" ] [ text "スポンサー募集中！" ]
+            [ Html.h3 [ id "sponsor" ] [ text "スポンサー募集中！" ]
             , p []
                 [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
                 ]
@@ -614,6 +595,7 @@ silverSponsorsShuffled seed =
         , Sponsor "合同会社ザウエル" "zauel.png" "https://zauel.co.jp"
         , Sponsor "株式会社ネクストビート" "nextbeat.png" "https://www.nextbeat.co.jp/"
         , Sponsor "エムスリー株式会社" "m3.png" "https://jobs.m3.com/engineer/"
+        , Sponsor "ルームクリップ株式会社" "roomclip.png" "https://roomclip.jp"
         ]
 
 
@@ -623,6 +605,7 @@ logoSponsorsShuffled seed =
         [ Sponsor "合同会社Ignission" "ignission.png" "https://ignission.tech/"
         , Sponsor "株式会社ギークニア" "geekneer.png" "https://geekneer.com/"
         , Sponsor "Siiibo証券株式会社" "siiibo.png" "https://siiibo.com/"
+        , Sponsor "合同会社コトイコンサルタンシー" "kxc.png" "https://kxc.inc"
         ]
 
 
@@ -648,66 +631,57 @@ shuffleList seed list =
 
 
 sponsorLogos : Int -> Html msg
-sponsorLogos seed =
-    let
-        -- スポンサープランによらない、レイアウト構成を決めるようなスタイルを定義
-        logoGridStyle =
-            batch
+sponsorLogos randomSeed =
+    div
+        [ css
+            [ width (pct 100)
+            , maxWidth (em 43)
+            , display grid
+            , rowGap (px 40)
+            ]
+        ]
+        [ sponsorPlan "プラチナスポンサー"
+            { mobileColumnsCount = 1, desktopColumnWidth = "326px" }
+            (platinumSponsorsShuffled randomSeed)
+        , sponsorPlan "ゴールドスポンサー"
+            { mobileColumnsCount = 2, desktopColumnWidth = "257px" }
+            (goldSponsorsShuffled randomSeed)
+        , sponsorPlan "シルバースポンサー"
+            { mobileColumnsCount = 3, desktopColumnWidth = "163px" }
+            (silverSponsorsShuffled randomSeed)
+        , sponsorPlan "ロゴスポンサー"
+            { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
+            (logoSponsorsShuffled randomSeed)
+        ]
+
+
+sponsorPlan :
+    String
+    -> { mobileColumnsCount : Int, desktopColumnWidth : String }
+    -> List Sponsor
+    -> Html msg
+sponsorPlan title { mobileColumnsCount, desktopColumnWidth } sponsors =
+    div
+        [ css
+            [ display grid
+            , rowGap (px 20)
+            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                [ rowGap (px 30) ]
+            ]
+        ]
+        [ h3 [ css [ color (rgb 0x66 0x66 0x66) ] ] [ text title ]
+        , div
+            [ css
                 [ display grid
                 , rowGap (px 10)
                 , columnGap (px 10)
-                , paddingTop (px 20)
                 , justifyContent center
+                , gridTemplateColumns (List.repeat mobileColumnsCount (fr 1))
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ paddingTop (px 30)
-                    ]
-                ]
-    in
-    div [ css [ width (pct 100), maxWidth (em 43) ] ]
-        [ sponsorPlanHeader "プラチナスポンサー"
-        , div
-            [ css
-                [ logoGridStyle
-                , paddingBottom (px 40)
-                , gridTemplateColumns [ fr 1 ]
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 326 ] ]
+                    [ property "grid-template-columns" ("repeat(auto-fit, " ++ desktopColumnWidth ++ ")") ]
                 ]
             ]
-            (List.map sponsorLogo (platinumSponsorsShuffled seed))
-        , sponsorPlanHeader "ゴールドスポンサー"
-        , div
-            [ css
-                [ logoGridStyle
-                , paddingBottom (px 40)
-                , gridTemplateColumns [ fr 1, fr 1 ]
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ gridTemplateColumns [ px 257 ] ]
-                ]
-            ]
-            (List.map sponsorLogo (goldSponsorsShuffled seed))
-        , sponsorPlanHeader "シルバースポンサー"
-        , div
-            [ css
-                [ logoGridStyle
-                , paddingBottom (px 40)
-                , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-columns" "repeat(auto-fit, 163px)" ]
-                ]
-            ]
-            (List.map sponsorLogo (silverSponsorsShuffled seed))
-        , sponsorPlanHeader "ロゴスポンサー"
-        , div
-            [ css
-                [ logoGridStyle
-                , paddingBottom (px 40)
-                , gridTemplateColumns [ fr 1, fr 1, fr 1, fr 1 ]
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ property "grid-template-columns" "repeat(auto-fit, 116px)" ]
-                ]
-            ]
-            (List.map sponsorLogo (logoSponsorsShuffled seed))
+            (List.map sponsorLogo sponsors)
         ]
 
 
@@ -719,7 +693,7 @@ sponsorLogo s =
         , Attributes.target "_blank"
         ]
         [ img
-            [ src ("images/sponsors/" ++ s.image)
+            [ src ("/images/sponsors/" ++ s.image)
             , css
                 [ backgroundColor (rgb 255 255 255)
                 , borderRadius (px 10)
@@ -728,30 +702,6 @@ sponsorLogo s =
             , alt s.name
             ]
             []
-        ]
-
-
-sponsorPlanHeader : String -> Html msg
-sponsorPlanHeader name =
-    div
-        [ css
-            [ display grid
-            , property "grid-template-columns " "1fr max-content 1fr"
-            , alignItems center
-            , columnGap (em 0.5)
-            ]
-        ]
-        [ div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
-        , div
-            [ css
-                [ color (rgb 0x66 0x66 0x66)
-                , whiteSpace noWrap
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ fontSize (px 16) ]
-                ]
-            ]
-            [ text name ]
-        , div [ css [ backgroundColor (rgba 30 44 88 0.1), height (px 1) ] ] []
         ]
 
 
@@ -767,7 +717,15 @@ teamSection =
                 ]
     in
     section "Team"
-        [ div [ class "people leaders" ]
+        [ div [ class "markdown people" ]
+            [ h3 [] [ text "当日スタッフ募集中" ]
+            , p []
+                [ text "関数型まつりでは当日スタッフを募集しています。"
+                , a [ href "/extra-staff" ] [ text "当日スタッフ募集のお知らせ" ]
+                , text "をご覧ください"
+                ]
+            ]
+        , div [ class "people leaders" ]
             [ h3 [] [ text "座長" ]
             , ul [] (List.map listItem staff.leader)
             ]
@@ -837,3 +795,29 @@ section title children =
                 h2 [] [ text title ]
     in
     Html.section [] (heading :: children)
+
+
+h3 : List (Attribute msg) -> List (Html msg) -> Html msg
+h3 attributes children =
+    let
+        pseudoDividerStyles =
+            [ property "content" (qt "")
+            , display block
+            , height (px 1)
+            , backgroundColor (rgba 30 44 88 0.1)
+            ]
+    in
+    Html.styled Html.h3
+        [ margin zero
+        , display grid
+        , property "grid-template-columns " "1fr max-content 1fr"
+        , alignItems center
+        , columnGap (em 0.5)
+        , whiteSpace noWrap
+        , fontSize (px 16)
+        , fontWeight normal
+        , before pseudoDividerStyles
+        , after pseudoDividerStyles
+        ]
+        attributes
+        children

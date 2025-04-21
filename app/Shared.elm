@@ -4,11 +4,12 @@ module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 -}
 
 import BackendTask exposing (BackendTask)
+import Css exposing (..)
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Html exposing (Html)
 import Html.Styled exposing (a, br, div, footer, h4, header, img, main_, nav, text)
-import Html.Styled.Attributes exposing (alt, class, href, src)
+import Html.Styled.Attributes exposing (alt, class, css, href, src)
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Route exposing (Route)
@@ -88,20 +89,33 @@ view :
     -> (Msg -> msg)
     -> View msg
     -> { body : List (Html msg), title : String }
-view _ _ _ _ pageView =
+view _ { route } _ _ pageView =
     { body =
         List.map Html.Styled.toUnstyled
             [ header [ class "site-header" ]
                 [ a [ class "site-logo", href "/" ]
                     [ img
-                        [ src "images/logotype.svg"
+                        [ src "/images/logotype.svg"
                         , alt "関数型まつり"
                         ]
                         []
                     ]
-                , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
+                , nav []
+                    [ a [ href "/code-of-conduct/" ] [ text "行動規範" ]
+                    , a [ href "/schedule" ] [ text "スケジュール" ]
+                    ]
                 ]
-            , main_ [] pageView.body
+            , main_
+                [ css
+                    [ case route of
+                        Just Route.Index ->
+                            padding zero
+
+                        _ ->
+                            padding3 zero (px 15) (px 30)
+                    ]
+                ]
+                pageView.body
             , footer [ class "site-footer" ]
                 [ div [ class "footer-navigation" ]
                     [ h4 [] [ text "サイトマップ" ]

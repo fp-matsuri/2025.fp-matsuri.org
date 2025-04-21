@@ -22,6 +22,9 @@
             "elm/random": "1.0.0",
             "elm/time": "1.0.0",
             "elm/url": "1.0.0",
+            "elm-community/dict-extra": "2.4.0",
+            "justinmimbs/time-extra": "1.2.0",
+            "justinmimbs/timezone-data": "11.0.0",
             "rtfeldman/elm-css": "18.0.0",
             "rtfeldman/elm-iso8601-date-strings": "1.1.4"
         },
