@@ -428,7 +428,7 @@ overviewSection =
 
         map =
             iframe
-                [ src "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2856.5182504582544!2d139.66182436879737!3d35.706488198207815!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sja!2sjp!4v1745236946348!5m2!1sja!2sjp"
+                [ src "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6706.437024372982!2d139.6603819160998!3d35.70552369324171!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f34668e0bc27%3A0x7d66caba722762c5!2z5Lit6YeO44K744Oz44OI44Op44Or44OR44O844Kv44Kr44Oz44OV44Kh44Os44Oz44K5!5e0!3m2!1sja!2sjp!4v1745237362764!5m2!1sja!2sjp"
                 , attribute "allowfullscreen" ""
                 , attribute "loading" "lazy"
                 , attribute "referrerpolicy" "no-referrer-when-downgrade"
