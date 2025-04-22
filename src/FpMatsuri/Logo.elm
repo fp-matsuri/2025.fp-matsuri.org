@@ -9,7 +9,7 @@ logoMark : Svg msg
 logoMark =
     let
         gradientDefault =
-            linearGradient [ id "gradient_default", x1 "145.34", y1 "-115.32", x2 "602.01", y2 "341.35", gradientUnits "userSpaceOnUse" ]
+            linearGradient [ id "gradient_default", x1 "145.34", y1 "-162.82", x2 "602.01", y2 "293.85", gradientUnits "userSpaceOnUse" ]
                 [ stop [ offset "0%", stopColor "#F4DA0B", style "stop-color:#F4DA0B;stop-color:color(display-p3 0.9569 0.8549 0.0431);stop-opacity:1;" ] []
                 , stop [ offset "18%", stopColor "#EEB756", style "stop-color:#EEB756;stop-color:color(display-p3 0.9333 0.7176 0.3373);stop-opacity:1;" ] []
                 , stop [ offset "40%", stopColor "#E26264", style "stop-color:#E26264;stop-color:color(display-p3 0.8863 0.3843 0.3922);stop-opacity:1;" ] []
@@ -19,23 +19,23 @@ logoMark =
                 ]
 
         gradient_41 =
-            linearGradient [ id "gradient_41", x1 "39.82", y1 "-9.8", x2 "496.49", y2 "446.87", xlinkHref "#gradient_default" ] []
+            linearGradient [ id "gradient_41", x1 "39.82", y1 "-57.3", x2 "496.49", y2 "399.37", xlinkHref "#gradient_default" ] []
 
         gradient_42 =
-            linearGradient [ id "gradient_42", x1 "39.82", y1 "-9.8", x2 "496.49", y2 "446.87", xlinkHref "#gradient_default" ] []
+            linearGradient [ id "gradient_42", x1 "39.82", y1 "-57.3", x2 "496.49", y2 "399.37", xlinkHref "#gradient_default" ] []
 
         gradient_43 =
-            linearGradient [ id "gradient_43", x1 "-61.13", y1 "91.16", x2 "395.53", y2 "547.82", xlinkHref "#gradient_default" ] []
+            linearGradient [ id "gradient_43", x1 "-61.13", y1 "43.66", x2 "395.53", y2 "500.32", xlinkHref "#gradient_default" ] []
 
         gradient_44 =
-            linearGradient [ id "gradient_44", x1 "-64.18", y1 "94.2", x2 "392.49", y2 "550.87", xlinkHref "#gradient_default" ] []
+            linearGradient [ id "gradient_44", x1 "-64.18", y1 "46.7", x2 "392.49", y2 "503.37", xlinkHref "#gradient_default" ] []
     in
-    svg [ width "100", height "100", viewBox "0 0 520 520", attribute "xmlns" "http://www.w3.org/2000/svg" ]
+    svg [ width "160", height "128", viewBox "0 0 520 417", attribute "xmlns" "http://www.w3.org/2000/svg" ]
         [ defs [] [ gradientDefault, gradient_41, gradient_42, gradient_43, gradient_44 ]
-        , path [ fill "url(#gradient_43)", d "M176.51,152c17.23,0,31.2-13.97,31.2-31.2V48h-104C46.27,48-.29,94.56-.29,152H-.29v312h104v-104h72.8c17.23,0,31.2-13.97,31.2-31.2v-41.6c0-17.23-13.97-31.2-31.2-31.2h-72.8v-104h72.8Z" ] []
-        , path [ fill "url(#gradient_default)", d "M311.71,48h72.8c17.23,0,31.2,13.97,31.2,31.2v52c0,11.49-9.31,20.8-20.8,20.8h-62.4c-11.49,0-20.8-9.31-20.8-20.8V48Z" ] []
-        , path [ fill "url(#gradient_41)", d "M207.71,152h83.2c11.49,0,20.8,9.31,20.8,20.8v62.4c0,11.49-9.31,20.8-20.8,20.8h-83.2v-104Z" ] []
-        , rect [ fill "#CE3F3D", style "fill:#CE3F3D;fill:color(display-p3 0.8078 0.2471 0.2392);fill-opacity:1;", x "415.71", y "152", width "104", height "104", rx "52", ry "52" ] []
-        , path [ fill "url(#gradient_42)", d "M332.51,256h62.4c11.49,0,20.8,9.31,20.8,20.8v52c0,17.23-13.97,31.2-31.2,31.2h-72.8v-83.2c0-11.49,9.31-20.8,20.8-20.8Z" ] []
-        , path [ fill "url(#gradient_44)", d "M207.71,360h83.2c11.49,0,20.8,9.31,20.8,20.8v83.2h-104v-104Z:" ] []
+        , path [ fill "url(#gradient_43)", d "M176.51,104.5c17.23,0,31.2-13.97,31.2-31.2V0.5h-104c-57.44,0-104,46.56-104,104V416.5h104v-104h72.8c17.23,0,31.2-13.97,31.2-31.2v-41.6c0-17.23-13.97-31.2-31.2-31.2h-72.8v-104h72.8Z" ] []
+        , path [ fill "url(#gradient_default)", d "M311.71,0.5h72.8c17.23,0,31.2,13.97,31.2,31.2v52c0,11.49-9.31,20.8-20.8,20.8h-62.4c-11.49,0-20.8-9.31-20.8-20.8V0.5Z" ] []
+        , path [ fill "url(#gradient_41)", d "M207.71,104.5h83.2c11.49,0,20.8,9.31,20.8,20.8v62.4c0,11.49-9.31,20.8-20.8,20.8h-83.2v-104Z" ] []
+        , rect [ fill "#CE3F3D", style "fill:#CE3F3D;fill:color(display-p3 0.8078 0.2471 0.2392);fill-opacity:1;", x "415.71", y "104.5", width "104", height "104", rx "52", ry "52" ] []
+        , path [ fill "url(#gradient_42)", d "M332.51,208.5h62.4c11.49,0,20.8,9.31,20.8,20.8v52c0,17.23-13.97,31.2-31.2,31.2h-72.8v-83.2c0-11.49,9.31-20.8,20.8-20.8Z" ] []
+        , path [ fill "url(#gradient_44)", d "M207.71,312.5h83.2c11.49,0,20.8,9.31,20.8,20.8v83.2h-104v-104Z" ] []
         ]

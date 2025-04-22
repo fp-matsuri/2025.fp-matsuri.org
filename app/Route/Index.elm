@@ -119,7 +119,7 @@ hero : Int -> Sponsors.Data -> Html msg
 hero seed sponsorsData =
     let
         { gridRows, gridColumns } =
-            { gridRows = 20, gridColumns = 80 }
+            { gridRows = 22, gridColumns = 81 }
 
         -- Get platinum sponsors for hero section
         platinumSponsors =
@@ -139,7 +139,7 @@ hero seed sponsorsData =
             , position relative
             , overflow hidden
             , width (pct 100)
-            , height (em 38)
+            , height (em 40)
             ]
         ]
         [ div
@@ -158,28 +158,33 @@ hero seed sponsorsData =
                 (makeShapes seed { rows = gridRows, columns = gridColumns })
             , div
                 [ css
-                    [ gridColumn "39 / -39"
-                    , gridRow "4/7"
+                    [ gridColumn "38/-38"
+                    , gridRow "5/10"
                     , backgroundColor (hsl 0 0 1)
                     , zIndex (int 1)
+                    , padding (px 32)
                     ]
                 ]
                 [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
             , div
                 [ css
-                    [ gridColumn "36 / -36"
-                    , gridRow "9/12"
+                    [ gridColumn "35 / -35"
+                    , gridRow "10/15"
                     , backgroundColor (hsl 0 0 1)
                     , zIndex (int 1)
+                    , displayFlex
+                    , property "place-items" "center"
                     ]
                 ]
                 [ logoAndDate ]
             , div
                 [ css
-                    [ gridColumn "36 / -36"
-                    , gridRow "14/17"
+                    [ gridColumn "37 / -37"
+                    , gridRow "14/18"
                     , backgroundColor (hsl 0 0 1)
                     , zIndex (int 1)
+                    , displayFlex
+                    , property "place-items" "center"
                     ]
                 ]
                 [ heroSponsorsBlock platinumSponsors ]
@@ -196,21 +201,7 @@ hero seed sponsorsData =
                 , zIndex (int 1)
                 ]
             ]
-            [ socialLinkList
-                [ { id = "x"
-                  , icon = "/images/x.svg"
-                  , href = "https://x.com/fp_matsuri"
-                  }
-                , { id = "hatena_blog"
-                  , icon = "/images/hatenablog.svg"
-                  , href = "https://blog.fp-matsuri.org/"
-                  }
-                , { id = "fortee"
-                  , icon = "/images/fortee.svg"
-                  , href = "https://fortee.jp/2025fp-matsuri"
-                  }
-                ]
-            ]
+            []
         ]
 
 
@@ -289,7 +280,7 @@ makeShape ( ( column, row ), shape ) =
             div
                 [ css
                     (List.append uniqueStyles
-                        [ opacity (num 0.5)
+                        [ opacity (num 0.3)
                         , width (pct 100)
                         , height (pct 100)
                         , gridColumn (String.fromInt column)
@@ -302,7 +293,7 @@ makeShape ( ( column, row ), shape ) =
     case shape of
         Circle ->
             commonShape
-                [ property "background-color" "hsl(0, 0%, 30%)"
+                [ property "background-color" "hsl(0, 0%, 10%)"
                 , borderRadius (pct 50)
                 ]
 
@@ -412,13 +403,13 @@ heroSponsorsBlock sponsors =
                     [ display block
                     , width (px 200)
                     , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ width (px 250) ]
+                        [ width (pct 100) ]
                     ]
                 ]
                 [ img
                     [ src ("/images/sponsors/" ++ sponsor.image)
                     , css
-                        [ backgroundColor (rgb 255 255 255)
+                        [ display block
                         , borderRadius (px 10)
                         , width (pct 100)
                         ]
