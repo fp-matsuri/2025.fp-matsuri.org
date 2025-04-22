@@ -2,7 +2,7 @@ module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
 import Css exposing (..)
-import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridTemplateColumns, rowGap)
+import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridRow, gridTemplateColumns, gridTemplateRows, rowGap)
 import Css.Global exposing (descendants, withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Data.Sponsor exposing (Plan(..))
@@ -118,6 +118,9 @@ view app _ model =
 hero : Int -> Sponsors.Data -> Html msg
 hero seed sponsorsData =
     let
+        { gridRows, gridColumns } =
+            { gridRows = 20, gridColumns = 80 }
+
         -- Get platinum sponsors for hero section
         platinumSponsors =
             sponsorsData.platinumSponsors
@@ -130,8 +133,58 @@ hero seed sponsorsData =
                     )
                 |> shuffleList seed
     in
-    div [ css [ padding3 zero (px 10) (px 10), position relative ] ]
+    div
+        [ css
+            [ padding3 zero (px 10) (px 10)
+            , position relative
+            , overflow hidden
+            , width (pct 100)
+            , height (em 38)
+            ]
+        ]
         [ div
+            [ css
+                [ position absolute
+                , top zero
+                , left (pct 50)
+                , transform (translateX (pct -50))
+                , display grid
+                , gridTemplateColumns (List.repeat gridColumns (em 2))
+                , gridTemplateRows (List.repeat gridRows (em 2))
+                , zIndex (int 0)
+                ]
+            ]
+            [ div [ css [ property "display" "contents" ] ]
+                (makeShapes seed { rows = gridRows, columns = gridColumns })
+            , div
+                [ css
+                    [ gridColumn "39 / -39"
+                    , gridRow "4/7"
+                    , backgroundColor (hsl 0 0 1)
+                    , zIndex (int 1)
+                    ]
+                ]
+                [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
+            , div
+                [ css
+                    [ gridColumn "36 / -36"
+                    , gridRow "9/12"
+                    , backgroundColor (hsl 0 0 1)
+                    , zIndex (int 1)
+                    ]
+                ]
+                [ logoAndDate ]
+            , div
+                [ css
+                    [ gridColumn "36 / -36"
+                    , gridRow "14/17"
+                    , backgroundColor (hsl 0 0 1)
+                    , zIndex (int 1)
+                    ]
+                ]
+                [ heroSponsorsBlock platinumSponsors ]
+            ]
+        , div
             [ css
                 [ padding3 (px 80) (px 20) (px 20)
                 , display grid
@@ -143,9 +196,7 @@ hero seed sponsorsData =
                 , zIndex (int 1)
                 ]
             ]
-            [ logoAndDate
-            , heroSponsorsBlock platinumSponsors
-            , socialLinkList
+            [ socialLinkList
                 [ { id = "x"
                   , icon = "/images/x.svg"
                   , href = "https://x.com/fp_matsuri"
@@ -163,13 +214,148 @@ hero seed sponsorsData =
         ]
 
 
+type Shape
+    = Circle
+    | RoundedRect Corners
+    | NoShape
+
+
+type alias Corners =
+    { topLeft : Int
+    , topRight : Int
+    , bottomRight : Int
+    , bottomLeft : Int
+    }
+
+
+makeShapes : Int -> { rows : Int, columns : Int } -> List (Html msg)
+makeShapes seed { rows, columns } =
+    let
+        initialSeed =
+            Random.initialSeed seed
+
+        shapeGenerator : Random.Generator Shape
+        shapeGenerator =
+            let
+                cornersGenerator =
+                    Random.map4 Corners
+                        cornerGenerator
+                        cornerGenerator
+                        cornerGenerator
+                        cornerGenerator
+
+                cornerGenerator =
+                    Random.uniform 0 [ 5, 10 ]
+            in
+            Random.weighted ( 2, Random.constant Circle )
+                [ ( 18, Random.map RoundedRect cornersGenerator )
+                , ( 80, Random.constant NoShape )
+                ]
+                |> Random.andThen identity
+
+        -- グリッド内の全セルの位置リストを生成
+        allCellPositions : List ( Int, Int )
+        allCellPositions =
+            List.concatMap
+                (\row ->
+                    List.map
+                        (\col -> ( col, row ))
+                        (List.range 1 columns)
+                )
+                (List.range 1 rows)
+
+        -- 各セルに図形タイプを割り当てるジェネレーター
+        cellShapeTypeGenerator : Random.Generator (List ( ( Int, Int ), Shape ))
+        cellShapeTypeGenerator =
+            let
+                cellCount =
+                    List.length allCellPositions
+            in
+            Random.map
+                (\shapeTypes -> List.map2 Tuple.pair allCellPositions shapeTypes)
+                (Random.list cellCount shapeGenerator)
+
+        -- 各セルに図形を割り当てた結果
+        ( cellShapes, _ ) =
+            Random.step cellShapeTypeGenerator initialSeed
+    in
+    List.map makeShape cellShapes
+
+
+makeShape : ( ( Int, Int ), Shape ) -> Html msg
+makeShape ( ( column, row ), shape ) =
+    let
+        commonShape uniqueStyles =
+            div
+                [ css
+                    (List.append uniqueStyles
+                        [ width (pct 100)
+                        , height (pct 100)
+                        , gridColumn (String.fromInt column)
+                        , gridRow (String.fromInt row)
+                        ]
+                    )
+                ]
+                []
+    in
+    case shape of
+        Circle ->
+            commonShape
+                [ property "background-color" "color(display-p3 0.8078 0.2471 0.2392)"
+                , borderRadius (pct 50)
+                ]
+
+        RoundedRect { topLeft, topRight, bottomRight, bottomLeft } ->
+            let
+                gradientAngle =
+                    ((column * 13) + (row * 17)) |> modBy 360
+
+                -- Create variation for gradient colors
+                gradientType =
+                    ((column * 7) + (row * 11)) |> modBy 5
+
+                gradientColors =
+                    case gradientType of
+                        0 ->
+                            "color(display-p3 0.9569 0.8549 0.0431) 0%, color(display-p3 0.8863 0.3843 0.3922) 100%"
+
+                        1 ->
+                            "color(display-p3 0.9333 0.7176 0.3373) 0%, color(display-p3 0.8863 0.3843 0.3922) 100%"
+
+                        2 ->
+                            "color(display-p3 0.8863 0.3843 0.3922) 0%, color(display-p3 0.8235 0.3765 0.3451) 100%"
+
+                        3 ->
+                            "color(display-p3 0.8863 0.3843 0.3922) 0%, color(display-p3 0.4549 0.3569 0.6353) 100%"
+
+                        _ ->
+                            "color(display-p3 0.8235 0.3765 0.3451) 0%, color(display-p3 0.3255 0.3216 0.6275) 100%"
+            in
+            commonShape
+                [ property "background"
+                    ("linear-gradient("
+                        ++ String.fromInt gradientAngle
+                        ++ "deg, "
+                        ++ gradientColors
+                        ++ ")"
+                    )
+                , borderRadius4 (px (toFloat topLeft))
+                    (px (toFloat topRight))
+                    (px (toFloat bottomRight))
+                    (px (toFloat bottomLeft))
+                ]
+
+        NoShape ->
+            -- 何も表示しない
+            text ""
+
+
 logoAndDate : Html msg
 logoAndDate =
     let
         -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
         logo =
-            [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark
-            , h1
+            [ h1
                 [ css
                     [ margin zero
                     , lineHeight (num 1)
@@ -203,11 +389,11 @@ logoAndDate =
         [ css
             [ width (pct 100)
             , property "display" "grid"
-            , property "grid-template-rows" "6rem auto auto"
+            , property "grid-template-rows" "auto auto"
             , property "place-items" "center"
             , rowGap (rem 1.2)
             , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                [ property "grid-template-rows" "9rem auto auto" ]
+                [ property "grid-template-rows" "auto auto" ]
             ]
         ]
         (logo ++ [ date ])
