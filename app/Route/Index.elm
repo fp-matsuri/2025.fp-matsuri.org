@@ -239,8 +239,8 @@ makeShapes seed { rows, columns } =
                     Random.uniform 0 [ 5, 10 ]
             in
             Random.weighted ( 2, Random.constant Circle )
-                [ ( 18, Random.map RoundedRect cornersGenerator )
-                , ( 80, Random.constant NoShape )
+                [ ( 13, Random.map RoundedRect cornersGenerator )
+                , ( 85, Random.constant NoShape )
                 ]
                 |> Random.andThen identity
 
@@ -280,8 +280,7 @@ makeShape ( ( column, row ), shape ) =
             div
                 [ css
                     (List.append uniqueStyles
-                        [ opacity (num 0.3)
-                        , width (pct 100)
+                        [ width (pct 100)
                         , height (pct 100)
                         , gridColumn (String.fromInt column)
                         , gridRow (String.fromInt row)
@@ -293,7 +292,7 @@ makeShape ( ( column, row ), shape ) =
     case shape of
         Circle ->
             commonShape
-                [ property "background-color" "hsl(0, 0%, 10%)"
+                [ property "background-color" "color(display-p3 0.8078 0.2471 0.2392)"
                 , borderRadius (pct 50)
                 ]
 
@@ -309,19 +308,19 @@ makeShape ( ( column, row ), shape ) =
                 gradientColors =
                     case gradientType of
                         0 ->
-                            "hsl(0, 0%, 90%) 0%, hsl(0, 0%, 60%) 100%"
+                            "color(display-p3 0.9569 0.8549 0.0431) 0%, color(display-p3 0.8863 0.3843 0.3922) 100%"
 
                         1 ->
-                            "hsl(0, 0%, 80%) 0%, hsl(0, 0%, 50%) 100%"
+                            "color(display-p3 0.9333 0.7176 0.3373) 0%, color(display-p3 0.8863 0.3843 0.3922) 100%"
 
                         2 ->
-                            "hsl(0, 0%, 70%) 0%, hsl(0, 0%, 40%) 100%"
+                            "color(display-p3 0.8863 0.3843 0.3922) 0%, color(display-p3 0.8235 0.3765 0.3451) 100%"
 
                         3 ->
-                            "hsl(0, 0%, 60%) 0%, hsl(0, 0%, 30%) 100%"
+                            "color(display-p3 0.8863 0.3843 0.3922) 0%, color(display-p3 0.4549 0.3569 0.6353) 100%"
 
                         _ ->
-                            "hsl(0, 0%, 50%) 0%, hsl(0, 0%, 20%) 100%"
+                            "color(display-p3 0.8235 0.3765 0.3451) 0%, color(display-p3 0.3255 0.3216 0.6275) 100%"
             in
             commonShape
                 [ property "background"
