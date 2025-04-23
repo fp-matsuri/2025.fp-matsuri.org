@@ -2,7 +2,7 @@
 id: nulab
 name: 株式会社ヌーラボ
 href: https://nulab.com/ja/
-plan: シルバー
+plan: ゴールド
 postedAt: 2025-04-17 19:15
 ---
 
