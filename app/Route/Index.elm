@@ -13,6 +13,7 @@ import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, iframe, im
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
+import Route.Sponsors as Sponsors
 import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
@@ -70,7 +71,7 @@ update _ _ msg model =
 
 
 type alias Data =
-    {}
+    { sponsors : Sponsors.Data }
 
 
 type alias ActionData =
@@ -79,7 +80,7 @@ type alias ActionData =
 
 data : BackendTask FatalError Data
 data =
-    BackendTask.succeed Data
+    BackendTask.map Data Sponsors.data
 
 
 head :
@@ -99,21 +100,42 @@ view :
     -> Shared.Model
     -> Model
     -> View (PagesMsg Msg)
-view _ _ model =
+view app _ model =
     { title = ""
     , body =
-        [ hero model.seed
+        [ hero model.seed app.data.sponsors
         , newsSection
         , aboutSection
         , overviewSection
-        , sponsorsSection model.seed
+        , sponsorsSection model.seed app.data.sponsors
         , teamSection
         ]
     }
 
 
-hero : Int -> Html msg
-hero seed =
+hero : Int -> Sponsors.Data -> Html msg
+hero seed sponsorsData =
+    let
+        -- Get platinum sponsors for hero section
+        platinumSponsors =
+            sponsorsData
+                |> List.filter
+                    (\article ->
+                        let
+                            planString =
+                                Debug.toString article.metadata.plan
+                        in
+                        String.contains "Platinum" planString
+                    )
+                |> List.map
+                    (\article ->
+                        { name = article.metadata.name
+                        , image = article.metadata.id ++ ".png"
+                        , href = article.metadata.href
+                        }
+                    )
+                |> shuffleList seed
+    in
     div [ css [ padding3 zero (px 10) (px 10) ] ]
         [ div
             [ css
@@ -127,7 +149,7 @@ hero seed =
                 ]
             ]
             [ logoAndDate
-            , heroSponsorsBlock (platinumSponsorsShuffled seed)
+            , heroSponsorsBlock platinumSponsors
             , socialLinkList
                 [ { id = "x"
                   , icon = "/images/x.svg"
@@ -540,8 +562,8 @@ tableRow ticket =
         ]
 
 
-sponsorsSection : Int -> Html msg
-sponsorsSection seed =
+sponsorsSection : Int -> Sponsors.Data -> Html msg
+sponsorsSection seed sponsorsData =
     section "Sponsors"
         [ div [ class "markdown sponsors" ]
             [ Html.h3 [] [ text "スポンサー募集中！" ]
@@ -561,7 +583,7 @@ sponsorsSection seed =
                 , text "よりお気軽にお問い合わせください。"
                 ]
             ]
-        , sponsorLogos seed
+        , sponsorLogos seed sponsorsData
         ]
 
 
@@ -574,42 +596,6 @@ type alias Sponsor =
     , image : String
     , href : String
     }
-
-
-platinumSponsorsShuffled : Int -> List Sponsor
-platinumSponsorsShuffled seed =
-    shuffleList seed
-        [ Sponsor "株式会社スリーシェイク" "3-shake.png" "https://3-shake.com/" ]
-
-
-goldSponsorsShuffled : Int -> List Sponsor
-goldSponsorsShuffled seed =
-    shuffleList seed
-        [ Sponsor "株式会社kubell（旧Chatwork株式会社）" "kubell.png" "https://www.kubell.com/recruit/engineer/"
-        , Sponsor "株式会社ヌーラボ" "nulab.png" "https://nulab.com/ja/"
-        , Sponsor "アルプ株式会社" "alp.png" "https://thealp.co.jp/"
-        ]
-
-
-silverSponsorsShuffled : Int -> List Sponsor
-silverSponsorsShuffled seed =
-    shuffleList seed
-        [ Sponsor "株式会社はてな" "hatena.png" "https://hatena.co.jp"
-        , Sponsor "合同会社ザウエル" "zauel.png" "https://zauel.co.jp"
-        , Sponsor "株式会社ネクストビート" "nextbeat.png" "https://www.nextbeat.co.jp/"
-        , Sponsor "エムスリー株式会社" "m3.png" "https://jobs.m3.com/engineer/"
-        , Sponsor "ルームクリップ株式会社" "roomclip.png" "https://roomclip.jp"
-        ]
-
-
-logoSponsorsShuffled : Int -> List Sponsor
-logoSponsorsShuffled seed =
-    shuffleList seed
-        [ Sponsor "合同会社Ignission" "ignission.png" "https://ignission.tech/"
-        , Sponsor "株式会社ギークニア" "geekneer.png" "https://geekneer.com/"
-        , Sponsor "Siiibo証券株式会社" "siiibo.png" "https://siiibo.com/"
-        , Sponsor "合同会社コトイコンサルタンシー" "kxc.png" "https://kxc.inc"
-        ]
 
 
 {-| 与えられたリストの要素をランダムな順序に並べ替えます
@@ -633,8 +619,43 @@ shuffleList seed list =
         |> List.map Tuple.first
 
 
-sponsorLogos : Int -> Html msg
-sponsorLogos randomSeed =
+sponsorLogos : Int -> Sponsors.Data -> Html msg
+sponsorLogos randomSeed sponsorsData =
+    let
+        -- Extract sponsors by plan and convert to our display format
+        sponsorsByPlan planString =
+            sponsorsData
+                |> List.filter (\article -> getPlanString article.metadata.plan == planString)
+                |> List.map
+                    (\article ->
+                        { name = article.metadata.name
+                        , image = article.metadata.id ++ ".png"
+                        , href = article.metadata.href
+                        }
+                    )
+                |> shuffleList randomSeed
+
+        -- Helper to convert Plan to String for comparison using Debug.toString
+        getPlanString plan =
+            let
+                planString =
+                    Debug.toString plan
+            in
+            if String.contains "Platinum" planString then
+                "プラチナ"
+
+            else if String.contains "Gold" planString then
+                "ゴールド"
+
+            else if String.contains "Silver" planString then
+                "シルバー"
+
+            else if String.contains "Logo" planString then
+                "ロゴ"
+
+            else
+                "Unknown"
+    in
     div
         [ css
             [ width (pct 100)
@@ -645,16 +666,16 @@ sponsorLogos randomSeed =
         ]
         [ sponsorPlan "プラチナスポンサー"
             { mobileColumnsCount = 1, desktopColumnWidth = "326px" }
-            (platinumSponsorsShuffled randomSeed)
+            (sponsorsByPlan "プラチナ")
         , sponsorPlan "ゴールドスポンサー"
             { mobileColumnsCount = 2, desktopColumnWidth = "222px" }
-            (goldSponsorsShuffled randomSeed)
+            (sponsorsByPlan "ゴールド")
         , sponsorPlan "シルバースポンサー"
             { mobileColumnsCount = 3, desktopColumnWidth = "163px" }
-            (silverSponsorsShuffled randomSeed)
+            (sponsorsByPlan "シルバー")
         , sponsorPlan "ロゴスポンサー"
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
-            (logoSponsorsShuffled randomSeed)
+            (sponsorsByPlan "ロゴ")
         ]
 
 
