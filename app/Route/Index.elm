@@ -5,6 +5,7 @@ import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridTemplateColumns, rowGap)
 import Css.Global exposing (descendants, withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
+import Data.Sponsor exposing (Plan(..))
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
@@ -119,14 +120,7 @@ hero seed sponsorsData =
         -- Get platinum sponsors for hero section
         platinumSponsors =
             sponsorsData
-                |> List.filter
-                    (\article ->
-                        let
-                            planString =
-                                Debug.toString article.metadata.plan
-                        in
-                        String.contains "Platinum" planString
-                    )
+                |> List.filter (\article -> article.metadata.plan == Platinum)
                 |> List.map
                     (\article ->
                         { name = article.metadata.name
@@ -623,9 +617,9 @@ sponsorLogos : Int -> Sponsors.Data -> Html msg
 sponsorLogos randomSeed sponsorsData =
     let
         -- Extract sponsors by plan and convert to our display format
-        sponsorsByPlan planString =
+        sponsorsByPlan plan =
             sponsorsData
-                |> List.filter (\article -> getPlanString article.metadata.plan == planString)
+                |> List.filter (\article -> article.metadata.plan == plan)
                 |> List.map
                     (\article ->
                         { name = article.metadata.name
@@ -634,27 +628,6 @@ sponsorLogos randomSeed sponsorsData =
                         }
                     )
                 |> shuffleList randomSeed
-
-        -- Helper to convert Plan to String for comparison using Debug.toString
-        getPlanString plan =
-            let
-                planString =
-                    Debug.toString plan
-            in
-            if String.contains "Platinum" planString then
-                "プラチナ"
-
-            else if String.contains "Gold" planString then
-                "ゴールド"
-
-            else if String.contains "Silver" planString then
-                "シルバー"
-
-            else if String.contains "Logo" planString then
-                "ロゴ"
-
-            else
-                "Unknown"
     in
     div
         [ css
@@ -666,16 +639,16 @@ sponsorLogos randomSeed sponsorsData =
         ]
         [ sponsorPlan "プラチナスポンサー"
             { mobileColumnsCount = 1, desktopColumnWidth = "326px" }
-            (sponsorsByPlan "プラチナ")
+            (sponsorsByPlan Platinum)
         , sponsorPlan "ゴールドスポンサー"
             { mobileColumnsCount = 2, desktopColumnWidth = "222px" }
-            (sponsorsByPlan "ゴールド")
+            (sponsorsByPlan Gold)
         , sponsorPlan "シルバースポンサー"
             { mobileColumnsCount = 3, desktopColumnWidth = "163px" }
-            (sponsorsByPlan "シルバー")
+            (sponsorsByPlan Silver)
         , sponsorPlan "ロゴスポンサー"
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
-            (sponsorsByPlan "ロゴ")
+            (sponsorsByPlan Logo)
         ]
 
 
