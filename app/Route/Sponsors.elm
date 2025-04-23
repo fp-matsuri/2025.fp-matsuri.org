@@ -223,7 +223,10 @@ sponsorsSection pageData =
                         ]
                     ]
             )
-            (sortSponsors pageData)
+            (pageData
+                |> List.filter (\s -> s.body /= [])
+                |> sortSponsors
+            )
         )
 
 
