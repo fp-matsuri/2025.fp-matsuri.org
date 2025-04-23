@@ -119,8 +119,7 @@ hero seed sponsorsData =
     let
         -- Get platinum sponsors for hero section
         platinumSponsors =
-            sponsorsData
-                |> List.filter (\article -> article.metadata.plan == Platinum)
+            sponsorsData.platinumSponsors
                 |> List.map
                     (\article ->
                         { name = article.metadata.name
@@ -617,9 +616,8 @@ sponsorLogos : Int -> Sponsors.Data -> Html msg
 sponsorLogos randomSeed sponsorsData =
     let
         -- Extract sponsors by plan and convert to our display format
-        sponsorsByPlan plan =
-            sponsorsData
-                |> List.filter (\article -> article.metadata.plan == plan)
+        sponsorsFromList list =
+            list
                 |> List.map
                     (\article ->
                         { name = article.metadata.name
@@ -639,16 +637,16 @@ sponsorLogos randomSeed sponsorsData =
         ]
         [ sponsorPlan "プラチナスポンサー"
             { mobileColumnsCount = 1, desktopColumnWidth = "326px" }
-            (sponsorsByPlan Platinum)
+            (sponsorsFromList sponsorsData.platinumSponsors)
         , sponsorPlan "ゴールドスポンサー"
             { mobileColumnsCount = 2, desktopColumnWidth = "222px" }
-            (sponsorsByPlan Gold)
+            (sponsorsFromList sponsorsData.goldSponsors)
         , sponsorPlan "シルバースポンサー"
             { mobileColumnsCount = 3, desktopColumnWidth = "163px" }
-            (sponsorsByPlan Silver)
+            (sponsorsFromList sponsorsData.silverSponsors)
         , sponsorPlan "ロゴスポンサー"
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
-            (sponsorsByPlan Logo)
+            (sponsorsFromList sponsorsData.logoSponsors)
         ]
 
 

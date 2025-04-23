@@ -38,7 +38,11 @@ type alias RouteParams =
 
 
 type alias Data =
-    List SponsorArticle
+    { platinumSponsors : List SponsorArticle
+    , goldSponsors : List SponsorArticle
+    , silverSponsors : List SponsorArticle
+    , logoSponsors : List SponsorArticle
+    }
 
 
 type alias ActionData =
@@ -68,34 +72,48 @@ head _ =
 -- DATA
 
 
-{-| content/sponsors 直下にあるMarkdownファイルを取得するためのBackendTask
--}
-sponsorFiles : BackendTask FatalError (List { filePath : String, slug : String })
-sponsorFiles =
-    Glob.succeed (\f s -> { filePath = f, slug = s })
-        |> Glob.captureFilePath
-        |> Glob.match (Glob.literal "content/sponsors/")
-        |> Glob.capture Glob.wildcard
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.toBackendTask
-
-
 {-| スポンサーデータを取得します。
-スポンサーデータはmd+frontmatterで管理されており、それらのファイルのバリデーションを行い、データを格納します。
+各プランごとに別々にディレクトリからデータを取得し、それぞれ格納します。
 -}
 sponsorsData : BackendTask FatalError Data
 sponsorsData =
-    sponsorFiles
-        |> BackendTask.map
-            (List.map
-                (\d ->
-                    Plugin.MarkdownCodec.withFrontmatter SponsorArticle
-                        metadataDecoder
-                        customizedHtmlRenderer
-                        d.filePath
-                )
+    BackendTask.map4 Data
+        (getSponsorsByPlan "platinum")
+        (getSponsorsByPlan "gold")
+        (getSponsorsByPlan "silver")
+        (getSponsorsByPlan "logo")
+
+
+{-| プラン名からスポンサー記事リストを取得して処理する
+-}
+getSponsorsByPlan : String -> BackendTask FatalError (List SponsorArticle)
+getSponsorsByPlan planName =
+    sponsorFilesByPlan planName
+        |> BackendTask.andThen
+            (\files ->
+                files
+                    |> List.map
+                        (\d ->
+                            Plugin.MarkdownCodec.withFrontmatter SponsorArticle
+                                metadataDecoder
+                                customizedHtmlRenderer
+                                d.filePath
+                        )
+                    |> BackendTask.combine
             )
-        |> BackendTask.andThen BackendTask.combine
+        |> BackendTask.map (List.sortBy (.metadata >> .postedAt))
+
+
+{-| 指定されたプランのスポンサーMarkdownファイルを取得するためのBackendTask
+-}
+sponsorFilesByPlan : String -> BackendTask FatalError (List { filePath : String, slug : String })
+sponsorFilesByPlan planName =
+    Glob.succeed (\f s -> { filePath = f, slug = s })
+        |> Glob.captureFilePath
+        |> Glob.match (Glob.literal ("content/sponsors/" ++ planName ++ "/"))
+        |> Glob.capture Glob.wildcard
+        |> Glob.match (Glob.literal ".md")
+        |> Glob.toBackendTask
 
 
 
@@ -154,7 +172,7 @@ sponsorsSection pageData =
                         ]
                     ]
             )
-            (pageData
+            ((pageData.platinumSponsors ++ pageData.goldSponsors ++ pageData.silverSponsors)
                 |> List.filter (\s -> s.body /= [])
                 |> sortSponsors
             )
