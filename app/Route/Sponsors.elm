@@ -265,7 +265,7 @@ planToBadge plan =
         _ ->
             Nothing
     )
-        |> Maybe.map (\badgeImage -> img [ src ("images/sponsor-labels/" ++ badgeImage), css [ display block, width (px 80) ] ] [])
+        |> Maybe.map (\badgeImage -> img [ src ("/images/sponsor-labels/" ++ badgeImage), css [ display block, width (px 80) ] ] [])
         |> Maybe.withDefault (text "")
 
 
@@ -277,7 +277,7 @@ sponsorLogo image name site =
         , Attributes.target "_blank"
         ]
         [ img
-            [ src ("images/sponsors/" ++ image ++ ".png")
+            [ src ("/images/sponsors/" ++ image ++ ".png")
             , css
                 [ backgroundColor (rgb 255 255 255)
                 , borderRadius (px 10)
