@@ -1,6 +1,7 @@
 module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import BackendTask exposing (BackendTask)
+import Browser.Events
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridRow, gridTemplateColumns, gridTemplateRows, rowGap)
 import Css.Global exposing (descendants, withClass)
@@ -19,6 +20,8 @@ import Route.Sponsors as Sponsors
 import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
+import Time exposing (Posix)
+import UrlPath
 import View exposing (View)
 
 
@@ -33,7 +36,7 @@ route =
             { init = init
             , update = update
             , view = view
-            , subscriptions = \_ _ _ _ -> Sub.none
+            , subscriptions = subscriptions
             }
 
 
@@ -43,12 +46,13 @@ route =
 
 type alias Model =
     { seed : Int
+    , time : Float
     }
 
 
 init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
 init _ _ =
-    ( { seed = 0 }
+    ( { seed = 0, time = 0 }
     , Effect.fromCmd (Random.generate GotRandomSeed (Random.int 0 100))
     )
 
@@ -59,6 +63,7 @@ init _ _ =
 
 type Msg
     = GotRandomSeed Int
+    | Tick Posix
 
 
 update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
@@ -66,6 +71,9 @@ update _ _ msg model =
     case msg of
         GotRandomSeed newSeed ->
             ( { model | seed = newSeed }, Effect.none )
+
+        Tick newTime ->
+            ( { model | time = Time.posixToMillis newTime |> toFloat }, Effect.none )
 
 
 
@@ -105,7 +113,7 @@ view :
 view app _ model =
     { title = ""
     , body =
-        [ hero model.seed app.data.sponsors
+        [ hero model.seed model.time app.data.sponsors
         , newsSection
         , aboutSection
         , overviewSection
@@ -115,8 +123,8 @@ view app _ model =
     }
 
 
-hero : Int -> Sponsors.Data -> Html msg
-hero seed sponsorsData =
+hero : Int -> Float -> Sponsors.Data -> Html msg
+hero seed time sponsorsData =
     let
         { gridRows, gridColumns } =
             { gridRows = 22, gridColumns = 81 }
@@ -155,7 +163,7 @@ hero seed sponsorsData =
                 ]
             ]
             [ div [ css [ property "display" "contents" ] ]
-                (makeShapes seed { rows = gridRows, columns = gridColumns })
+                (makeShapes seed time { rows = gridRows, columns = gridColumns })
             , div
                 [ css
                     [ gridColumn "38/-38"
@@ -219,8 +227,8 @@ type alias Corners =
     }
 
 
-makeShapes : Int -> { rows : Int, columns : Int } -> List (Html msg)
-makeShapes seed { rows, columns } =
+makeShapes : Int -> Float -> { rows : Int, columns : Int } -> List (Html msg)
+makeShapes seed time { rows, columns } =
     let
         initialSeed =
             Random.initialSeed seed
@@ -270,12 +278,30 @@ makeShapes seed { rows, columns } =
         ( cellShapes, _ ) =
             Random.step cellShapeTypeGenerator initialSeed
     in
-    List.map makeShape cellShapes
+    List.map (makeShape time) cellShapes
 
 
-makeShape : ( ( Int, Int ), Shape ) -> Html msg
-makeShape ( ( column, row ), shape ) =
+makeShape : Float -> ( ( Int, Int ), Shape ) -> Html msg
+makeShape time ( ( column, row ), shape ) =
     let
+        -- アニメーションの計算
+        animationPhase =
+            -- 列と行によって位相をずらす（早さを上げるためにdivisorを小さくする）
+            (time / 500) + toFloat (column * 13 + row * 17)
+
+        -- 波打つようなアニメーション（サイン波）- より大きく変化
+        oscillation =
+            sin animationPhase * 0.15 + 0.9
+
+        -- 0.75 ~ 1.05の間で変動
+        -- 回転アニメーションの計算（度数）- より大きく回転
+        rotation =
+            sin (animationPhase * 0.5) * 15
+
+        -- 上下に漂うようなアニメーション - より大きく動く
+        float =
+            sin (animationPhase * 0.3) * 8
+
         commonShape uniqueStyles =
             div
                 [ css
@@ -284,6 +310,17 @@ makeShape ( ( column, row ), shape ) =
                         , height (pct 100)
                         , gridColumn (String.fromInt column)
                         , gridRow (String.fromInt row)
+                        , property "transform"
+                            ("scale("
+                                ++ String.fromFloat oscillation
+                                ++ ") "
+                                ++ "rotate("
+                                ++ String.fromFloat rotation
+                                ++ "deg) "
+                                ++ "translateY("
+                                ++ String.fromFloat float
+                                ++ "px)"
+                            )
                         ]
                     )
                 ]
@@ -298,8 +335,9 @@ makeShape ( ( column, row ), shape ) =
 
         RoundedRect { topLeft, topRight, bottomRight, bottomLeft } ->
             let
+                -- グラデーション角度の回転速度を上げる
                 gradientAngle =
-                    ((column * 13) + (row * 17)) |> modBy 360
+                    ((column * 13) + (row * 17) + floor (time / 20)) |> modBy 360
 
                 -- Create variation for gradient colors
                 gradientType =
@@ -998,3 +1036,8 @@ h3 attributes children =
         ]
         attributes
         children
+
+
+subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
+subscriptions _ _ _ _ =
+    Browser.Events.onAnimationFrame Tick
