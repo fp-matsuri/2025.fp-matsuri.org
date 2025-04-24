@@ -284,23 +284,50 @@ makeShapes seed time { rows, columns } =
 makeShape : Float -> ( ( Int, Int ), Shape ) -> Html msg
 makeShape time ( ( column, row ), shape ) =
     let
+        -- 市松模様のパターン強化：より大きなブロックでグループ化（2x2のブロック）
+        blockPattern =
+            modBy 2 (column // 2 + row // 2)
+
+        -- 波状に広がるパターンを追加（中心から外側に広がる波）
+        centerDistancePhase =
+            let
+                centerX =
+                    40
+
+                -- グリッドの中央付近の列
+                centerY =
+                    11
+
+                -- グリッドの中央付近の行
+                distance =
+                    sqrt (toFloat ((column - centerX) ^ 2 + (row - centerY) ^ 2))
+            in
+            -- 距離を位相に変換（離れるほど位相が遅れる）
+            distance * 0.3
+
         -- アニメーションの計算
         animationPhase =
-            -- 列と行によって位相をずらす（早さを上げるためにdivisorを小さくする）
-            (time / 500) + toFloat (column * 13 + row * 17)
+            -- 速度を遅くする（200→350）
+            (time / 350)
+                + -- 市松模様のパターンで位相をずらす
+                  (if blockPattern == 0 then
+                    0
 
-        -- 波打つようなアニメーション（サイン波）- より大きく変化
-        oscillation =
-            sin animationPhase * 0.15 + 0.9
+                   else
+                    pi
+                  )
+                + -- 中心からの波状の広がりを追加
+                  centerDistancePhase
 
-        -- 0.75 ~ 1.05の間で変動
-        -- 回転アニメーションの計算（度数）- より大きく回転
-        rotation =
-            sin (animationPhase * 0.5) * 15
+        -- フェードイン・フェードアウト効果（透明度）
+        -- 透明度の変動範囲を最大に（0.0〜1.0）
+        -- sin関数をそのまま使うのではなく、より鋭い変化のためにべき乗を使用
+        fadeEffect =
+            sin (animationPhase * 0.3)
 
-        -- 上下に漂うようなアニメーション - より大きく動く
-        float =
-            sin (animationPhase * 0.3) * 8
+        opacity =
+            -- fadeEffectを2乗して変化を強調（0〜1の範囲を保持）
+            fadeEffect * fadeEffect
 
         commonShape uniqueStyles =
             div
@@ -310,17 +337,8 @@ makeShape time ( ( column, row ), shape ) =
                         , height (pct 100)
                         , gridColumn (String.fromInt column)
                         , gridRow (String.fromInt row)
-                        , property "transform"
-                            ("scale("
-                                ++ String.fromFloat oscillation
-                                ++ ") "
-                                ++ "rotate("
-                                ++ String.fromFloat rotation
-                                ++ "deg) "
-                                ++ "translateY("
-                                ++ String.fromFloat float
-                                ++ "px)"
-                            )
+                        , Css.opacity (num opacity) -- 透明度を適用
+                        , property "transition" "opacity 0.15s ease" -- トランジション時間を延長
                         ]
                     )
                 ]
@@ -335,9 +353,9 @@ makeShape time ( ( column, row ), shape ) =
 
         RoundedRect { topLeft, topRight, bottomRight, bottomLeft } ->
             let
-                -- グラデーション角度の回転速度を上げる
+                -- グラデーション角度を時間と位相に合わせる
                 gradientAngle =
-                    ((column * 13) + (row * 17) + floor (time / 20)) |> modBy 360
+                    ((column * 13) + (row * 17) + floor (time / 35 + (animationPhase * 10))) |> modBy 360
 
                 -- Create variation for gradient colors
                 gradientType =
