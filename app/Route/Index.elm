@@ -326,8 +326,8 @@ makeShape time ( ( column, row ), shape ) =
             sin (animationPhase * 0.3)
 
         opacity =
-            -- fadeEffectを2乗して変化を強調（0〜1の範囲を保持）
-            fadeEffect * fadeEffect
+            -- fadeEffectを2乗して変化を強調（0〜0.5の範囲を保持）
+            fadeEffect * fadeEffect * 0.5
 
         commonShape uniqueStyles =
             div
@@ -347,7 +347,7 @@ makeShape time ( ( column, row ), shape ) =
     case shape of
         Circle ->
             commonShape
-                [ property "background-color" "color(display-p3 0.8078 0.2471 0.2392)"
+                [ property "background-color" "hsl(0, 0%, 30%)"
                 , borderRadius (pct 50)
                 ]
 
@@ -364,19 +364,19 @@ makeShape time ( ( column, row ), shape ) =
                 gradientColors =
                     case gradientType of
                         0 ->
-                            "color(display-p3 0.9569 0.8549 0.0431) 0%, color(display-p3 0.8863 0.3843 0.3922) 100%"
+                            "hsl(0, 0%, 90%) 0%, hsl(0, 0%, 60%) 100%"
 
                         1 ->
-                            "color(display-p3 0.9333 0.7176 0.3373) 0%, color(display-p3 0.8863 0.3843 0.3922) 100%"
+                            "hsl(0, 0%, 80%) 0%, hsl(0, 0%, 50%) 100%"
 
                         2 ->
-                            "color(display-p3 0.8863 0.3843 0.3922) 0%, color(display-p3 0.8235 0.3765 0.3451) 100%"
+                            "hsl(0, 0%, 70%) 0%, hsl(0, 0%, 40%) 100%"
 
                         3 ->
-                            "color(display-p3 0.8863 0.3843 0.3922) 0%, color(display-p3 0.4549 0.3569 0.6353) 100%"
+                            "hsl(0, 0%, 60%) 0%, hsl(0, 0%, 30%) 100%"
 
                         _ ->
-                            "color(display-p3 0.8235 0.3765 0.3451) 0%, color(display-p3 0.3255 0.3216 0.6275) 100%"
+                            "hsl(0, 0%, 50%) 0%, hsl(0, 0%, 20%) 100%"
             in
             commonShape
                 [ property "background"
