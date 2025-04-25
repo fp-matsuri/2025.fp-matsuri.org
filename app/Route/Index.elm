@@ -160,6 +160,7 @@ hero seed time sponsorsData =
                 , gridTemplateColumns (List.repeat gridColumns (em 2))
                 , gridTemplateRows (List.repeat gridRows (em 2))
                 , zIndex (int 0)
+                , backgroundColor (hsl 226 0.05 0.9)
                 ]
             ]
             [ div [ css [ property "display" "contents" ] ]
@@ -167,8 +168,8 @@ hero seed time sponsorsData =
             , div
                 [ css
                     [ gridColumn "38/-38"
-                    , gridRow "5/10"
-                    , backgroundColor (hsl 0 0 1)
+                    , gridRow "4/9"
+                    , backgroundColor (hsl 226 0.05 0.9)
                     , zIndex (int 1)
                     , padding (px 32)
                     ]
@@ -176,9 +177,9 @@ hero seed time sponsorsData =
                 [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
             , div
                 [ css
-                    [ gridColumn "35 / -35"
-                    , gridRow "10/15"
-                    , backgroundColor (hsl 0 0 1)
+                    [ gridColumn "35/-35"
+                    , gridRow "9/14"
+                    , backgroundColor (hsl 226 0.05 0.9)
                     , zIndex (int 1)
                     , displayFlex
                     , property "place-items" "center"
@@ -188,11 +189,11 @@ hero seed time sponsorsData =
             , div
                 [ css
                     [ gridColumn "37 / -37"
-                    , gridRow "14/18"
-                    , backgroundColor (hsl 0 0 1)
+                    , gridRow "15/18"
                     , zIndex (int 1)
                     , displayFlex
                     , property "place-items" "center"
+                    , backgroundColor (hsl 226 0.05 0.9)
                     ]
                 ]
                 [ heroSponsorsBlock platinumSponsors ]
@@ -247,8 +248,8 @@ makeShapes seed time { rows, columns } =
                     Random.uniform 0 [ 5, 10 ]
             in
             Random.weighted ( 2, Random.constant Circle )
-                [ ( 13, Random.map RoundedRect cornersGenerator )
-                , ( 85, Random.constant NoShape )
+                [ ( 18, Random.map RoundedRect cornersGenerator )
+                , ( 80, Random.constant NoShape )
                 ]
                 |> Random.andThen identity
 
@@ -326,8 +327,8 @@ makeShape time ( ( column, row ), shape ) =
             sin (animationPhase * 0.3)
 
         opacity =
-            -- fadeEffectを2乗して変化を強調（0〜0.5の範囲を保持）
-            fadeEffect * fadeEffect * 0.5
+            -- fadeEffectを2乗して変化を強調（0〜1の範囲を保持）
+            fadeEffect * fadeEffect
 
         commonShape uniqueStyles =
             div
@@ -347,7 +348,7 @@ makeShape time ( ( column, row ), shape ) =
     case shape of
         Circle ->
             commonShape
-                [ property "background-color" "hsl(0, 0%, 30%)"
+                [ property "background-color" "hsla(0, 0%, 100%, 0.3)"
                 , borderRadius (pct 50)
                 ]
 
@@ -364,19 +365,19 @@ makeShape time ( ( column, row ), shape ) =
                 gradientColors =
                     case gradientType of
                         0 ->
-                            "hsl(0, 0%, 90%) 0%, hsl(0, 0%, 60%) 100%"
+                            "hsla(0, 0%, 100%, 0.9) 0%, hsla(0, 0%, 100%, 0.6) 100%"
 
                         1 ->
-                            "hsl(0, 0%, 80%) 0%, hsl(0, 0%, 50%) 100%"
+                            "hsla(0, 0%, 100%, 0.8) 0%, hsla(0, 0%, 100%, 0.5) 100%"
 
                         2 ->
-                            "hsl(0, 0%, 70%) 0%, hsl(0, 0%, 40%) 100%"
+                            "hsla(0, 0%, 100%, 0.7) 0%, hsla(0, 0%, 100%, 0.4) 100%"
 
                         3 ->
-                            "hsl(0, 0%, 60%) 0%, hsl(0, 0%, 30%) 100%"
+                            "hsla(0, 0%, 100%, 0.6) 0%, hsla(0, 0%, 100%, 0.3) 100%"
 
                         _ ->
-                            "hsl(0, 0%, 50%) 0%, hsl(0, 0%, 20%) 100%"
+                            "hsla(0, 0%, 100%, 0.5) 0%, hsla(0, 0%, 100%, 0.2) 100%"
             in
             commonShape
                 [ property "background"
