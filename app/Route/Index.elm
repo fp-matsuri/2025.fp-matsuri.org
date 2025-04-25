@@ -127,7 +127,7 @@ hero : Int -> Float -> Sponsors.Data -> Html msg
 hero seed time sponsorsData =
     let
         { gridRows, gridColumns } =
-            { gridRows = 22, gridColumns = 81 }
+            { gridRows = 20, gridColumns = 81 }
 
         -- Get platinum sponsors for hero section
         platinumSponsors =
@@ -141,76 +141,66 @@ hero seed time sponsorsData =
                     )
                 |> shuffleList seed
     in
-    div
-        [ css
-            [ padding3 zero (px 10) (px 10)
-            , position relative
-            , overflow hidden
-            , width (pct 100)
-            , height (em 40)
-            ]
-        ]
-        [ div
-            [ css
-                [ position absolute
-                , top zero
-                , left (pct 50)
-                , transform (translateX (pct -50))
-                , display grid
-                , gridTemplateColumns (List.repeat gridColumns (em 2))
-                , gridTemplateRows (List.repeat gridRows (em 2))
-                , zIndex (int 0)
-                , backgroundColor (hsl 226 0.05 0.9)
-                ]
-            ]
-            [ div [ css [ property "display" "contents" ] ]
-                (makeShapes seed time { rows = gridRows, columns = gridColumns })
-            , div
+    div [ css [ padding3 zero (px 10) (px 10) ] ]
+        [ div [ css [ overflow hidden, height (em 40), borderRadius (px 10) ] ]
+            [ div
                 [ css
-                    [ gridColumn "38/-38"
-                    , gridRow "4/9"
-                    , backgroundColor (hsl 226 0.05 0.9)
-                    , zIndex (int 1)
-                    , padding (px 32)
+                    [ display grid
+                    , gridTemplateColumns (List.repeat gridColumns (em 2))
+                    , gridTemplateRows (List.repeat gridRows (em 2))
+                    , justifyContent center
                     ]
                 ]
-                [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
+                [ div [ css [ property "display" "contents" ] ] <|
+                    div [ css [ gridColumn "1 / -1", gridRow "1 / -1", backgroundColor (hsl 226 0.05 0.9) ] ] []
+                        :: makeShapes seed time { rows = gridRows, columns = gridColumns }
+                , div
+                    [ css
+                        [ gridColumn "38/-38"
+                        , gridRow "4/9"
+                        , backgroundColor (hsl 226 0.05 0.9)
+                        , padding (px 32)
+                        , zIndex (int 1)
+                        ]
+                    ]
+                    [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
+                , div
+                    [ css
+                        [ gridColumn "35/-35"
+                        , gridRow "9/14"
+                        , backgroundColor (hsl 226 0.05 0.9)
+                        , zIndex (int 1)
+                        , displayFlex
+                        , property "place-items" "center"
+                        ]
+                    ]
+                    [ logoAndDate ]
+                , div
+                    [ css
+                        [ gridColumn "37 / -37"
+                        , gridRow "15/18"
+                        , zIndex (int 1)
+                        , displayFlex
+                        , property "place-items" "center"
+                        , backgroundColor (hsl 226 0.05 0.9)
+                        ]
+                    ]
+                    [ heroSponsorsBlock platinumSponsors ]
+                ]
             , div
                 [ css
-                    [ gridColumn "35/-35"
-                    , gridRow "9/14"
-                    , backgroundColor (hsl 226 0.05 0.9)
+                    [ padding3 (px 80) (px 20) (px 20)
+                    , display grid
+                    , property "justify-items" "center"
+                    , rowGap (rem 2.5)
+                    , borderRadius (px 10)
+                    , property "color" "var(--color-primary)"
+                    , position relative
                     , zIndex (int 1)
-                    , displayFlex
-                    , property "place-items" "center"
                     ]
                 ]
-                [ logoAndDate ]
-            , div
-                [ css
-                    [ gridColumn "37 / -37"
-                    , gridRow "15/18"
-                    , zIndex (int 1)
-                    , displayFlex
-                    , property "place-items" "center"
-                    , backgroundColor (hsl 226 0.05 0.9)
-                    ]
-                ]
-                [ heroSponsorsBlock platinumSponsors ]
+                []
             ]
-        , div
-            [ css
-                [ padding3 (px 80) (px 20) (px 20)
-                , display grid
-                , property "justify-items" "center"
-                , rowGap (rem 2.5)
-                , borderRadius (px 10)
-                , property "color" "var(--color-primary)"
-                , position relative
-                , zIndex (int 1)
-                ]
-            ]
-            []
         ]
 
 
