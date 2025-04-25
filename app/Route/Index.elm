@@ -127,7 +127,7 @@ hero : Int -> Float -> Sponsors.Data -> Html msg
 hero seed time sponsorsData =
     let
         { gridRows, gridColumns } =
-            { gridRows = 20, gridColumns = 81 }
+            { gridRows = 18, gridColumns = 81 }
 
         -- Get platinum sponsors for hero section
         platinumSponsors =
@@ -141,8 +141,25 @@ hero seed time sponsorsData =
                     )
                 |> shuffleList seed
     in
-    div [ css [ padding3 zero (px 10) (px 10) ] ]
-        [ div [ css [ overflow hidden, height (em 40), borderRadius (px 10) ] ]
+    div
+        [ css
+            [ padding3 zero (px 10) (px 10)
+            , display grid
+            , gridTemplateColumns [ fr 1 ]
+            , gridTemplateRows [ fr 1 ]
+            ]
+        ]
+        [ div
+            [ css
+                [ gridColumn "1/-1"
+                , gridRow "1/-1"
+                , overflow hidden
+                , height (em 34)
+                , borderRadius (px 10)
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ height (em 36) ]
+                ]
+            ]
             [ div
                 [ css
                     [ display grid
@@ -157,49 +174,67 @@ hero seed time sponsorsData =
                 , div
                     [ css
                         [ gridColumn "38/-38"
-                        , gridRow "4/9"
+                        , gridRow "2/7"
                         , backgroundColor (hsl 226 0.05 0.9)
                         , padding (px 32)
                         , zIndex (int 1)
+                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                            [ gridRow "3/8" ]
                         ]
                     ]
                     [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
                 , div
                     [ css
                         [ gridColumn "35/-35"
-                        , gridRow "9/14"
+                        , gridRow "7/11"
                         , backgroundColor (hsl 226 0.05 0.9)
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
+                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                            [ gridRow "8/13" ]
                         ]
                     ]
                     [ logoAndDate ]
                 , div
                     [ css
-                        [ gridColumn "37 / -37"
-                        , gridRow "15/18"
+                        [ gridColumn "38/-38"
+                        , gridRow "11/15"
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
                         , backgroundColor (hsl 226 0.05 0.9)
+                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                            [ gridColumn "37/-37", gridRow "13/17" ]
                         ]
                     ]
                     [ heroSponsorsBlock platinumSponsors ]
                 ]
-            , div
-                [ css
-                    [ padding3 (px 80) (px 20) (px 20)
-                    , display grid
-                    , property "justify-items" "center"
-                    , rowGap (rem 2.5)
-                    , borderRadius (px 10)
-                    , property "color" "var(--color-primary)"
-                    , position relative
-                    , zIndex (int 1)
-                    ]
+            ]
+        , div
+            [ css
+                [ gridColumn "1/-1"
+                , gridRow "1/-1"
+                , padding (px 20)
+                , display grid
+                , property "align-items" "end"
+                , zIndex (int 1)
                 ]
-                []
+            ]
+            [ socialLinkList
+                [ { id = "x"
+                  , icon = "/images/x.svg"
+                  , href = "https://x.com/fp_matsuri"
+                  }
+                , { id = "hatena_blog"
+                  , icon = "/images/hatenablog.svg"
+                  , href = "https://blog.fp-matsuri.org/"
+                  }
+                , { id = "fortee"
+                  , icon = "/images/fortee.svg"
+                  , href = "https://fortee.jp/2025fp-matsuri"
+                  }
+                ]
             ]
         ]
 
@@ -441,9 +476,7 @@ heroSponsorsBlock sponsors =
                 , Attributes.target "_blank"
                 , css
                     [ display block
-                    , width (px 200)
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ width (pct 100) ]
+                    , width (pct 92)
                     ]
                 ]
                 [ img
@@ -458,7 +491,7 @@ heroSponsorsBlock sponsors =
                     []
                 ]
     in
-    div [] (List.map platinumSponsorLogo sponsors)
+    div [ css [ display grid, property "place-items" "center" ] ] (List.map platinumSponsorLogo sponsors)
 
 
 socialLinkList : List { id : String, icon : String, href : String } -> Html msg
@@ -492,6 +525,7 @@ socialLinkList links_ =
     ul
         [ css
             [ width (pct 100)
+            , height (px 44)
             , margin zero
             , padding zero
             , displayFlex
