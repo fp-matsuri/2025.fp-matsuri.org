@@ -298,7 +298,6 @@ makeShape time ( ( column, row ), shape ) =
 
         -- アニメーションの計算
         animationPhase =
-            -- 速度を遅くする（200→350）
             (time / 350)
                 + -- 市松模様のパターンで位相をずらす
                   (if blockPattern == 0 then
@@ -328,8 +327,8 @@ makeShape time ( ( column, row ), shape ) =
                         , height (pct 100)
                         , gridColumn (String.fromInt column)
                         , gridRow (String.fromInt row)
-                        , Css.opacity (num opacity) -- 透明度を適用
-                        , property "transition" "opacity 0.15s ease" -- トランジション時間を延長
+                        , Css.opacity (num opacity)
+                        , property "transition" "opacity 0.15s ease"
                         ]
                     )
                 ]
@@ -344,10 +343,6 @@ makeShape time ( ( column, row ), shape ) =
 
         RoundedRect { topLeft, topRight, bottomRight, bottomLeft } ->
             let
-                -- グラデーション角度を時間と位相に合わせる
-                gradientAngle =
-                    ((column * 13) + (row * 17) + floor (time / 35 + (animationPhase * 10))) |> modBy 360
-
                 -- Create variation for gradient colors
                 gradientType =
                     ((column * 7) + (row * 11)) |> modBy 5
@@ -372,7 +367,7 @@ makeShape time ( ( column, row ), shape ) =
             commonShape
                 [ property "background"
                     ("linear-gradient("
-                        ++ String.fromInt gradientAngle
+                        ++ String.fromInt (((column * 13) + (row * 17) + floor (time / 35)) |> modBy 360)
                         ++ "deg, "
                         ++ gradientColors
                         ++ ")"
@@ -384,7 +379,6 @@ makeShape time ( ( column, row ), shape ) =
                 ]
 
         NoShape ->
-            -- 何も表示しない
             text ""
 
 
