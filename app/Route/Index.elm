@@ -4,7 +4,7 @@ import BackendTask exposing (BackendTask)
 import Browser.Events
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridRow, gridTemplateColumns, gridTemplateRows, rowGap)
-import Css.Global exposing (descendants, withClass)
+import Css.Global exposing (children, descendants, withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Data.Sponsor exposing (Plan(..))
 import Effect exposing (Effect)
@@ -126,8 +126,11 @@ view app _ model =
 hero : Int -> Float -> Sponsors.Data -> Html msg
 hero seed time sponsorsData =
     let
+        cellSize =
+            25
+
         { gridRows, gridColumns } =
-            { gridRows = 18, gridColumns = 81 }
+            { gridRows = 22, gridColumns = 81 }
 
         -- Get platinum sponsors for hero section
         platinumSponsors =
@@ -154,17 +157,17 @@ hero seed time sponsorsData =
                 [ gridColumn "1/-1"
                 , gridRow "1/-1"
                 , overflow hidden
-                , height (em 34)
+                , height (px (cellSize * 20))
                 , borderRadius (px 10)
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ height (em 36) ]
+                    [ height (px (cellSize * 22)) ]
                 ]
             ]
             [ div
                 [ css
                     [ display grid
-                    , gridTemplateColumns (List.repeat gridColumns (em 2))
-                    , gridTemplateRows (List.repeat gridRows (em 2))
+                    , gridTemplateColumns (List.repeat gridColumns (px cellSize))
+                    , gridTemplateRows (List.repeat gridRows (px cellSize))
                     , justifyContent center
                     ]
                 ]
@@ -174,38 +177,39 @@ hero seed time sponsorsData =
                 , div
                     [ css
                         [ gridColumn "38/-38"
-                        , gridRow "2/7"
+                        , gridRow "3/8"
                         , backgroundColor (hsl 226 0.05 0.9)
-                        , padding (px 32)
+                        , padding (px cellSize)
                         , zIndex (int 1)
+                        , children [ Css.Global.svg [ width (px (cellSize * 5)), height (px (cellSize * 4)) ] ]
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "3/8" ]
+                            [ gridRow "5/10" ]
                         ]
                     ]
                     [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
                 , div
                     [ css
                         [ gridColumn "35/-35"
-                        , gridRow "7/11"
+                        , gridRow "8/13"
                         , backgroundColor (hsl 226 0.05 0.9)
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "8/13" ]
+                            [ gridRow "10/15" ]
                         ]
                     ]
                     [ logoAndDate ]
                 , div
                     [ css
-                        [ gridColumn "38/-38"
-                        , gridRow "11/15"
+                        [ gridColumn "37/-37"
+                        , gridRow "14/17"
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
                         , backgroundColor (hsl 226 0.05 0.9)
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridColumn "37/-37", gridRow "13/17" ]
+                            [ gridRow "16/18" ]
                         ]
                     ]
                     [ heroSponsorsBlock platinumSponsors ]
@@ -429,8 +433,6 @@ logoAndDate =
                     , property "font-family" "var(--serif-logo)"
                     , fontSize (rem 2.2)
                     , fontWeight inherit
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ fontSize (rem 3.25) ]
                     ]
                 ]
                 [ text "関数型まつり" ]
@@ -440,10 +442,8 @@ logoAndDate =
             div
                 [ css
                     [ property "font-family" "var(--montserrat-sans)"
-                    , fontSize (rem 1)
+                    , fontSize (em 1.1)
                     , fontWeight (int 300)
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                        [ fontSize (rem 1.5) ]
                     ]
                 ]
                 [ text "2025.6.14"
@@ -458,7 +458,7 @@ logoAndDate =
             , property "display" "grid"
             , property "grid-template-rows" "auto auto"
             , property "place-items" "center"
-            , rowGap (rem 1.2)
+            , rowGap (em 1)
             , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                 [ property "grid-template-rows" "auto auto" ]
             ]
@@ -476,7 +476,7 @@ heroSponsorsBlock sponsors =
                 , Attributes.target "_blank"
                 , css
                     [ display block
-                    , width (pct 92)
+                    , width (pct 90)
                     ]
                 ]
                 [ img

@@ -30,7 +30,7 @@ logoMark =
         gradient_44 =
             linearGradient [ id "gradient_44", x1 "-64.18", y1 "46.7", x2 "392.49", y2 "503.37", xlinkHref "#gradient_default" ] []
     in
-    svg [ width "160", height "128", viewBox "0 0 520 417", attribute "xmlns" "http://www.w3.org/2000/svg" ]
+    svg [ width "520", height "417", viewBox "0 0 520 417", attribute "xmlns" "http://www.w3.org/2000/svg" ]
         [ defs [] [ gradientDefault, gradient_41, gradient_42, gradient_43, gradient_44 ]
         , path [ fill "url(#gradient_43)", d "M176.51,104.5c17.23,0,31.2-13.97,31.2-31.2V0.5h-104c-57.44,0-104,46.56-104,104V416.5h104v-104h72.8c17.23,0,31.2-13.97,31.2-31.2v-41.6c0-17.23-13.97-31.2-31.2-31.2h-72.8v-104h72.8Z" ] []
         , path [ fill "url(#gradient_default)", d "M311.71,0.5h72.8c17.23,0,31.2,13.97,31.2,31.2v52c0,11.49-9.31,20.8-20.8,20.8h-62.4c-11.49,0-20.8-9.31-20.8-20.8V0.5Z" ] []
