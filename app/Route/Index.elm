@@ -559,7 +559,7 @@ sponsorsSection : Int -> Sponsors.Data -> Html msg
 sponsorsSection seed sponsorsData =
     section "Sponsors"
         [ div [ class "markdown sponsors" ]
-            [ Html.h3 [ id "sponsor" ] [ text "スポンサー募集中！" ]
+            [ Html.h3 [] [ text "スポンサー募集中！" ]
             , p []
                 [ text "関数型まつりの開催には、みなさまのサポートが必要です！現在、イベントを支援していただけるスポンサー企業を募集しています。関数型プログラミングのコミュニティを一緒に盛り上げていきたいという企業のみなさま、ぜひご検討ください。"
                 ]

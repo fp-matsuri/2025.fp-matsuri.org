@@ -121,7 +121,7 @@ view _ { route } _ _ pageView =
                 [ div [ class "footer-navigation" ]
                     [ h4 [] [ text "サイトマップ" ]
                     , nav [] [ a [ href "/" ] [ text "トップページ" ] ]
-                    , nav [] [ a [ href "/#sponsor" ] [ text "スポンサー" ] ]
+                    , nav [] [ a [ href "/sponsor" ] [ text "スポンサー" ] ]
                     , nav [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
                     , br [] []
                     , h4 [] [ text "公式アカウント" ]
