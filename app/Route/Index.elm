@@ -647,6 +647,9 @@ sponsorLogos randomSeed sponsorsData =
         , sponsorPlan "ロゴスポンサー"
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
             (sponsorsFromList sponsorsData.logoSponsors)
+        , sponsorPlan "協力"
+            { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
+            (sponsorsFromList sponsorsData.supportSponsors)
         ]
 
 

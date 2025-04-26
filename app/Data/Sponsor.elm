@@ -42,6 +42,7 @@ type Plan
     | Gold
     | Silver
     | Logo
+    | Support
 
 
 type IframeData
@@ -76,6 +77,9 @@ planDecoder =
 
                     "ロゴ" ->
                         Decode.succeed Logo
+
+                    "協力" ->
+                        Decode.succeed Support
 
                     _ ->
                         Decode.fail ("無効なプランです: " ++ value)

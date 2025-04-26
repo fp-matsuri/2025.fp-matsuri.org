@@ -42,6 +42,7 @@ type alias Data =
     , goldSponsors : List SponsorArticle
     , silverSponsors : List SponsorArticle
     , logoSponsors : List SponsorArticle
+    , supportSponsors : List SponsorArticle
     }
 
 
@@ -77,11 +78,12 @@ head _ =
 -}
 sponsorsData : BackendTask FatalError Data
 sponsorsData =
-    BackendTask.map4 Data
+    BackendTask.map5 Data
         (getSponsorsByPlan "platinum")
         (getSponsorsByPlan "gold")
         (getSponsorsByPlan "silver")
         (getSponsorsByPlan "logo")
+        (getSponsorsByPlan "support")
 
 
 {-| プラン名からスポンサー記事リストを取得して処理する
