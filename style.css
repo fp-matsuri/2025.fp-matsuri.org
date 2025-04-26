@@ -83,11 +83,11 @@ a {
   color: var(--color-on-primary);
 }
 
-.site-footer > .footer-navigation {
+.site-footer > nav {
   text-align: left;
 }
 
-.site-footer > .footer-navigation > nav > a {
+.site-footer > nav > div > a {
   display: inline-block;
   padding: 0.5rem 0.5rem;
   text-decoration: inherit;
