@@ -300,3 +300,11 @@ section.coc {
     padding: 2em 2em 2em 55px;
   }
 }
+
+/*
+ * elm-markdownのMarkdownの中にHTMLタグがあると、
+ * その直下に<p>タグが必ず入るよう(<b>abc</b> → <b><p>abc</p></b>となる)なのでCSS上は何もない扱いにする
+ */
+.markdown-html-workaround > * p {
+  display: contents;
+}

@@ -103,6 +103,7 @@ view _ { route } _ _ pageView =
                 , nav []
                     [ a [ href "/code-of-conduct/" ] [ text "行動規範" ]
                     , a [ href "/schedule" ] [ text "スケジュール" ]
+                    , a [ href "/sponsors" ] [ text "スポンサー" ]
                     ]
                 ]
             , main_
