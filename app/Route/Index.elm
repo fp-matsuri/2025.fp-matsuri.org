@@ -9,7 +9,7 @@ import Css.Media as Media exposing (only, screen, withMedia)
 import Data.Sponsor exposing (Plan(..))
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
-import FpMatsuri.BackgroundTexture
+import FpMatsuri.BackgroundTexture as BackgroundTexture
 import FpMatsuri.Logo
 import Head
 import Head.Seo
@@ -174,7 +174,7 @@ hero seed time sponsorsData =
                 ]
                 [ div [ css [ property "display" "contents" ] ] <|
                     div [ css [ gridColumn "1 / -1", gridRow "1 / -1", backgroundColor (hsl 226 0.05 0.9) ] ] []
-                        :: FpMatsuri.BackgroundTexture.makeShapes seed time { rows = gridRows, columns = gridColumns }
+                        :: BackgroundTexture.textureGrid seed time { rows = gridRows, columns = gridColumns }
                 , div
                     [ css
                         [ gridColumn "38/-38"

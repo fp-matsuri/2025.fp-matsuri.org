@@ -1,4 +1,4 @@
-module FpMatsuri.BackgroundTexture exposing (makeShapes)
+module FpMatsuri.BackgroundTexture exposing (textureGrid)
 
 import Css exposing (..)
 import Css.Extra exposing (gridColumn, gridRow)
@@ -7,13 +7,13 @@ import Html.Styled.Attributes exposing (css)
 import Random
 
 
-type Shape
+type TextureElement
     = Circle
-    | RoundedRect Corners
+    | RoundedRect BorderRadius
     | NoShape
 
 
-type alias Corners =
+type alias BorderRadius =
     { topLeft : Int
     , topRight : Int
     , bottomRight : Int
@@ -21,33 +21,43 @@ type alias Corners =
     }
 
 
-makeShapes : Int -> Float -> { rows : Int, columns : Int } -> List (Html msg)
-makeShapes seed time { rows, columns } =
+textureGrid : Int -> Float -> { rows : Int, columns : Int } -> List (Html msg)
+textureGrid seed time gridDimensions =
+    Random.step (elementsGenerator gridDimensions) (Random.initialSeed seed)
+        |> Tuple.first
+        |> List.map (renderGridCell gridDimensions time)
+
+
+
+-- GENERATOR
+
+
+elementGenerator : Random.Generator TextureElement
+elementGenerator =
     let
-        initialSeed =
-            Random.initialSeed seed
+        borderRadiusGenerator =
+            Random.map4 BorderRadius
+                cornerGenerator
+                cornerGenerator
+                cornerGenerator
+                cornerGenerator
 
-        shapeGenerator : Random.Generator Shape
-        shapeGenerator =
-            let
-                cornersGenerator =
-                    Random.map4 Corners
-                        cornerGenerator
-                        cornerGenerator
-                        cornerGenerator
-                        cornerGenerator
+        cornerGenerator =
+            Random.uniform 0 [ 5, 10 ]
+    in
+    Random.weighted ( 2, Random.constant Circle )
+        [ ( 18, Random.map RoundedRect borderRadiusGenerator )
+        , ( 80, Random.constant NoShape )
+        ]
+        |> Random.andThen identity
 
-                cornerGenerator =
-                    Random.uniform 0 [ 5, 10 ]
-            in
-            Random.weighted ( 2, Random.constant Circle )
-                [ ( 18, Random.map RoundedRect cornersGenerator )
-                , ( 80, Random.constant NoShape )
-                ]
-                |> Random.andThen identity
 
+{-| 各セルに図形タイプを割り当てるジェネレーター
+-}
+elementsGenerator : { rows : Int, columns : Int } -> Random.Generator (List ( ( Int, Int ), TextureElement ))
+elementsGenerator { rows, columns } =
+    let
         -- グリッド内の全セルの位置リストを生成
-        allCellPositions : List ( Int, Int )
         allCellPositions =
             List.concatMap
                 (\row ->
@@ -56,43 +66,30 @@ makeShapes seed time { rows, columns } =
                         (List.range 1 columns)
                 )
                 (List.range 1 rows)
-
-        -- 各セルに図形タイプを割り当てるジェネレーター
-        cellShapeTypeGenerator : Random.Generator (List ( ( Int, Int ), Shape ))
-        cellShapeTypeGenerator =
-            let
-                cellCount =
-                    List.length allCellPositions
-            in
-            Random.map
-                (\shapeTypes -> List.map2 Tuple.pair allCellPositions shapeTypes)
-                (Random.list cellCount shapeGenerator)
-
-        -- 各セルに図形を割り当てた結果
-        ( cellShapes, _ ) =
-            Random.step cellShapeTypeGenerator initialSeed
     in
-    List.map (makeShape time) cellShapes
+    Random.list (List.length allCellPositions) elementGenerator
+        |> Random.map (\elements -> List.map2 Tuple.pair allCellPositions elements)
 
 
-makeShape : Float -> ( ( Int, Int ), Shape ) -> Html msg
-makeShape time ( ( column, row ), shape ) =
+
+-- VIEW
+
+
+renderGridCell : { rows : Int, columns : Int } -> Float -> ( ( Int, Int ), TextureElement ) -> Html msg
+renderGridCell { rows, columns } time ( ( column, row ), element ) =
     let
         -- 市松模様のパターン強化：より大きなブロックでグループ化（2x2のブロック）
-        blockPattern =
+        checkerboardPattern =
             modBy 2 (column // 2 + row // 2)
 
         -- 波状に広がるパターンを追加（中心から外側に広がる波）
-        centerDistancePhase =
+        radialWavePhase =
             let
-                centerX =
-                    40
+                ( centerX, centerY ) =
+                    ( columns // 2 + modBy 2 columns
+                    , rows // 2 + modBy 2 rows
+                    )
 
-                -- グリッドの中央付近の列
-                centerY =
-                    11
-
-                -- グリッドの中央付近の行
                 distance =
                     sqrt (toFloat ((column - centerX) ^ 2 + (row - centerY) ^ 2))
             in
@@ -103,14 +100,14 @@ makeShape time ( ( column, row ), shape ) =
         animationPhase =
             (time / 350)
                 + -- 市松模様のパターンで位相をずらす
-                  (if blockPattern == 0 then
+                  (if checkerboardPattern == 0 then
                     0
 
                    else
                     pi
                   )
                 + -- 中心からの波状の広がりを追加
-                  centerDistancePhase
+                  radialWavePhase
 
         -- フェードイン・フェードアウト効果（透明度）
         -- 透明度の変動範囲を最大に（0.0〜1.0）
@@ -122,27 +119,25 @@ makeShape time ( ( column, row ), shape ) =
             -- fadeEffectを2乗して変化を強調（0〜1の範囲を保持）
             fadeEffect * fadeEffect
 
-        commonShape uniqueStyles =
+        commonStyles =
+            [ width (pct 100)
+            , height (pct 100)
+            , gridColumn (String.fromInt column)
+            , gridRow (String.fromInt row)
+            , Css.opacity (num opacity)
+            , property "transition" "opacity 0.15s ease"
+            ]
+    in
+    case element of
+        Circle ->
             div
                 [ css
-                    (List.append uniqueStyles
-                        [ width (pct 100)
-                        , height (pct 100)
-                        , gridColumn (String.fromInt column)
-                        , gridRow (String.fromInt row)
-                        , Css.opacity (num opacity)
-                        , property "transition" "opacity 0.15s ease"
-                        ]
-                    )
+                    [ batch commonStyles
+                    , property "background-color" "hsla(0, 0%, 100%, 0.3)"
+                    , borderRadius (pct 50)
+                    ]
                 ]
                 []
-    in
-    case shape of
-        Circle ->
-            commonShape
-                [ property "background-color" "hsla(0, 0%, 100%, 0.3)"
-                , borderRadius (pct 50)
-                ]
 
         RoundedRect { topLeft, topRight, bottomRight, bottomLeft } ->
             let
@@ -167,19 +162,24 @@ makeShape time ( ( column, row ), shape ) =
                         _ ->
                             "hsla(0, 0%, 100%, 0.5) 0%, hsla(0, 0%, 100%, 0.2) 100%"
             in
-            commonShape
-                [ property "background"
-                    ("linear-gradient("
-                        ++ String.fromInt (((column * 13) + (row * 17) + floor (time / 35)) |> modBy 360)
-                        ++ "deg, "
-                        ++ gradientColors
-                        ++ ")"
-                    )
-                , borderRadius4 (px (toFloat topLeft))
-                    (px (toFloat topRight))
-                    (px (toFloat bottomRight))
-                    (px (toFloat bottomLeft))
+            div
+                [ css
+                    [ batch commonStyles
+                    , property "background"
+                        ("linear-gradient("
+                            ++ String.fromInt (((column * 13) + (row * 17) + floor (time / 35)) |> modBy 360)
+                            ++ "deg, "
+                            ++ gradientColors
+                            ++ ")"
+                        )
+                    , borderRadius4
+                        (px (toFloat topLeft))
+                        (px (toFloat topRight))
+                        (px (toFloat bottomRight))
+                        (px (toFloat bottomLeft))
+                    ]
                 ]
+                []
 
         NoShape ->
             text ""
