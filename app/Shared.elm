@@ -121,6 +121,7 @@ view _ { route } _ _ pageView =
                 [ nav []
                     [ h4 [] [ text "サイトマップ" ]
                     , div [] [ a [ href "/" ] [ text "トップページ" ] ]
+                    , div [] [ a [ href "/schedule" ] [ text "スケジュール" ] ]
                     , div [] [ a [ href "/sponsors" ] [ text "スポンサー" ] ]
                     , div [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
                     , br [] []
