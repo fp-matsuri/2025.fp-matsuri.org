@@ -1,4 +1,4 @@
-module Route.Schedule exposing (ActionData, Data, Model, Msg, overrideTalkId, route)
+module Route.Schedule exposing (ActionData, Data, Model, Msg, overrideTalkId, route, trackFromUuid)
 
 import BackendTask exposing (BackendTask)
 import BackendTask.Http
