@@ -3,7 +3,7 @@ module ScheduleTest exposing (dummyItems, dummyTalkProps, parseIso8601, suite)
 import Data.Schedule exposing (Speaker, TalkProps, TimetableItem(..), Track(..), getCommonProps)
 import Expect
 import Iso8601
-import Route.Schedule exposing (trackFromUuid)
+import Route.Schedule exposing (calcGridRow)
 import Test exposing (Test, describe, test)
 import Time exposing (Posix)
 
@@ -17,9 +17,8 @@ suite =
                     let
                         gridPositionByUUID items uuid =
                             findCommonPropsByUUID items uuid
-                                |> Maybe.map .uuid
-                                |> Maybe.withDefault ""
-                                |> (trackFromUuid >> .row)
+                                |> Maybe.map (calcGridRow >> .row)
+                                |> Maybe.withDefault "50"
 
                         findCommonPropsByUUID items uuid =
                             items
@@ -367,7 +366,7 @@ dummyItems =
         , title = "Excelで関数型プログラミング"
         , track = TrackC
         , startsAt = parseIso8601 "2025-06-14T17:30:00+09:00"
-        , lengthMin = 25
+        , lengthMin = 10
         }
         dummyTalkProps
     , Talk
