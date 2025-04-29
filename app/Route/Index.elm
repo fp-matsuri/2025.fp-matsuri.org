@@ -14,7 +14,7 @@ import FpMatsuri.Logo
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
-import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, id, rel, src)
+import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
 import Route.Sponsors as Sponsors
