@@ -1,11 +1,11 @@
-module Route.Schedule exposing (ActionData, Data, Model, Msg, calcGridRow, overrideTalkId, route)
+module Route.Schedule exposing (ActionData, Data, Model, Msg, overrideTalkId, route)
 
 import BackendTask exposing (BackendTask)
 import BackendTask.Http
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, gap, grid, gridColumn, gridRow, gridTemplateColumns, rowGap)
 import Css.Media as Media exposing (only, screen, withMedia)
-import Data.Schedule exposing (CommonProps, TimetableItem(..), Track(..), getCommonProps, timetableItemDecoder)
+import Data.Schedule exposing (TimetableItem(..), Track(..), calcGridRow, getCommonProps, timetableItemDecoder)
 import Data.Schedule.TalkId exposing (calcTalkIdWithOverride)
 import Dict
 import Dict.Extra
@@ -63,62 +63,6 @@ parseIso8601 : String -> Posix
 parseIso8601 isoString =
     Iso8601.toTime isoString
         |> Result.withDefault (Time.millisToPosix 0)
-
-
-{-| 開始時刻と所要時間からグリッドレイアウト用の行番号を取得する
--}
-calcGridRow : { baseHour : Int, baseMinute : Int } -> CommonProps -> { row : String }
-calcGridRow { baseHour, baseMinute } c =
-    let
-        gridInterval =
-            5
-
-        -- 開始時刻の基準時刻からの経過分数
-        startMinutes =
-            let
-                parts =
-                    Time.Extra.posixToParts (TimeZone.asia__tokyo ()) c.startsAt
-
-                hour =
-                    parts.hour
-
-                minute =
-                    parts.minute
-
-                -- 基準時刻からの経過分数
-                totalMinutes =
-                    (hour - baseHour) * 60 + (minute - baseMinute)
-            in
-            if totalMinutes < 0 then
-                0
-
-            else
-                totalMinutes
-
-        -- 開始グリッド位置
-        startRow =
-            ceiling (toFloat startMinutes / gridInterval) + 1
-
-        -- 所要時間に基づくグリッドのスパン数（50分の場合は60分、25分の場合は30分として計算）
-        adjustedLength =
-            if c.lengthMin == 50 then
-                60
-
-            else if c.lengthMin == 25 then
-                30
-
-            else
-                c.lengthMin
-
-        spanCount =
-            ceiling (toFloat adjustedLength / gridInterval)
-    in
-    -- CSS Gridの行指定（開始行/終了行または開始行のみ）
-    if spanCount > 1 then
-        { row = String.fromInt startRow ++ " / span " ++ String.fromInt spanCount }
-
-    else
-        { row = String.fromInt startRow }
 
 
 head : App Data ActionData RouteParams -> List Head.Tag
