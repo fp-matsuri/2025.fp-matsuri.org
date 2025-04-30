@@ -115,7 +115,7 @@ calcGridRow { baseHour, baseMinute } c =
     in
     -- CSS Gridの行指定（開始行/終了行または開始行のみ）
     if spanCount > 1 then
-        { row = String.fromInt startRow ++ "/ span " ++ String.fromInt spanCount }
+        { row = String.fromInt startRow ++ " / span " ++ String.fromInt spanCount }
 
     else
         { row = String.fromInt startRow }
@@ -368,12 +368,15 @@ overrideTalkId { uuid } previousId =
 timetableItem : String -> TimetableItem -> Html msg
 timetableItem talkId item =
     let
-        { row } =
+        baseTime =
             if isItemOnDate 2025 Jun 14 item then
-                calcGridRow { baseHour = 10, baseMinute = 30 } (getCommonProps item)
+                { baseHour = 10, baseMinute = 30 }
 
             else
-                calcGridRow { baseHour = 9, baseMinute = 30 } (getCommonProps item)
+                { baseHour = 9, baseMinute = 30 }
+
+        { row } =
+            calcGridRow baseTime (getCommonProps item)
     in
     case item of
         Talk c talk ->
