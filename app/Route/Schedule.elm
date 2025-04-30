@@ -306,6 +306,7 @@ timetable title items =
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                     [ display grid
                     , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
+                    , rowGap zero
                     ]
                 ]
             ]
@@ -426,6 +427,8 @@ timetableItem talkId item =
                     , textDecoration none
                     , border3 (px 1.5) solid (hsl 226 0.1 0.9)
                     , color inherit
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ marginTop (px 10) ]
                     ]
             in
             wrapper
@@ -480,6 +483,8 @@ timetableItem talkId item =
                     , borderRadius (px 10)
                     , fontSize (px 14)
                     , backgroundColor (hsl 226 0.1 0.92)
+                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        [ nthChild "n+2" [ marginTop (px 10) ] ]
                     ]
                 ]
                 [ div [ css [ fontWeight bold ] ] [ text (formatTimeRange c.startsAt c.lengthMin) ]
