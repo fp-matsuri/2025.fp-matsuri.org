@@ -67,102 +67,58 @@ parseIso8601 isoString =
 
 {-| 開始時刻と所要時間からグリッドレイアウト用の行番号を取得する
 -}
-calcGridRow : CommonProps -> { row : String }
-calcGridRow c =
+calcGridRow : { baseHour : Int, baseMinute : Int } -> CommonProps -> { row : String }
+calcGridRow { baseHour, baseMinute } c =
     let
-        toJstString =
-            Time.Extra.posixToParts (TimeZone.asia__tokyo ())
-                >> (\p -> "2025-06-" ++ String.fromInt p.day ++ "T" ++ toPaddedString p.hour ++ ":" ++ toPaddedString p.minute ++ ":00+09:00")
+        gridInterval =
+            5
 
-        toPaddedString =
-            String.fromInt >> String.padLeft 2 '0'
+        -- 開始時刻の基準時刻からの経過分数
+        startMinutes =
+            let
+                parts =
+                    Time.Extra.posixToParts (TimeZone.asia__tokyo ()) c.startsAt
+
+                hour =
+                    parts.hour
+
+                minute =
+                    parts.minute
+
+                -- 基準時刻からの経過分数
+                totalMinutes =
+                    (hour - baseHour) * 60 + (minute - baseMinute)
+            in
+            if totalMinutes < 0 then
+                0
+
+            else
+                totalMinutes
+
+        -- 開始グリッド位置
+        startRow =
+            ceiling (toFloat startMinutes / gridInterval) + 1
+
+        -- 所要時間に基づくグリッドのスパン数（50分の場合は60分、25分の場合は30分として計算）
+        adjustedLength =
+            if c.lengthMin == 50 then
+                60
+
+            else if c.lengthMin == 25 then
+                30
+
+            else
+                c.lengthMin
+
+        spanCount =
+            ceiling (toFloat adjustedLength / gridInterval)
     in
-    case ( toJstString c.startsAt, c.lengthMin ) of
-        ( "2025-06-14T11:30:00+09:00", 50 ) ->
-            { row = "3" }
+    -- CSS Gridの行指定（開始行/終了行または開始行のみ）
+    if spanCount > 1 then
+        { row = String.fromInt startRow ++ "/ span " ++ String.fromInt spanCount }
 
-        ( "2025-06-14T14:00:00+09:00", 50 ) ->
-            { row = "5" }
-
-        ( "2025-06-14T15:00:00+09:00", 50 ) ->
-            { row = "6" }
-
-        ( "2025-06-14T16:30:00+09:00", 25 ) ->
-            { row = "8" }
-
-        ( "2025-06-14T17:00:00+09:00", 25 ) ->
-            { row = "9" }
-
-        ( "2025-06-14T17:30:00+09:00", 25 ) ->
-            { row = "10/12" }
-
-        ( "2025-06-14T17:30:00+09:00", 10 ) ->
-            { row = "10" }
-
-        ( "2025-06-14T17:45:00+09:00", 10 ) ->
-            { row = "11" }
-
-        ( "2025-06-14T18:00:00+09:00", 50 ) ->
-            { row = "12" }
-
-        ( "2025-06-15T10:30:00+09:00", 50 ) ->
-            { row = "3" }
-
-        ( "2025-06-15T11:30:00+09:00", 50 ) ->
-            { row = "4" }
-
-        ( "2025-06-15T14:00:00+09:00", 50 ) ->
-            { row = "6" }
-
-        ( "2025-06-15T15:00:00+09:00", 25 ) ->
-            { row = "7" }
-
-        ( "2025-06-15T15:30:00+09:00", 25 ) ->
-            { row = "8" }
-
-        ( "2025-06-15T16:30:00+09:00", 25 ) ->
-            { row = "10" }
-
-        ( "2025-06-15T17:00:00+09:00", 25 ) ->
-            { row = "11/13" }
-
-        ( "2025-06-15T17:00:00+09:00", 10 ) ->
-            { row = "11" }
-
-        ( "2025-06-15T17:15:00+09:00", 10 ) ->
-            { row = "12" }
-
-        ( "2025-06-15T17:30:00+09:00", 25 ) ->
-            { row = "13/17" }
-
-        ( "2025-06-15T17:40:00+09:00", 10 ) ->
-            { row = "14/16" }
-
-        ( "2025-06-15T17:45:00+09:00", 10 ) ->
-            { row = "15/17" }
-
-        ( "2025-06-15T17:50:00+09:00", 10 ) ->
-            { row = "16" }
-
-        _ ->
-            trackFromUuid c.uuid
-
-
-{-| UUIDからグリッドレイアウト用の行番号を取得する
--}
-trackFromUuid : String -> { row : String }
-trackFromUuid uuid =
-    case uuid of
-        -- Lispは関数型言語(ではない)
-        "92b697d1-206c-426a-90c9-9ff3486cce6f" ->
-            { row = "13/15" }
-
-        -- 堅牢な認証基盤の実現: TypeScriptで代数的データ型を活用する
-        "267ff4c1-8f3c-473b-8cab-e62d0d468af5" ->
-            { row = "13" }
-
-        _ ->
-            { row = "50" }
+    else
+        { row = String.fromInt startRow }
 
 
 head : App Data ActionData RouteParams -> List Head.Tag
@@ -410,12 +366,17 @@ overrideTalkId { uuid } previousId =
 
 timetableItem : String -> TimetableItem -> Html msg
 timetableItem talkId item =
+    let
+        { row } =
+            if isItemOnDate 2025 Jun 14 item then
+                calcGridRow { baseHour = 10, baseMinute = 30 } (getCommonProps item)
+
+            else
+                calcGridRow { baseHour = 9, baseMinute = 30 } (getCommonProps item)
+    in
     case item of
         Talk c talk ->
             let
-                { row } =
-                    calcGridRow c
-
                 filteredTags =
                     talk.tags
                         -- 重要度の低いタグを除外（TODO：必要に応じて解禁する）
@@ -510,6 +471,7 @@ timetableItem talkId item =
             div
                 [ css
                     [ gridColumn (columnFromTrack c.track)
+                    , gridRow row
                     , padding (px 10)
                     , display grid
                     , property "grid-template-columns" "auto 1fr"
