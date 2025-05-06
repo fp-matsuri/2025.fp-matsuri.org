@@ -724,6 +724,14 @@ sponsorLogos randomSeed sponsorsData =
         , sponsorPlan "ロゴスポンサー"
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
             (sponsorsFromList sponsorsData.logoSponsors)
+        , personalSupporterPlan "応援団"
+            { mobileColumnsCount = 4, desktopColumnWidth = "120px" }
+            -- .png以外の画像を許容するために、拡張子付与の処理を省略しています
+            -- TODO: メタデータにimageプロパティを追加する
+            (sponsorsData.personalSupporters
+                |> List.map (\{ metadata } -> { name = metadata.name, image = metadata.id, href = metadata.href })
+                |> shuffleList randomSeed
+            )
         , sponsorPlan "協力"
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
             (sponsorsFromList sponsorsData.supportSponsors)
@@ -777,6 +785,71 @@ sponsorLogo s =
             , alt s.name
             ]
             []
+        ]
+
+
+personalSupporterPlan :
+    String
+    -> { mobileColumnsCount : Int, desktopColumnWidth : String }
+    -> List Sponsor
+    -> Html msg
+personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors =
+    let
+        listItem s =
+            li []
+                [ a
+                    [ href s.href
+                    , Attributes.target "_blank"
+                    , rel "noopener noreferrer"
+                    , css
+                        [ displayFlex
+                        , flexDirection column
+                        , alignItems center
+                        , rowGap (rem 0.5)
+                        , fontSize (px 14)
+                        , textDecoration none
+                        , color inherit
+                        ]
+                    ]
+                    [ img
+                        [ src ("/images/sponsors/" ++ s.image)
+                        , css
+                            [ maxWidth (px 50)
+                            , maxHeight (px 50)
+                            , property "object-fit" "contain"
+                            , borderRadius (pct 50)
+                            , border3 (px 1) solid (hsla 0 0 0 0.05)
+                            ]
+                        ]
+                        []
+                    , text s.name
+                    ]
+                ]
+    in
+    div
+        [ css
+            [ display grid
+            , rowGap (px 20)
+            , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                [ rowGap (px 30) ]
+            ]
+        ]
+        [ h3 [ css [ color (rgb 0x66 0x66 0x66) ] ] [ text title ]
+        , ul
+            [ css
+                [ margin zero
+                , padding zero
+                , display grid
+                , rowGap (px 10)
+                , columnGap (px 10)
+                , justifyContent center
+                , gridTemplateColumns (List.repeat mobileColumnsCount (fr 1))
+                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    [ property "grid-template-columns" ("repeat(auto-fit, " ++ desktopColumnWidth ++ ")") ]
+                , listStyle none
+                ]
+            ]
+            (List.map listItem sponsors)
         ]
 
 
