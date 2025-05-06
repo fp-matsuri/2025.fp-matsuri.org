@@ -725,7 +725,7 @@ sponsorLogos randomSeed sponsorsData =
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
             (sponsorsFromList sponsorsData.logoSponsors)
         , personalSupporterPlan "応援団"
-            { mobileColumnsCount = 4, desktopColumnWidth = "120px" }
+            { mobileColumnsCount = 4, desktopColumnWidth = "100px" }
             -- .png以外の画像を許容するために、拡張子付与の処理を省略しています
             -- TODO: メタデータにimageプロパティを追加する
             (sponsorsData.personalSupporters
@@ -805,8 +805,8 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                         [ displayFlex
                         , flexDirection column
                         , alignItems center
-                        , rowGap (rem 0.5)
-                        , fontSize (px 14)
+                        , rowGap (em 0.5)
+                        , fontSize (px 10)
                         , textDecoration none
                         , color inherit
                         ]
@@ -814,9 +814,9 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                     [ img
                         [ src ("/images/sponsors/" ++ s.image)
                         , css
-                            [ maxWidth (px 50)
-                            , maxHeight (px 50)
-                            , property "object-fit" "contain"
+                            [ width (px 40)
+                            , height (px 40)
+                            , property "object-fit" "cover"
                             , borderRadius (pct 50)
                             , border3 (px 1) solid (hsla 0 0 0 0.05)
                             ]
@@ -840,7 +840,7 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                 [ margin zero
                 , padding zero
                 , display grid
-                , rowGap (px 10)
+                , rowGap (px 20)
                 , columnGap (px 10)
                 , justifyContent center
                 , gridTemplateColumns (List.repeat mobileColumnsCount (fr 1))
