@@ -796,21 +796,18 @@ personalSupporterPlan :
 personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors =
     let
         listItem s =
-            li []
-                [ a
-                    [ href s.href
-                    , Attributes.target "_blank"
-                    , rel "noopener noreferrer"
-                    , css
-                        [ displayFlex
-                        , flexDirection column
-                        , alignItems center
-                        , rowGap (em 0.5)
-                        , fontSize (px 10)
-                        , textDecoration none
-                        , color inherit
-                        ]
+            let
+                commonWrapperStyles =
+                    [ displayFlex
+                    , flexDirection column
+                    , alignItems center
+                    , rowGap (em 0.5)
+                    , fontSize (px 10)
+                    , textDecoration none
+                    , color inherit
                     ]
+
+                contents =
                     [ img
                         [ src ("/images/sponsors/" ++ s.image)
                         , css
@@ -824,6 +821,19 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                         []
                     , text s.name
                     ]
+            in
+            li []
+                [ if s.href == "" then
+                    div [ css commonWrapperStyles ] contents
+
+                  else
+                    a
+                        [ href s.href
+                        , Attributes.target "_blank"
+                        , rel "noopener noreferrer"
+                        , css commonWrapperStyles
+                        ]
+                        contents
                 ]
     in
     div
