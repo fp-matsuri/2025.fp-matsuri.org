@@ -321,6 +321,14 @@ timetableItem talkId item =
 
         { row } =
             calcGridRow baseTime (getCommonProps item)
+
+        commonStyles c =
+            [ gridColumn (columnFromTrack c.track)
+            , gridRow row
+            , padding (px 10)
+            , borderRadius (px 10)
+            , fontSize (px 14)
+            ]
     in
     case item of
         Talk c talk ->
@@ -362,15 +370,11 @@ timetableItem talkId item =
                             ]
 
                 wrapperStyles =
-                    [ gridColumn (columnFromTrack c.track)
-                    , gridRow row
-                    , padding (px 10)
+                    [ batch (commonStyles c)
                     , display grid
                     , property "grid-template-rows" "auto auto auto 1fr"
                     , alignItems start
                     , rowGap (px 5)
-                    , borderRadius (px 10)
-                    , fontSize (px 14)
                     , textDecoration none
                     , border3 (px 1.5) solid (hsl 226 0.1 0.9)
                     , color inherit
@@ -420,15 +424,11 @@ timetableItem talkId item =
         Timeslot c ->
             div
                 [ css
-                    [ gridColumn (columnFromTrack c.track)
-                    , gridRow row
-                    , padding (px 10)
+                    [ batch (commonStyles c)
                     , display grid
                     , property "grid-template-columns" "auto 1fr"
                     , alignItems center
                     , columnGap (px 10)
-                    , borderRadius (px 10)
-                    , fontSize (px 14)
                     , backgroundColor (hsl 226 0.1 0.92)
                     , withMedia [ only screen [ Media.minWidth (px 640) ] ]
                         [ nthChild "n+2" [ marginTop (px 10) ] ]
