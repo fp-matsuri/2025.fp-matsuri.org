@@ -1,9 +1,8 @@
 module ScheduleTest exposing (dummyItems, dummyTalkProps, parseIso8601, suite)
 
-import Data.Schedule exposing (Speaker, TalkProps, TimetableItem(..), Track(..), getCommonProps)
+import Data.Schedule exposing (Speaker, TalkProps, TimetableItem(..), Track(..), calcGridRow, getCommonProps)
 import Expect
 import Iso8601
-import Route.Schedule exposing (calcGridRow)
 import Test exposing (Test, describe, test)
 import Time exposing (Month(..), Posix)
 import Time.Extra
