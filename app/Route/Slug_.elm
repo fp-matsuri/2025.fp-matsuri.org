@@ -8,7 +8,6 @@ module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, route)
 -}
 
 import BackendTask exposing (BackendTask)
-import Debug
 import ErrorPage exposing (ErrorPage)
 import FatalError exposing (FatalError)
 import Head
@@ -17,6 +16,7 @@ import Html exposing (Html, a, iframe)
 import Html.Attributes exposing (attribute, href, rel, src, target)
 import Html.Styled exposing (div, section)
 import Html.Styled.Attributes exposing (class)
+import Json.Decode
 import Markdown.Block exposing (Block)
 import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
@@ -70,30 +70,50 @@ action _ _ =
 data : RouteParams -> Request -> BackendTask FatalError (Response Data ErrorPage)
 data routeParams _ =
     let
-        attemptLoadTask : BackendTask FatalError (Response Data ErrorPage)
+        attemptLoadTask : BackendTask Plugin.MarkdownCodec.Error (Response Data ErrorPage)
         attemptLoadTask =
             Plugin.MarkdownCodec.withFrontmatter Data
                 Page.frontmatterDecoder
                 customizedHtmlRenderer
                 ("content/" ++ routeParams.slug ++ ".md")
-                |> BackendTask.map (\pageData -> Server.Response.render pageData)
+                |> BackendTask.map Server.Response.render
 
-        handleFatalError : FatalError -> BackendTask FatalError (Response Data ErrorPage)
-        handleFatalError fatalError =
+        handleCodecError : Plugin.MarkdownCodec.Error -> BackendTask Plugin.MarkdownCodec.Error (Response Data ErrorPage)
+        handleCodecError codecError =
             let
-                errorMessage =
-                    Debug.toString fatalError
+                errorPage =
+                    case codecError of
+                        Plugin.MarkdownCodec.FileDoesNotExist ->
+                            ErrorPage.notFound
 
-                errorPageDataForSlug =
-                    if String.contains "Couldn't find file at path" errorMessage then
-                        ErrorPage.notFound
+                        Plugin.MarkdownCodec.FileReadFailure msg ->
+                            ErrorPage.internalError msg
 
-                    else
-                        ErrorPage.internalError errorMessage
+                        Plugin.MarkdownCodec.FrontmatterDecodingFailure decodeError ->
+                            ErrorPage.internalError ("Frontmatter decoding error: " ++ Json.Decode.errorToString decodeError)
+
+                        Plugin.MarkdownCodec.MarkdownProcessingFailure fatalError ->
+                            ErrorPage.internalError "Markdown processing failed."
             in
-            BackendTask.succeed (Server.Response.errorPage errorPageDataForSlug)
+            BackendTask.succeed (Server.Response.errorPage errorPage)
     in
-    BackendTask.onError handleFatalError attemptLoadTask
+    attemptLoadTask
+        |> BackendTask.onError handleCodecError
+        |> BackendTask.mapError
+            (\codecError ->
+                case codecError of
+                    Plugin.MarkdownCodec.FileDoesNotExist ->
+                        FatalError.fromString ("Content not found for slug: " ++ routeParams.slug)
+
+                    Plugin.MarkdownCodec.FileReadFailure msg ->
+                        FatalError.fromString ("Internal error processing content for slug " ++ routeParams.slug ++ ": " ++ msg)
+
+                    Plugin.MarkdownCodec.FrontmatterDecodingFailure decodeError ->
+                        FatalError.fromString ("Frontmatter decoding error for slug " ++ routeParams.slug ++ ": " ++ Json.Decode.errorToString decodeError)
+
+                    Plugin.MarkdownCodec.MarkdownProcessingFailure fatalError ->
+                        fatalError
+            )
 
 
 customizedHtmlRenderer : Renderer (Html msg)
