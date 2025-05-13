@@ -1,4 +1,4 @@
-module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, pages, route)
+module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, route)
 
 {-|
 
@@ -8,6 +8,8 @@ module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, pages, route)
 -}
 
 import BackendTask exposing (BackendTask)
+import Debug
+import ErrorPage exposing (ErrorPage)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
@@ -22,6 +24,8 @@ import Page exposing (Metadata)
 import PagesMsg exposing (PagesMsg)
 import Plugin.MarkdownCodec
 import RouteBuilder exposing (App, StatelessRoute)
+import Server.Request exposing (Request)
+import Server.Response exposing (Response)
 import Shared
 import Site
 import View exposing (View)
@@ -54,27 +58,42 @@ type alias ActionData =
 
 route : StatelessRoute RouteParams Data ActionData
 route =
-    RouteBuilder.preRender { data = data, head = head, pages = pages }
+    RouteBuilder.serverRender { data = data, head = head, action = action }
         |> RouteBuilder.buildNoState { view = view }
 
 
-pages : BackendTask FatalError (List RouteParams)
-pages =
-    Page.pagesGlob
-        |> BackendTask.map
-            (List.map
-                (\globData ->
-                    { slug = globData.slug }
-                )
-            )
+action : RouteParams -> Request -> BackendTask FatalError (Response ActionData ErrorPage)
+action _ _ =
+    BackendTask.succeed (Server.Response.render {})
 
 
-data : RouteParams -> BackendTask FatalError Data
-data routeParams =
-    Plugin.MarkdownCodec.withFrontmatter Data
-        Page.frontmatterDecoder
-        customizedHtmlRenderer
-        ("content/" ++ routeParams.slug ++ ".md")
+data : RouteParams -> Request -> BackendTask FatalError (Response Data ErrorPage)
+data routeParams _ =
+    let
+        attemptLoadTask : BackendTask FatalError (Response Data ErrorPage)
+        attemptLoadTask =
+            Plugin.MarkdownCodec.withFrontmatter Data
+                Page.frontmatterDecoder
+                customizedHtmlRenderer
+                ("content/" ++ routeParams.slug ++ ".md")
+                |> BackendTask.map (\pageData -> Server.Response.render pageData)
+
+        handleFatalError : FatalError -> BackendTask FatalError (Response Data ErrorPage)
+        handleFatalError fatalError =
+            let
+                errorMessage =
+                    Debug.toString fatalError
+
+                errorPageDataForSlug =
+                    if String.contains "Couldn't find file at path" errorMessage then
+                        ErrorPage.notFound
+
+                    else
+                        ErrorPage.internalError errorMessage
+            in
+            BackendTask.succeed (Server.Response.errorPage errorPageDataForSlug)
+    in
+    BackendTask.onError handleFatalError attemptLoadTask
 
 
 customizedHtmlRenderer : Renderer (Html msg)
