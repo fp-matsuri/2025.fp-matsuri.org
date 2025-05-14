@@ -25,6 +25,7 @@
             "elm/url": "1.0.0",
             "elm-community/dict-extra": "2.4.0",
             "elm-community/list-extra": "8.7.0",
+            "elm-community/random-extra": "3.2.0",
             "justinmimbs/time-extra": "1.2.0",
             "justinmimbs/timezone-data": "11.0.0",
             "rtfeldman/elm-css": "18.0.0",

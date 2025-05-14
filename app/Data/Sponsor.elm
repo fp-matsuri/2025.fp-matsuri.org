@@ -23,6 +23,7 @@ import Html.Styled.Attributes exposing (css, src)
 import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
 import Random
+import Random.List
 
 
 type alias SponsorArticle =
@@ -122,21 +123,12 @@ planToBadge plan =
 
 
 {-| 与えられたリストの要素をランダムな順序に並べ替えます
-
-    1. リストの各要素に0〜1のランダムな値を割り当てる
-    2. ランダム値でソートすることでリストをシャッフル
-    3. ランダム値を取り除いて元の要素だけを返す
-
 -}
 shuffle : Int -> List a -> List a
 shuffle seed list =
     let
         generator =
-            Random.list (List.length list) (Random.float 0 1)
+            Random.List.shuffle list
     in
-    Random.initialSeed seed
-        |> Random.step generator
-        |> Tuple.first
-        |> List.map2 Tuple.pair list
-        |> List.sortBy Tuple.second
-        |> List.map Tuple.first
+    Random.step generator (Random.initialSeed seed)
+        |> (\( shuffledList, _ ) -> shuffledList)
