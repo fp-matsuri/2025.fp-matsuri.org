@@ -5,7 +5,8 @@ import BackendTask.Glob as Glob
 import Css exposing (..)
 import Css.Extra exposing (columnGap, grid, paddingBlock)
 import Css.Media as Media exposing (only, screen, withMedia)
-import Data.Sponsor exposing (IframeData(..), Plan(..), SponsorArticle, metadataDecoder, planToBadge)
+import Data.Sponsor as Sponsor exposing (IframeData(..), Plan(..), SponsorArticle, metadataDecoder, planToBadge)
+import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
@@ -18,7 +19,8 @@ import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
 import PagesMsg exposing (PagesMsg)
 import Plugin.MarkdownCodec
-import RouteBuilder exposing (App, StatelessRoute)
+import Random
+import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
 import Svg.Styled.Attributes exposing (style)
@@ -26,11 +28,11 @@ import View exposing (View)
 
 
 type alias Model =
-    {}
+    { seed : Int }
 
 
-type alias Msg =
-    ()
+type Msg
+    = GotRandomSeed Int
 
 
 type alias RouteParams =
@@ -51,10 +53,29 @@ type alias ActionData =
     {}
 
 
-route : StatelessRoute RouteParams Data ActionData
+route : StatefulRoute RouteParams Data ActionData Model Msg
 route =
     RouteBuilder.single { head = head, data = data }
-        |> RouteBuilder.buildNoState { view = view }
+        |> RouteBuilder.buildWithLocalState
+            { init = init
+            , update = update
+            , view = view
+            , subscriptions = \_ _ _ _ -> Sub.none
+            }
+
+
+init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
+init _ _ =
+    ( { seed = 0 }
+    , Effect.fromCmd (Random.generate GotRandomSeed (Random.int 0 100))
+    )
+
+
+update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
+update _ _ msg model =
+    case msg of
+        GotRandomSeed newSeed ->
+            ( { model | seed = newSeed }, Effect.none )
 
 
 data : BackendTask FatalError Data
@@ -127,15 +148,16 @@ sponsorFilesByPlan planName =
 view :
     App Data ActionData RouteParams
     -> Shared.Model
+    -> Model
     -> View (PagesMsg Msg)
-view d _ =
+view d _ model =
     { title = "スポンサー"
-    , body = [ Html.section [] [ sponsorsSection d.data ] ]
+    , body = [ Html.section [] [ sponsorsSection model.seed d.data ] ]
     }
 
 
-sponsorsSection : Data -> Html msg
-sponsorsSection pageData =
+sponsorsSection : Int -> Data -> Html msg
+sponsorsSection seed pageData =
     div
         []
         (List.map
@@ -176,33 +198,13 @@ sponsorsSection pageData =
                         ]
                     ]
             )
-            ((pageData.platinumSponsors ++ pageData.goldSponsors ++ pageData.silverSponsors)
-                |> List.filter (\s -> s.body /= [])
-                |> sortSponsors
+            ([ pageData.platinumSponsors
+             , pageData.goldSponsors
+             , pageData.silverSponsors
+             ]
+                |> List.map (List.filter (\s -> s.body /= []) >> Sponsor.shuffle seed)
+                |> List.concat
             )
-        )
-
-
-sortSponsors : List SponsorArticle -> List SponsorArticle
-sortSponsors =
-    List.sortBy
-        (\s ->
-            let
-                priority =
-                    case s.metadata.plan of
-                        Platinum ->
-                            3
-
-                        Gold ->
-                            2
-
-                        Silver ->
-                            1
-
-                        _ ->
-                            0
-            in
-            ( -priority, s.metadata.postedAt )
         )
 
 
