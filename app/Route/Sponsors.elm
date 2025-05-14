@@ -339,5 +339,6 @@ customizedHtmlRenderer =
                             children
                     )
                     |> Markdown.Html.withAttribute "href"
+                , Markdown.Html.tag "strong" (\children -> PlainHtml.strong [] children)
                 ]
     }
