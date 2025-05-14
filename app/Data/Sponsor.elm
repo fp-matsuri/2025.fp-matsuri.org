@@ -3,6 +3,7 @@ module Data.Sponsor exposing
     , SponsorMetadata, metadataDecoder
     , Plan(..), planToBadge
     , IframeData(..)
+    , shuffle
     )
 
 {-|
@@ -12,6 +13,8 @@ module Data.Sponsor exposing
 @docs Plan, planToBadge
 @docs IframeData
 
+@docs shuffle
+
 -}
 
 import Css exposing (block, display, px, width)
@@ -19,6 +22,8 @@ import Html.Styled as Html exposing (Html, img, text)
 import Html.Styled.Attributes exposing (css, src)
 import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
+import Random
+import Random.List
 
 
 type alias SponsorArticle =
@@ -115,3 +120,15 @@ planToBadge plan =
     )
         |> Maybe.map (\badgeImage -> img [ src ("/images/sponsor-labels/" ++ badgeImage), css [ display block, width (px 80) ] ] [])
         |> Maybe.withDefault (text "")
+
+
+{-| 与えられたリストの要素をランダムな順序に並べ替えます
+-}
+shuffle : Int -> List a -> List a
+shuffle seed list =
+    let
+        generator =
+            Random.List.shuffle list
+    in
+    Random.step generator (Random.initialSeed seed)
+        |> (\( shuffledList, _ ) -> shuffledList)

@@ -6,7 +6,7 @@ import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridRow, gridTemplateColumns, gridTemplateRows, rowGap)
 import Css.Global exposing (children, descendants, withClass)
 import Css.Media as Media exposing (only, screen, withMedia)
-import Data.Sponsor exposing (Plan(..))
+import Data.Sponsor as Sponsor exposing (Plan(..))
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import FpMatsuri.BackgroundTexture as BackgroundTexture
@@ -143,7 +143,7 @@ hero seed time sponsorsData =
                         , href = article.metadata.href
                         }
                     )
-                |> shuffleList seed
+                |> Sponsor.shuffle seed
     in
     div
         [ css
@@ -668,27 +668,6 @@ type alias Sponsor =
     }
 
 
-{-| 与えられたリストの要素をランダムな順序に並べ替えます
-
-    1. リストの各要素に0〜1のランダムな値を割り当てる
-    2. ランダム値でソートすることでリストをシャッフル
-    3. ランダム値を取り除いて元の要素だけを返す
-
--}
-shuffleList : Int -> List a -> List a
-shuffleList seed list =
-    let
-        generator =
-            Random.list (List.length list) (Random.float 0 1)
-    in
-    Random.initialSeed seed
-        |> Random.step generator
-        |> Tuple.first
-        |> List.map2 Tuple.pair list
-        |> List.sortBy Tuple.second
-        |> List.map Tuple.first
-
-
 sponsorLogos : Int -> Sponsors.Data -> Html msg
 sponsorLogos randomSeed sponsorsData =
     let
@@ -702,7 +681,7 @@ sponsorLogos randomSeed sponsorsData =
                         , href = article.metadata.href
                         }
                     )
-                |> shuffleList randomSeed
+                |> Sponsor.shuffle randomSeed
     in
     div
         [ css
@@ -730,7 +709,7 @@ sponsorLogos randomSeed sponsorsData =
             -- TODO: メタデータにimageプロパティを追加する
             (sponsorsData.personalSupporters
                 |> List.map (\{ metadata } -> { name = metadata.name, image = metadata.id, href = metadata.href })
-                |> shuffleList randomSeed
+                |> Sponsor.shuffle randomSeed
             )
         , sponsorPlan "協力"
             { mobileColumnsCount = 4, desktopColumnWidth = "116px" }
