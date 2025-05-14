@@ -925,6 +925,7 @@ staff =
         , Member "kmizu"
         , Member "lmdexpr"
         , Member "magnolia-k"
+        , Member "omiend"
         , Member "quantumshiro"
         , Member "rabe1028"
         , Member "takezoux2"
@@ -937,7 +938,6 @@ staff =
         , Member "y047aka"
         , Member "yonta"
         , Member "yshnb"
-        , Member "omiend"
         ]
     }
 
