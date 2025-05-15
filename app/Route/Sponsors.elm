@@ -14,6 +14,7 @@ import Html as PlainHtml
 import Html.Attributes as PlainAttributes
 import Html.Styled as Html exposing (Html, a, div, iframe, img, text)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, src)
+import Json.Decode as Decode
 import Markdown.Block exposing (Block)
 import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
@@ -109,6 +110,29 @@ sponsorsData =
         (getSponsorsByPlan "personal_supporter")
 
 
+processSponsorFile : { filePath : String, slug : String } -> BackendTask FatalError SponsorArticle
+processSponsorFile d =
+    Plugin.MarkdownCodec.withFrontmatter SponsorArticle
+        metadataDecoder
+        customizedHtmlRenderer
+        d.filePath
+        |> BackendTask.mapError
+            (\codecError ->
+                case codecError of
+                    Plugin.MarkdownCodec.FileDoesNotExist ->
+                        FatalError.fromString ("Sponsor file not found: " ++ d.filePath)
+
+                    Plugin.MarkdownCodec.FileReadFailure msg ->
+                        FatalError.fromString ("Internal error processing sponsor file: " ++ d.filePath ++ " - " ++ msg)
+
+                    Plugin.MarkdownCodec.FrontmatterDecodingFailure decodeError ->
+                        FatalError.fromString ("Frontmatter decoding error in sponsor file: " ++ d.filePath ++ " - " ++ Decode.errorToString decodeError)
+
+                    Plugin.MarkdownCodec.MarkdownProcessingFailure fatalError ->
+                        fatalError
+            )
+
+
 {-| プラン名からスポンサー記事リストを取得して処理する
 -}
 getSponsorsByPlan : String -> BackendTask FatalError (List SponsorArticle)
@@ -118,12 +142,7 @@ getSponsorsByPlan planName =
             (\files ->
                 files
                     |> List.map
-                        (\d ->
-                            Plugin.MarkdownCodec.withFrontmatter SponsorArticle
-                                metadataDecoder
-                                customizedHtmlRenderer
-                                d.filePath
-                        )
+                        processSponsorFile
                     |> BackendTask.combine
             )
         |> BackendTask.map (List.sortBy (.metadata >> .postedAt))

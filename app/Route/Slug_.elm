@@ -1,4 +1,4 @@
-module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, pages, route)
+module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, route)
 
 {-|
 
@@ -8,6 +8,7 @@ module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, pages, route)
 -}
 
 import BackendTask exposing (BackendTask)
+import ErrorPage exposing (ErrorPage)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
@@ -15,6 +16,7 @@ import Html exposing (Html, a, iframe)
 import Html.Attributes exposing (attribute, href, rel, src, target)
 import Html.Styled exposing (div, section)
 import Html.Styled.Attributes exposing (class)
+import Json.Decode
 import Markdown.Block exposing (Block)
 import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
@@ -22,6 +24,8 @@ import Page exposing (Metadata)
 import PagesMsg exposing (PagesMsg)
 import Plugin.MarkdownCodec
 import RouteBuilder exposing (App, StatelessRoute)
+import Server.Request exposing (Request)
+import Server.Response exposing (Response)
 import Shared
 import Site
 import View exposing (View)
@@ -54,27 +58,62 @@ type alias ActionData =
 
 route : StatelessRoute RouteParams Data ActionData
 route =
-    RouteBuilder.preRender { data = data, head = head, pages = pages }
+    RouteBuilder.serverRender { data = data, head = head, action = action }
         |> RouteBuilder.buildNoState { view = view }
 
 
-pages : BackendTask FatalError (List RouteParams)
-pages =
-    Page.pagesGlob
-        |> BackendTask.map
-            (List.map
-                (\globData ->
-                    { slug = globData.slug }
-                )
+action : RouteParams -> Request -> BackendTask FatalError (Response ActionData ErrorPage)
+action _ _ =
+    BackendTask.succeed (Server.Response.render {})
+
+
+data : RouteParams -> Request -> BackendTask FatalError (Response Data ErrorPage)
+data routeParams _ =
+    let
+        attemptLoadTask : BackendTask Plugin.MarkdownCodec.Error (Response Data ErrorPage)
+        attemptLoadTask =
+            Plugin.MarkdownCodec.withFrontmatter Data
+                Page.frontmatterDecoder
+                customizedHtmlRenderer
+                ("content/" ++ routeParams.slug ++ ".md")
+                |> BackendTask.map Server.Response.render
+
+        handleCodecError : Plugin.MarkdownCodec.Error -> BackendTask Plugin.MarkdownCodec.Error (Response Data ErrorPage)
+        handleCodecError codecError =
+            let
+                errorPage =
+                    case codecError of
+                        Plugin.MarkdownCodec.FileDoesNotExist ->
+                            ErrorPage.notFound
+
+                        Plugin.MarkdownCodec.FileReadFailure msg ->
+                            ErrorPage.internalError msg
+
+                        Plugin.MarkdownCodec.FrontmatterDecodingFailure decodeError ->
+                            ErrorPage.internalError ("Frontmatter decoding error: " ++ Json.Decode.errorToString decodeError)
+
+                        Plugin.MarkdownCodec.MarkdownProcessingFailure fatalError ->
+                            ErrorPage.internalError "Markdown processing failed."
+            in
+            BackendTask.succeed (Server.Response.errorPage errorPage)
+    in
+    attemptLoadTask
+        |> BackendTask.onError handleCodecError
+        |> BackendTask.mapError
+            (\codecError ->
+                case codecError of
+                    Plugin.MarkdownCodec.FileDoesNotExist ->
+                        FatalError.fromString ("Content not found for slug: " ++ routeParams.slug)
+
+                    Plugin.MarkdownCodec.FileReadFailure msg ->
+                        FatalError.fromString ("Internal error processing content for slug " ++ routeParams.slug ++ ": " ++ msg)
+
+                    Plugin.MarkdownCodec.FrontmatterDecodingFailure decodeError ->
+                        FatalError.fromString ("Frontmatter decoding error for slug " ++ routeParams.slug ++ ": " ++ Json.Decode.errorToString decodeError)
+
+                    Plugin.MarkdownCodec.MarkdownProcessingFailure fatalError ->
+                        fatalError
             )
-
-
-data : RouteParams -> BackendTask FatalError Data
-data routeParams =
-    Plugin.MarkdownCodec.withFrontmatter Data
-        Page.frontmatterDecoder
-        customizedHtmlRenderer
-        ("content/" ++ routeParams.slug ++ ".md")
 
 
 customizedHtmlRenderer : Renderer (Html msg)
