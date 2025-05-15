@@ -46,4 +46,4 @@ postedAt: 2025-04-03 09:47
 
 スリーシェイクをより詳しく知りたい方はこちら
 - <a href="https://jobs-3-shake.com/">▽▼▽スリーシェイク採用情報ページ▽▼▽</a>
-- <a href="https://hrmos.co/pages/threeshake/jobs?">3-shakeエンジニア求人票一覧</a>
+- <a href="https://hrmos.co/pages/threeshake/jobs?jobType=FULL&amp;category=1661608035104907264,1905592875089539072">3-shakeエンジニア求人票一覧</a>
