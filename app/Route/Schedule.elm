@@ -91,7 +91,7 @@ view app _ =
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 14)
                     |> filterDuplicateTimeslots
-                    |> List.filter (getCommonProps >> .title >> (/=) "Scott Wlaschinさんによるセッション")
+                    |> List.filter (getCommonProps >> .title >> (/=) "What I have learned from 15 years of functional programming")
                     |> (::)
                         (Talk
                             { type_ = "talk"
