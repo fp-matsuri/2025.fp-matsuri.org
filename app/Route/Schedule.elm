@@ -341,7 +341,7 @@ timetableItem talkId item =
                                 -- 招待セッションの場合はタグを追加
                                 if
                                     List.any (\id -> c.uuid == id)
-                                        [ "scott"
+                                        [ "cc680424-27f5-4fc1-8fa1-82b5df6cad20"
                                         , "5699c262-e04d-4f58-a6f5-34c390f36d0d"
                                         , "61fb241f-cfaa-448a-892d-277e93577198"
                                         ]
