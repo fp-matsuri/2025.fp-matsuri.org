@@ -419,6 +419,12 @@ timetableItem talkId item =
                     ]
                 , div [ css [ displayFlex, flexWrap wrap, gap (px 4) ] ]
                     (List.map viewTag filteredTags)
+                , if c.title == "What I have learned from 15 years of functional programming" then
+                    div [ css [ fontSize (px 14), color (hex "#666") ] ]
+                        [ text "※ Track A, B, C共通で日本語字幕付きのセッション動画を投影する形式で行います" ]
+
+                  else
+                    text ""
                 ]
 
         Timeslot c ->
