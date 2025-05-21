@@ -14,7 +14,6 @@ import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, div, h1, header, img, span, text)
 import Html.Styled.Attributes as Attributes exposing (alt, css, href, rel, src)
-import Iso8601
 import Json.Decode as Decode
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -59,12 +58,6 @@ data =
         |> BackendTask.onError (\_ -> BackendTask.succeed { timetable = [] })
 
 
-parseIso8601 : String -> Posix
-parseIso8601 isoString =
-    Iso8601.toTime isoString
-        |> Result.withDefault (Time.millisToPosix 0)
-
-
 head : App Data ActionData RouteParams -> List Head.Tag
 head _ =
     Site.summaryLarge { pageTitle = "開催スケジュール" }
@@ -91,23 +84,8 @@ view app _ =
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 14)
                     |> filterDuplicateTimeslots
-                    |> List.filter (getCommonProps >> .title >> (/=) "Scott Wlaschinさんによるセッション")
-                    |> (::)
-                        (Talk
-                            { type_ = "talk"
-                            , uuid = "scott"
-                            , title = "Scott Wlaschinさんによるセッション"
-                            , track = All
-                            , startsAt = parseIso8601 "2025-06-14T18:00:00+09:00"
-                            , lengthMin = 50
-                            }
-                            { url = ""
-                            , abstract = "Domain Modeling Made Functional (『関数型ドメインモデリング』)の著者として知られるScott Wlaschinさんによる招待セッション"
-                            , accepted = True
-                            , tags = []
-                            , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
-                            }
-                        )
+                    -- 複数トラックに登録されているScottさんのトークを1つに統合する
+                    |> scottSessionFilter
                     |> List.sortBy timetableItemSortKey
                 )
             , timetable "Day 2：2025年6月15日"
@@ -190,6 +168,28 @@ filterDuplicateTimeslots items =
 
                     _ ->
                         items_
+            )
+
+
+{-| 複数トラックに登録されているScottさんのトークを1つに統合する
+TrackA以外のTimeslotを削除し、TrackAで登録されているトークのTrackをAllに変更
+-}
+scottSessionFilter : List TimetableItem -> List TimetableItem
+scottSessionFilter items =
+    items
+        |> List.filter (getCommonProps >> (\{ title, track } -> not (title == "What I have learned from 15 years of functional programming" && track /= TrackA)))
+        |> List.map
+            (\item ->
+                let
+                    { title } =
+                        getCommonProps item
+                in
+                case ( item, title == "What I have learned from 15 years of functional programming" ) of
+                    ( Talk c t, True ) ->
+                        Talk { c | track = All } t
+
+                    _ ->
+                        item
             )
 
 
@@ -320,7 +320,7 @@ timetableItem talkId item =
                 { baseHour = 9, baseMinute = 30 }
 
         { row } =
-            calcGridRow baseTime (getCommonProps item)
+            calcGridRow baseTime item
 
         commonStyles c =
             [ gridColumn (columnFromTrack c.track)
@@ -341,7 +341,7 @@ timetableItem talkId item =
                                 -- 招待セッションの場合はタグを追加
                                 if
                                     List.any (\id -> c.uuid == id)
-                                        [ "scott"
+                                        [ "cc680424-27f5-4fc1-8fa1-82b5df6cad20"
                                         , "5699c262-e04d-4f58-a6f5-34c390f36d0d"
                                         , "61fb241f-cfaa-448a-892d-277e93577198"
                                         ]
@@ -419,6 +419,12 @@ timetableItem talkId item =
                     ]
                 , div [ css [ displayFlex, flexWrap wrap, gap (px 4) ] ]
                     (List.map viewTag filteredTags)
+                , if c.title == "What I have learned from 15 years of functional programming" then
+                    div [ css [ fontSize (px 14), color (hex "#666") ] ]
+                        [ text "※ Track A, B, C共通で日本語字幕付きのセッション動画を投影する形式で行います" ]
+
+                  else
+                    text ""
                 ]
 
         Timeslot c ->
