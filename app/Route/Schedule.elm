@@ -96,16 +96,16 @@ view app _ =
                         (Talk
                             { type_ = "talk"
                             , uuid = "scott"
-                            , title = "Scott Wlaschinさんによるセッション"
+                            , title = "What I have learned from 15 years of functional programming"
                             , track = All
                             , startsAt = parseIso8601 "2025-06-14T18:00:00+09:00"
                             , lengthMin = 50
                             }
-                            { url = ""
+                            { url = "https://fortee.jp/2025fp-matsuri/proposal/cc680424-27f5-4fc1-8fa1-82b5df6cad20"
                             , abstract = "Domain Modeling Made Functional (『関数型ドメインモデリング』)の著者として知られるScott Wlaschinさんによる招待セッション"
                             , accepted = True
                             , tags = []
-                            , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
+                            , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Just "https://fortee.jp/files/2025fp-matsuri/speaker/8971cb6b-ac99-4e64-83dc-0c7307f45a1b.jpg" }
                             }
                         )
                     |> List.sortBy timetableItemSortKey
