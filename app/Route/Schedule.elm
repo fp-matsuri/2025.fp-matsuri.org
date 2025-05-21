@@ -320,7 +320,7 @@ timetableItem talkId item =
                 { baseHour = 9, baseMinute = 30 }
 
         { row } =
-            calcGridRow baseTime (getCommonProps item)
+            calcGridRow baseTime item
 
         commonStyles c =
             [ gridColumn (columnFromTrack c.track)
