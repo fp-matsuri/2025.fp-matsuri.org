@@ -52,8 +52,14 @@ makeSitemapEntries getStaticRoutes =
         build route =
             let
                 routeSource lastMod =
+                    let
+                        hackyTrailingSlash =
+                            -- dillonkearns/elm-sitemapでの処理で末尾の`/`が削除されるので、`//`とすることで片方を残すようにする
+                            -- https://github.com/dillonkearns/elm-sitemap/blob/ef6faa987f89ed8ec16497816e4afe1adaf2e23d/src/Path.elm#L25-L31
+                            "//"
+                    in
                     BackendTask.succeed
-                        { path = String.join "/" (Route.routeToPath route)
+                        { path = String.join "/" (Route.routeToPath route) ++ hackyTrailingSlash
                         , lastMod = Just lastMod
                         }
             in
