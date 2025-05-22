@@ -467,10 +467,11 @@ viewTag : { name : String, colorText : Css.Color, colorBackground : Css.Color } 
 viewTag tag =
     div
         [ css
-            [ display inlineBlock
-            , padding2 (px 2) (px 6)
+            [ display tableCell
+            , padding (px 5)
             , borderRadius (px 4)
             , whiteSpace noWrap
+            , lineHeight (num 1)
             , fontSize (px 12)
             , backgroundColor tag.colorBackground
             , color tag.colorText
