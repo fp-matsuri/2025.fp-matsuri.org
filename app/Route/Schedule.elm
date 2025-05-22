@@ -467,8 +467,7 @@ viewTag : { name : String, colorText : Css.Color, colorBackground : Css.Color } 
 viewTag tag =
     div
         [ css
-            [ display tableCell
-            , padding (px 5)
+            [ padding (px 5)
             , borderRadius (px 4)
             , whiteSpace noWrap
             , lineHeight (num 1)
