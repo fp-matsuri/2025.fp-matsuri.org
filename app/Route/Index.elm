@@ -371,6 +371,10 @@ newsSection =
               , label = "当日スタッフの募集を開始しました"
               , url = "/extra-staff"
               }
+            , { date = "2025-04-15"
+              , label = "当日のタイムテーブルを公開しました"
+              , url = "/schedule"
+              }
             , { date = "2025-04-06"
               , label = "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！"
               , url = "https://blog.fp-matsuri.org/entry/2025/04/06/101230"
