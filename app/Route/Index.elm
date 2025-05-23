@@ -363,9 +363,17 @@ newsSection : Html msg
 newsSection =
     section ""
         [ news
-            [ { date = "2025-04-18"
+            [ { date = "2025-05-20"
+              , label = "当日スタッフの募集を締め切りました"
+              , url = ""
+              }
+            , { date = "2025-04-18"
               , label = "当日スタッフの募集を開始しました"
               , url = "/extra-staff"
+              }
+            , { date = "2025-04-15"
+              , label = "当日のタイムテーブルを公開しました"
+              , url = "/schedule"
               }
             , { date = "2025-04-06"
               , label = "🎉 注目のプログラムがついに公開！そしてチケット販売開始しました！！"
@@ -854,15 +862,7 @@ teamSection =
                 ]
     in
     section "Team"
-        [ div [ class "markdown people" ]
-            [ h3 [] [ text "当日スタッフ募集中" ]
-            , p []
-                [ text "関数型まつりでは当日スタッフを募集しています。"
-                , a [ href "/extra-staff" ] [ text "当日スタッフ募集のお知らせ" ]
-                , text "をご覧ください"
-                ]
-            ]
-        , div [ class "people leaders" ]
+        [ div [ class "people leaders" ]
             [ h3 [] [ text "座長" ]
             , ul [] (List.map listItem staff.leader)
             ]
