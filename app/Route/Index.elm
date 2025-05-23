@@ -856,9 +856,9 @@ teamSection =
                         , displayFlex
                         , flexDirection column
                         , alignItems center
-                        , rowGap (rem 0.5)
+                        , rowGap (em 0.5)
                         , textAlign center
-                        , fontSize (px 14)
+                        , fontSize (px 10)
                         , textDecoration none
                         , color inherit
                         , borderRadius (px 10)
@@ -872,7 +872,9 @@ teamSection =
                     [ img
                         [ src ("https://github.com/" ++ member.id ++ ".png")
                         , css
-                            [ maxWidth (px 50)
+                            [ width (px 40)
+                            , height (px 40)
+                            , property "object-fit" "cover"
                             , borderRadius (pct 50)
                             , border3 (px 1) solid (hsla 0 0 0 0.05)
                             ]
