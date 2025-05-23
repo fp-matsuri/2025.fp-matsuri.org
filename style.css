@@ -287,11 +287,11 @@ section > h2 {
 }
 
 .people.leaders {
-  max-width: 720px;
+  max-width: 600px;
 }
 
 .people.staff {
-  max-width: 1200px;
+  max-width: 799px;
 }
 
 .people ul {
@@ -299,14 +299,14 @@ section > h2 {
   padding: 0;
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   row-gap: 0.2rem;
   list-style: none;
 }
 
 @media all and (min-width: 640px) {
   .people ul {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
 }
 
