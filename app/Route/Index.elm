@@ -855,8 +855,39 @@ teamSection =
     let
         listItem member =
             li []
-                [ a [ class "person", href ("https://github.com/" ++ member.id), Attributes.target "_blank" ]
-                    [ img [ src ("https://github.com/" ++ member.id ++ ".png") ] []
+                [ a
+                    [ href ("https://github.com/" ++ member.id)
+                    , Attributes.target "_blank"
+                    , css
+                        [ margin zero
+                        , padding (rem 0.5)
+                        , displayFlex
+                        , flexDirection column
+                        , alignItems center
+                        , rowGap (em 0.5)
+                        , textAlign center
+                        , fontSize (px 10)
+                        , textDecoration none
+                        , color inherit
+                        , borderRadius (px 10)
+                        , border3 (px 1) solid transparent
+                        , hover
+                            [ backgroundColor (hex "f9f9f9")
+                            , borderColor (hex "ddd")
+                            ]
+                        ]
+                    ]
+                    [ img
+                        [ src ("https://github.com/" ++ member.id ++ ".png")
+                        , css
+                            [ width (px 40)
+                            , height (px 40)
+                            , property "object-fit" "cover"
+                            , borderRadius (pct 50)
+                            , border3 (px 1) solid (hsla 0 0 0 0.05)
+                            ]
+                        ]
+                        []
                     , text member.id
                     ]
                 ]
