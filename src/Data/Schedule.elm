@@ -58,6 +58,7 @@ type Track
     | TrackA
     | TrackB
     | TrackC
+    | AB
 
 
 type alias Tag =
