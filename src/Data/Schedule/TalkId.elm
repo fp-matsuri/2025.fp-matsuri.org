@@ -33,6 +33,9 @@ trackPrefix track =
         All ->
             "A"
 
+        AB ->
+            "AB"
+
 
 dayPrefix : Posix -> String
 dayPrefix startsAt =

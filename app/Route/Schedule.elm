@@ -121,6 +121,9 @@ timetableItemSortKey item =
 
                 TrackC ->
                     3
+
+                AB ->
+                    1
     in
     ( Time.posixToMillis startsAt, trackOrder )
 
@@ -160,11 +163,16 @@ filterDuplicateTimeslots items =
             )
         |> Dict.toList
         |> List.concatMap
-            -- グループ内のTimeslotが3つある場合、1つを残しTrack.Allとして扱う
             (\( _, items_ ) ->
-                case ( List.length items_ >= 3, List.head items_ ) of
-                    ( True, Just (Timeslot c) ) ->
+                case ( List.length items_, List.head items_ ) of
+                    ( 3, Just (Timeslot c) ) ->
+                        -- グループ内のTimeslotが3つある場合、1つを残しTrack.Allとして扱う
                         [ Timeslot { c | track = All } ]
+
+                    ( 2, Just (Timeslot c) ) ->
+                        -- グループ内のTimeslotが2つある場合、1つを残しTrack.ABとして扱う
+                        -- TODO: TrackCが含まれる場合を想定する
+                        [ Timeslot { c | title = c.title ++ "（Track A, B共通）", track = AB } ]
 
                     _ ->
                         items_
@@ -462,6 +470,9 @@ columnFromTrack track =
         TrackC ->
             "3"
 
+        AB ->
+            "1/3"
+
 
 viewTag : { name : String, colorText : Css.Color, colorBackground : Css.Color } -> Html msg
 viewTag tag =
@@ -523,3 +534,6 @@ trackColorConfig track =
 
         TrackC ->
             { bgColor = hex "#5352A0", textColor = hex "#FFFFFF" }
+
+        AB ->
+            { bgColor = hex "#CE3F3D", textColor = hex "#FFFFFF" }
