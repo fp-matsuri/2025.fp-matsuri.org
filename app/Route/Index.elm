@@ -965,6 +965,32 @@ section title children =
     Html.section [] (heading :: children)
 
 
+h2 : List (Attribute msg) -> List (Html msg) -> Html msg
+h2 attributes children =
+    let
+        pseudoDividerStyles =
+            [ property "content" (qt "")
+            , display block
+            , height (px 1)
+            , backgroundColor (rgba 30 44 88 0.1)
+            ]
+    in
+    Html.styled Html.h2
+        [ margin zero
+        , display grid
+        , property "grid-template-columns " "1fr max-content 1fr"
+        , alignItems center
+        , columnGap (em 0.5)
+        , whiteSpace noWrap
+        , fontSize (px 16)
+        , fontWeight normal
+        , before pseudoDividerStyles
+        , after pseudoDividerStyles
+        ]
+        attributes
+        children
+
+
 h3 : List (Attribute msg) -> List (Html msg) -> Html msg
 h3 attributes children =
     let
