@@ -4,6 +4,8 @@ name: 株式会社kubell（旧Chatwork株式会社）
 href: https://www.kubell.com/recruit/engineer/
 plan: ゴールド
 postedAt: 2025-03-31 09:46
+iframe:
+  - speakerDeck: 33d8fc59f58d4855b2ba455112b14e33
 ---
 
 <p>
