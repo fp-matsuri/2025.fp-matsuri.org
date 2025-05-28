@@ -326,7 +326,6 @@ customizedHtmlRenderer =
                     |> Markdown.Html.withAttribute "allowfullscreen"
 
                 -- スポンサー記事向けに追加
-                , Markdown.Html.tag "h2" (\children -> PlainHtml.h2 [] children)
                 , Markdown.Html.tag "h3" (\children -> PlainHtml.h3 [] children)
                 , Markdown.Html.tag "p" (\children -> PlainHtml.p [] children)
                 , Markdown.Html.tag "b" (\children -> PlainHtml.b [] children)
