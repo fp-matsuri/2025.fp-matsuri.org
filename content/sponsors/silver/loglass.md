@@ -33,5 +33,4 @@ iframe:
   <li><a href="https://prd-blog.loglass.co.jp/entry/engineer_list" target="_blank">イベント・登壇資料・記事まとめ</a></li>
   <li><a href="https://zenn.dev/p/loglass" target="_blank">テックブログ（Zenn）</a></li>
   <li><a href="https://prd-blog.loglass.co.jp/" target="_blank">はてなブログ</a></li>
-  <li><a href="https://x.com/loglass_product" target="_blank">ログラス Product Team 公式Xアカウント</a></li>
 </ul>
