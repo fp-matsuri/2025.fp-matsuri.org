@@ -789,7 +789,9 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                     , flexDirection column
                     , alignItems center
                     , rowGap (em 0.5)
+                    , textAlign center
                     , fontSize (px 10)
+                    , property "text-wrap" "balance"
                     , textDecoration none
                     , color inherit
                     ]
