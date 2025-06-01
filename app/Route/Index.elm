@@ -647,7 +647,8 @@ tableRow ticket =
 sponsorsSection : Int -> Sponsors.Data -> Html msg
 sponsorsSection seed sponsorsData =
     section "Sponsors"
-        [ sponsorLogos seed sponsorsData
+        [ div [ class "sponsors", css [ property "display" "contents" ] ] []
+        , sponsorLogos seed sponsorsData
         ]
 
 
