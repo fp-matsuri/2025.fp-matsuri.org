@@ -363,7 +363,11 @@ newsSection : Html msg
 newsSection =
     section ""
         [ news
-            [ { date = "2025-05-20"
+            [ { date = "2025-05-28"
+              , label = "スポンサーの募集を締め切りました"
+              , url = ""
+              }
+            , { date = "2025-05-20"
               , label = "当日スタッフの募集を締め切りました"
               , url = ""
               }
