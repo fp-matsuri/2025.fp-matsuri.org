@@ -769,6 +769,9 @@ personalSupporterPlan :
     -> Html msg
 personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors =
     let
+        isCommunity s =
+            s.image == "piyopiyo_ex.png" || s.image == "nerves.png"
+
         listItem s =
             let
                 commonWrapperStyles =
@@ -787,12 +790,17 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                     [ img
                         [ src ("/images/sponsors/" ++ s.image)
                         , css
-                            [ width (px 40)
-                            , height (px 40)
-                            , property "object-fit" "cover"
-                            , borderRadius (pct 50)
-                            , border3 (px 1) solid (hsla 0 0 0 0.05)
-                            ]
+                            (if isCommunity s then
+                                [ height (px 40) ]
+
+                             else
+                                [ width (px 40)
+                                , height (px 40)
+                                , property "object-fit" "cover"
+                                , borderRadius (pct 50)
+                                , border3 (px 1) solid (hsla 0 0 0 0.05)
+                                ]
+                            )
                         ]
                         []
                     , text s.name
