@@ -4,6 +4,8 @@ name: 株式会社eiicon
 href: "https://corp.eiicon.net/"
 plan: ゴールド
 postedAt: 2025-06-02 20:16
+iframe:
+  - speakerDeck: f447a3766dbf4d7991ffea3f961b1496
 ---
 
 株式会社 eiicon は「イノベーション後進国からオープンイノベーション先進国へ」をビジョンに掲げ、顧客の新規事業創出を成功に導く専門家集団です。
