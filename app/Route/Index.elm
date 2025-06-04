@@ -770,7 +770,13 @@ personalSupporterPlan :
 personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors =
     let
         isCommunity s =
-            List.any ((==) s.image) [ "piyopiyo_ex.png", "nerves.png", "fukuokaex.png", "LiveViewJP.png" ]
+            List.any ((==) s.image)
+                [ "piyopiyo_ex.png"
+                , "nerves.png"
+                , "fukuokaex.png"
+                , "LiveViewJP.png"
+                , "ElixirImp.png"
+                ]
 
         listItem s =
             let
