@@ -797,7 +797,7 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                         [ src ("/images/sponsors/" ++ s.image)
                         , css
                             (if isCommunity s then
-                                [ height (px 40) ]
+                                [ height (px 40), borderRadius (px 2) ]
 
                              else
                                 [ width (px 40)
