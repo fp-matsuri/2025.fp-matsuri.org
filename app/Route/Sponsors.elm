@@ -232,7 +232,24 @@ sponsorBody : Markdown.Renderer.Renderer (PlainHtml.Html msg) -> List Block -> L
 sponsorBody renderer body =
     body
         |> Markdown.Renderer.render renderer
-        |> Result.map (List.map (\x -> Html.fromUnstyled x))
+        |> Result.map
+            (List.map
+                (\x ->
+                    Html.div
+                        [ css
+                            [ Css.Global.descendants
+                                [ Css.Global.selector "iframe"
+                                    [ maxWidth (pct 100)
+                                    , width (pct 100)
+                                    , property "aspect-ratio" "16 / 9"
+                                    , height auto
+                                    ]
+                                ]
+                            ]
+                        ]
+                        [ Html.fromUnstyled x ]
+                )
+            )
         |> (\r ->
                 case r of
                     Err e ->
