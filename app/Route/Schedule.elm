@@ -75,6 +75,7 @@ view app _ =
             [ css
                 [ maxWidth (px 850)
                 , margin2 zero auto
+                , padding3 zero (px 15) (px 30)
                 , display grid
                 , rowGap (px 30)
                 ]

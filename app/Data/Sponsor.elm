@@ -17,9 +17,9 @@ module Data.Sponsor exposing
 
 -}
 
-import Css exposing (block, display, px, width)
-import Html.Styled as Html exposing (Html, img, text)
-import Html.Styled.Attributes exposing (css, src)
+import Css exposing (..)
+import Html.Styled as Html exposing (Html, div, text)
+import Html.Styled.Attributes exposing (css)
 import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
 import Random
@@ -105,21 +105,38 @@ iframeDecoder =
 
 planToBadge : Plan -> Html msg
 planToBadge plan =
-    (case plan of
+    let
+        badge bgGradient textColor text_ =
+            div
+                [ css
+                    [ property "width" "fit-content"
+                    , padding2 (px 4) (px 10)
+                    , borderRadius (px 5)
+                    , fontSize (px 14)
+                    , property "background" bgGradient
+                    , color textColor
+                    ]
+                ]
+                [ text text_ ]
+    in
+    case plan of
         Platinum ->
-            Just "platinum.svg"
+            badge "linear-gradient(95.58deg, #F1F1F4 0%, #F9F9FA 50%, #E3E3E9 100%)"
+                (hex "#464653")
+                "Platinum"
 
         Gold ->
-            Just "gold.svg"
+            badge "linear-gradient(103.14deg, #FFE448 0.78%, #FFF2AA 50.39%, #EDBD00 100%)"
+                (hex "#453B08")
+                "Gold"
 
         Silver ->
-            Just "silver.svg"
+            badge "linear-gradient(100.53deg, #E3E3E8 0%, #F1F1F4 50%, #B9B9C7 100%)"
+                (hex "#2F2F37")
+                "Silver"
 
         _ ->
-            Nothing
-    )
-        |> Maybe.map (\badgeImage -> img [ src ("/images/sponsor-labels/" ++ badgeImage), css [ display block, width (px 80) ] ] [])
-        |> Maybe.withDefault (text "")
+            text ""
 
 
 {-| 与えられたリストの要素をランダムな順序に並べ替えます

@@ -199,17 +199,7 @@ view _ { route } model toMsg pageView =
                     ]
                 , navMenu toMsg model.menuOpened
                 ]
-            , main_
-                [ css
-                    [ case route of
-                        Just Route.Index ->
-                            padding zero
-
-                        _ ->
-                            padding3 zero (px 15) (px 30)
-                    ]
-                ]
-                pageView.body
+            , main_ [] pageView.body
             , footer [ class "site-footer" ]
                 [ nav []
                     [ h4 [] [ text "サイトマップ" ]

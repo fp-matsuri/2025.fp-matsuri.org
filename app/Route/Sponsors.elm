@@ -3,7 +3,8 @@ module Route.Sponsors exposing (ActionData, Data, Model, Msg, data, route)
 import BackendTask exposing (BackendTask)
 import BackendTask.Glob as Glob
 import Css exposing (..)
-import Css.Extra exposing (columnGap, grid, paddingBlock)
+import Css.Extra exposing (columnGap, grid, paddingBlock, rowGap)
+import Css.Global
 import Css.Media as Media exposing (only, screen, withMedia)
 import Data.Sponsor as Sponsor exposing (IframeData(..), Plan(..), SponsorArticle, metadataDecoder, planToBadge)
 import Effect exposing (Effect)
@@ -12,7 +13,7 @@ import Head
 import Head.Seo
 import Html as PlainHtml
 import Html.Attributes as PlainAttributes
-import Html.Styled as Html exposing (Html, a, div, iframe, img, text)
+import Html.Styled as Html exposing (Html, a, aside, div, iframe, img, text)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, src)
 import Markdown.Block exposing (Block)
 import Markdown.Html
@@ -152,8 +153,74 @@ view :
     -> View (PagesMsg Msg)
 view d _ model =
     { title = "スポンサー"
-    , body = [ Html.section [] [ sponsorsSection model.seed d.data ] ]
+    , body =
+        [ Html.section
+            [ css
+                [ withMedia [ only screen [ Media.minWidth (px 1024) ] ]
+                    [ margin2 zero auto
+                    , display grid
+                    , property "grid-template-columns" "19em 35em"
+                    , justifyContent center
+                    , alignItems start
+                    , columnGap (em 5)
+                    ]
+                ]
+            ]
+            [ div
+                [ css
+                    [ withMedia [ only screen [ Media.minWidth (px 1024) ] ]
+                        [ position sticky
+                        , top (rem 2)
+                        ]
+                    ]
+                ]
+                [ tableOfContents model.seed d.data ]
+            , sponsorsSection model.seed d.data
+            ]
+        ]
     }
+
+
+tableOfContents : Int -> Data -> Html msg
+tableOfContents seed pageData =
+    let
+        sponsorGroups =
+            [ ( "プラチナスポンサー", pageData.platinumSponsors |> List.filter (\s -> s.body /= []) |> Sponsor.shuffle seed )
+            , ( "ゴールドスポンサー", pageData.goldSponsors |> List.filter (\s -> s.body /= []) |> Sponsor.shuffle seed )
+            , ( "シルバースポンサー", pageData.silverSponsors |> List.filter (\s -> s.body /= []) |> Sponsor.shuffle seed )
+            ]
+                |> List.filter (\( _, sponsors ) -> not (List.isEmpty sponsors))
+
+        tocItem sponsor =
+            a
+                [ href ("#" ++ sponsor.metadata.id)
+                , css
+                    [ display block
+                    , paddingBlock (px 4)
+                    , textDecoration none
+                    , hover [ textDecoration underline ]
+                    , fontSize (px 14)
+                    ]
+                ]
+                [ text sponsor.metadata.name ]
+
+        tocGroup ( planName, sponsors ) =
+            div [ css [ display grid, rowGap (em 0.5) ] ]
+                [ div [ css [ fontSize (px 16), fontWeight bold, color (rgb 68 68 68) ] ]
+                    [ text planName ]
+                , div [] (List.map tocItem sponsors)
+                ]
+    in
+    aside
+        [ css
+            [ padding (em 1.5)
+            , display grid
+            , rowGap (em 1)
+            , borderRadius (px 8)
+            , backgroundColor (rgb 248 249 250)
+            ]
+        ]
+        (List.map tocGroup sponsorGroups)
 
 
 sponsorsSection : Int -> Data -> Html msg
@@ -166,18 +233,12 @@ sponsorsSection seed pageData =
                     [ css
                         [ paddingBlock (px 40)
                         , borderTop3 (px 5) solid (rgb 246 246 246)
-                        , firstChild [ borderTopStyle none ]
-                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ display grid
-                            , property "grid-template-columns" "210px 1fr"
-                            , columnGap (px 40)
-                            ]
                         ]
+                    , Attributes.id f.metadata.id
                     ]
-                    [ div [ css [ marginBottom (px 30) ] ]
-                        [ sponsorLogo f.metadata.id f.metadata.name f.metadata.href ]
-                    , div
-                        [ css [ maxWidth (em 32.5) ] ]
+                    [ div [ css [ marginBottom (px 30), textAlign center ] ]
+                        [ sponsorLogo f.metadata.id f.metadata.name ]
+                    , div []
                         [ div [] [ planToBadge f.metadata.plan ]
                         , div
                             [ css
@@ -208,31 +269,43 @@ sponsorsSection seed pageData =
         )
 
 
-sponsorLogo : String -> String -> String -> Html msg
-sponsorLogo image name site =
-    a
-        [ href site
-        , Attributes.rel "noopener noreferrer"
-        , Attributes.target "_blank"
-        ]
-        [ img
-            [ src ("/images/sponsors/" ++ image ++ ".png")
-            , css
-                [ backgroundColor (rgb 255 255 255)
-                , borderRadius (px 10)
-                , width (pct 100)
-                ]
-            , alt name
+sponsorLogo : String -> String -> Html msg
+sponsorLogo image name =
+    img
+        [ src ("/images/sponsors/" ++ image ++ ".png")
+        , css
+            [ backgroundColor (rgb 255 255 255)
+            , borderRadius (px 10)
+            , width (pct 100)
+            , maxWidth (px 250)
             ]
-            []
+        , alt name
         ]
+        []
 
 
 sponsorBody : Markdown.Renderer.Renderer (PlainHtml.Html msg) -> List Block -> List (Html msg)
 sponsorBody renderer body =
     body
         |> Markdown.Renderer.render renderer
-        |> Result.map (List.map (\x -> Html.fromUnstyled x))
+        |> Result.map
+            (List.map
+                (\x ->
+                    Html.div
+                        [ css
+                            [ Css.Global.descendants
+                                [ Css.Global.selector "iframe"
+                                    [ maxWidth (pct 100)
+                                    , width (pct 100)
+                                    , property "aspect-ratio" "16 / 9"
+                                    , height auto
+                                    ]
+                                ]
+                            ]
+                        ]
+                        [ Html.fromUnstyled x ]
+                )
+            )
         |> (\r ->
                 case r of
                     Err e ->
