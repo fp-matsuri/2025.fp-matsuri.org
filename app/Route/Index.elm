@@ -480,12 +480,15 @@ overviewSection =
                 , item "チケット"
                     [ ticketTable
                         [ ConferenceTicket { category = "一般（懇親会なし）", price = "3,000円" }
-                        , BothTicket { category = "一般（懇親会あり）", price = "8,000円" }
                         , ConferenceTicket { category = "学生（懇親会なし）", price = "1,000円" }
-                        , BothTicket { category = "学生（懇親会あり）", price = "6,000円" }
-                        , PartyTicket { category = "懇親会のみ", price = "5,000円" }
+
+                        -- 懇親会チケットは販売終了
+                        -- , BothTicket { category = "一般（懇親会あり）", price = "8,000円" }
+                        -- , BothTicket { category = "学生（懇親会あり）", price = "6,000円" }
+                        -- , PartyTicket { category = "懇親会のみ", price = "5,000円" }
                         ]
-                    , note "Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
+                    , -- note "Day 1のセッション終了後には、参加者同士の交流を深める懇親会を予定しております。参加される方は「懇親会あり」のチケットをご購入ください。"
+                      note "懇親会チケットの販売は終了しました"
                     , buttonLink
                         { label = "チケットを購入（Doorkeeper）"
                         , url = "https://fp-matsuri.doorkeeper.jp/events/182879"
