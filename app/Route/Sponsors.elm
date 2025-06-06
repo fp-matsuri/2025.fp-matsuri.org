@@ -159,7 +159,7 @@ view d _ model =
                 [ withMedia [ only screen [ Media.minWidth (px 1024) ] ]
                     [ margin2 zero auto
                     , display grid
-                    , property "grid-template-columns" "19em 32.5em"
+                    , property "grid-template-columns" "19em 35em"
                     , justifyContent center
                     , alignItems start
                     , columnGap (em 5)
