@@ -237,7 +237,7 @@ sponsorsSection seed pageData =
                     , Attributes.id f.metadata.id
                     ]
                     [ div [ css [ marginBottom (px 30), textAlign center ] ]
-                        [ sponsorLogo f.metadata.id f.metadata.name f.metadata.href ]
+                        [ sponsorLogo f.metadata.id f.metadata.name ]
                     , div []
                         [ div [] [ planToBadge f.metadata.plan ]
                         , div
@@ -269,25 +269,19 @@ sponsorsSection seed pageData =
         )
 
 
-sponsorLogo : String -> String -> String -> Html msg
-sponsorLogo image name site =
-    a
-        [ href site
-        , Attributes.rel "noopener noreferrer"
-        , Attributes.target "_blank"
-        ]
-        [ img
-            [ src ("/images/sponsors/" ++ image ++ ".png")
-            , css
-                [ backgroundColor (rgb 255 255 255)
-                , borderRadius (px 10)
-                , width (pct 100)
-                , maxWidth (px 250)
-                ]
-            , alt name
+sponsorLogo : String -> String -> Html msg
+sponsorLogo image name =
+    img
+        [ src ("/images/sponsors/" ++ image ++ ".png")
+        , css
+            [ backgroundColor (rgb 255 255 255)
+            , borderRadius (px 10)
+            , width (pct 100)
+            , maxWidth (px 250)
             ]
-            []
+        , alt name
         ]
+        []
 
 
 sponsorBody : Markdown.Renderer.Renderer (PlainHtml.Html msg) -> List Block -> List (Html msg)
