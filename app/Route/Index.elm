@@ -928,7 +928,6 @@ staff =
     , members =
         [ Member "a-skua"
         , Member "antimon2"
-        , Member "aoiroaoino"
         , Member "ChenCMD"
         , Member "Guvalif"
         , Member "igrep"
