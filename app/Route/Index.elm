@@ -773,7 +773,13 @@ personalSupporterPlan :
 personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors =
     let
         isCommunity s =
-            s.image == "piyopiyo_ex.png" || s.image == "nerves.png"
+            List.any ((==) s.image)
+                [ "piyopiyo_ex.png"
+                , "nerves.png"
+                , "fukuokaex.png"
+                , "LiveViewJP.png"
+                , "ElixirImp.png"
+                ]
 
         listItem s =
             let
@@ -794,7 +800,7 @@ personalSupporterPlan title { mobileColumnsCount, desktopColumnWidth } sponsors 
                         [ src ("/images/sponsors/" ++ s.image)
                         , css
                             (if isCommunity s then
-                                [ height (px 40) ]
+                                [ height (px 40), borderRadius (px 2) ]
 
                              else
                                 [ width (px 40)
