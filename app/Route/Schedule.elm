@@ -4,7 +4,7 @@ import BackendTask exposing (BackendTask)
 import BackendTask.Http
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, gap, grid, gridColumn, gridRow, gridTemplateColumns, rowGap)
-import Css.Media as Media exposing (only, screen, withMedia)
+import Css.Media as Media exposing (only, print, screen, withMedia)
 import Data.Schedule exposing (TimetableItem(..), Track(..), calcGridRow, getCommonProps, timetableItemDecoder)
 import Data.Schedule.TalkId exposing (calcTalkIdWithOverride)
 import Dict
@@ -223,7 +223,10 @@ timetable title items =
                 , div
                     [ css
                         [ display none
-                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        , withMedia
+                            [ only screen [ Media.minWidth (px 640) ]
+                            , only print []
+                            ]
                             [ display grid
                             , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
                             , columnGap (px 10)
@@ -256,7 +259,10 @@ timetable title items =
                 [ displayFlex
                 , flexDirection column
                 , gap (px 10)
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                , withMedia
+                    [ only screen [ Media.minWidth (px 640) ]
+                    , only print []
+                    ]
                     [ display grid
                     , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
                     , rowGap zero
@@ -387,7 +393,10 @@ timetableItem talkId item =
                     , textDecoration none
                     , border3 (px 1.5) solid (hsl 226 0.1 0.9)
                     , color inherit
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    , withMedia
+                        [ only screen [ Media.minWidth (px 640) ]
+                        , only print []
+                        ]
                         [ marginTop (px 10) ]
                     ]
             in
@@ -445,7 +454,10 @@ timetableItem talkId item =
                     , alignItems center
                     , columnGap (px 10)
                     , backgroundColor (hsl 226 0.1 0.92)
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    , withMedia
+                        [ only screen [ Media.minWidth (px 640) ]
+                        , only print []
+                        ]
                         [ nthChild "n+2" [ marginTop (px 10) ] ]
                     ]
                 ]
