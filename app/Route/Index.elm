@@ -4,7 +4,7 @@ import BackendTask exposing (BackendTask)
 import Browser.Events
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridRow, gridTemplateColumns, gridTemplateRows, rowGap)
-import Css.Global exposing (children, descendants, withClass)
+import Css.Global exposing (children, descendants)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Data.Sponsor as Sponsor exposing (Plan(..))
 import Effect exposing (Effect)
@@ -13,7 +13,7 @@ import FpMatsuri.BackgroundTexture as BackgroundTexture
 import FpMatsuri.Logo
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
+import Html.Styled as Html exposing (Attribute, Html, a, div, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
@@ -131,7 +131,7 @@ hero seed time sponsorsData =
             25
 
         { gridRows, gridColumns } =
-            { gridRows = 22, gridColumns = 81 }
+            { gridRows = 20, gridColumns = 81 }
 
         -- Get platinum sponsors for hero section
         platinumSponsors =
@@ -139,7 +139,7 @@ hero seed time sponsorsData =
                 |> List.map
                     (\article ->
                         { name = article.metadata.name
-                        , image = article.metadata.id ++ ".png"
+                        , image = article.metadata.id ++ "_inverted.png"
                         , href = article.metadata.href
                         }
                     )
@@ -149,19 +149,15 @@ hero seed time sponsorsData =
         [ css
             [ padding3 zero (px 10) (px 10)
             , display grid
-            , gridTemplateColumns [ fr 1 ]
-            , gridTemplateRows [ fr 1 ]
             ]
         ]
         [ div
             [ css
-                [ gridColumn "1/-1"
-                , gridRow "1/-1"
-                , overflow hidden
+                [ overflow hidden
                 , height (px (cellSize * 20))
                 , borderRadius (px 10)
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ height (px (cellSize * 22)) ]
+                    [ height (px (cellSize * 20)) ]
                 ]
             ]
             [ div
@@ -173,18 +169,18 @@ hero seed time sponsorsData =
                     ]
                 ]
                 [ div [ css [ property "display" "contents" ] ] <|
-                    div [ css [ gridColumn "1 / -1", gridRow "1 / -1", backgroundColor (hsl 226 0.05 0.9) ] ] []
+                    div [ css [ gridColumn "1 / -1", gridRow "1 / -1", backgroundColor (hsl 209 0.94 0.06) ] ] []
                         :: BackgroundTexture.textureGrid seed time { rows = gridRows, columns = gridColumns }
                 , div
                     [ css
                         [ gridColumn "38/-38"
                         , gridRow "3/8"
-                        , backgroundColor (hsl 226 0.05 0.9)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         , padding (px cellSize)
                         , zIndex (int 1)
                         , children [ Css.Global.svg [ width (px (cellSize * 5)), height (px (cellSize * 4)) ] ]
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "5/10" ]
+                            [ gridRow "4/9" ]
                         ]
                     ]
                     [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
@@ -192,15 +188,15 @@ hero seed time sponsorsData =
                     [ css
                         [ gridColumn "35/-35"
                         , gridRow "8/13"
-                        , backgroundColor (hsl 226 0.05 0.9)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "10/15" ]
+                            [ gridRow "9/14" ]
                         ]
                     ]
-                    [ logoAndDate ]
+                    [ logotypeAndDate ]
                 , div
                     [ css
                         [ gridColumn "37/-37"
@@ -208,65 +204,35 @@ hero seed time sponsorsData =
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
-                        , backgroundColor (hsl 226 0.05 0.9)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "16/18" ]
+                            [ gridRow "14/18" ]
                         ]
                     ]
                     [ heroSponsorsBlock platinumSponsors ]
                 ]
             ]
-        , div
-            [ css
-                [ gridColumn "1/-1"
-                , gridRow "1/-1"
-                , padding (px 20)
-                , display grid
-                , property "align-items" "end"
-                , zIndex (int 1)
-                ]
-            ]
-            [ socialLinkList
-                [ { id = "x"
-                  , icon = "/images/x.svg"
-                  , href = "https://x.com/fp_matsuri"
-                  }
-                , { id = "hatena_blog"
-                  , icon = "/images/hatenablog.svg"
-                  , href = "https://blog.fp-matsuri.org/"
-                  }
-                , { id = "fortee"
-                  , icon = "/images/fortee.svg"
-                  , href = "https://fortee.jp/2025fp-matsuri"
-                  }
-                ]
-            ]
         ]
 
 
-logoAndDate : Html msg
-logoAndDate =
+logotypeAndDate : Html msg
+logotypeAndDate =
     let
-        -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
-        logo =
-            [ h1
-                [ css
-                    [ margin zero
-                    , lineHeight (num 1)
-                    , property "font-family" "var(--serif-logo)"
-                    , fontSize (rem 2.2)
-                    , fontWeight inherit
-                    ]
+        logotype =
+            img
+                [ src "/images/logotype.svg"
+                , alt "関数型まつり"
+                , css [ width (rem 12.5) ]
                 ]
-                [ text "関数型まつり" ]
-            ]
+                []
 
         date =
             div
                 [ css
                     [ property "font-family" "var(--montserrat-sans)"
                     , fontSize (em 1.1)
-                    , fontWeight (int 300)
+                    , fontWeight (int 400)
+                    , color (hsl 0 0 1)
                     ]
                 ]
                 [ text "2025.6.14"
@@ -286,7 +252,7 @@ logoAndDate =
                 [ property "grid-template-rows" "auto auto" ]
             ]
         ]
-        (logo ++ [ date ])
+        [ logotype, date ]
 
 
 heroSponsorsBlock : List { name : String, image : String, href : String } -> Html msg
@@ -308,6 +274,7 @@ heroSponsorsBlock sponsors =
                         [ display block
                         , borderRadius (px 10)
                         , width (pct 100)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         ]
                     , alt sponsor.name
                     ]
@@ -315,48 +282,6 @@ heroSponsorsBlock sponsors =
                 ]
     in
     div [ css [ display grid, property "place-items" "center" ] ] (List.map platinumSponsorLogo sponsors)
-
-
-socialLinkList : List { id : String, icon : String, href : String } -> Html msg
-socialLinkList links_ =
-    let
-        iconButton item =
-            a
-                [ href item.href
-                , css
-                    [ width (px 44)
-                    , height (px 44)
-                    , displayFlex
-                    , alignItems center
-                    , justifyContent center
-                    , borderRadius (pct 100)
-                    , backgroundColor (rgba 255 255 255 1)
-                    ]
-                ]
-                [ img
-                    [ class item.id
-                    , src item.icon
-                    , css
-                        [ withClass "x" [ width (pct 50), height (pct 50) ]
-                        , withClass "fortee" [ width (pct 50), height (pct 50) ]
-                        , withClass "hatena_blog" [ width (pct 100), height (pct 100) ]
-                        ]
-                    ]
-                    []
-                ]
-    in
-    ul
-        [ css
-            [ width (pct 100)
-            , height (px 44)
-            , margin zero
-            , padding zero
-            , displayFlex
-            , justifyContent flexEnd
-            , columnGap (rem 0.75)
-            ]
-        ]
-        (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links_)
 
 
 newsSection : Html msg
@@ -556,7 +481,8 @@ overviewSection =
                 [ display grid
                 , rowGap (em 1)
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ maxWidth (px 800)
+                    [ width (pct 100)
+                    , maxWidth (px 800)
                     , gridTemplateColumns [ fr 1, fr 1 ]
                     , columnGap (em 2)
                     ]
