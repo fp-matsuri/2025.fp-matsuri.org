@@ -131,7 +131,7 @@ hero seed time sponsorsData =
             25
 
         { gridRows, gridColumns } =
-            { gridRows = 22, gridColumns = 81 }
+            { gridRows = 20, gridColumns = 81 }
 
         -- Get platinum sponsors for hero section
         platinumSponsors =
@@ -157,7 +157,7 @@ hero seed time sponsorsData =
                 , height (px (cellSize * 20))
                 , borderRadius (px 10)
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ height (px (cellSize * 22)) ]
+                    [ height (px (cellSize * 20)) ]
                 ]
             ]
             [ div
@@ -180,7 +180,7 @@ hero seed time sponsorsData =
                         , zIndex (int 1)
                         , children [ Css.Global.svg [ width (px (cellSize * 5)), height (px (cellSize * 4)) ] ]
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "5/10" ]
+                            [ gridRow "4/9" ]
                         ]
                     ]
                     [ Html.fromUnstyled <| FpMatsuri.Logo.logoMark ]
@@ -193,7 +193,7 @@ hero seed time sponsorsData =
                         , displayFlex
                         , property "place-items" "center"
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "10/15" ]
+                            [ gridRow "9/14" ]
                         ]
                     ]
                     [ logotypeAndDate ]
@@ -206,7 +206,7 @@ hero seed time sponsorsData =
                         , property "place-items" "center"
                         , backgroundColor (hsl 226 0.05 0.9)
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "16/18" ]
+                            [ gridRow "15/17" ]
                         ]
                     ]
                     [ heroSponsorsBlock platinumSponsors ]
