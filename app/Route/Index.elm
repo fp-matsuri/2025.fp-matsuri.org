@@ -196,7 +196,7 @@ hero seed time sponsorsData =
                             [ gridRow "10/15" ]
                         ]
                     ]
-                    [ logoAndDate ]
+                    [ logotypeAndDate ]
                 , div
                     [ css
                         [ gridColumn "37/-37"
@@ -215,22 +215,17 @@ hero seed time sponsorsData =
         ]
 
 
-logoAndDate : Html msg
-logoAndDate =
+logotypeAndDate : Html msg
+logotypeAndDate =
     let
         -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
-        logo =
-            [ h1
-                [ css
-                    [ margin zero
-                    , lineHeight (num 1)
-                    , property "font-family" "var(--serif-logo)"
-                    , fontSize (rem 2.2)
-                    , fontWeight inherit
-                    ]
+        logotype =
+            img
+                [ src "/images/logotype.svg"
+                , alt "関数型まつり"
+                , css [ width (rem 12.5) ]
                 ]
-                [ text "関数型まつり" ]
-            ]
+                []
 
         date =
             div
@@ -257,7 +252,7 @@ logoAndDate =
                 [ property "grid-template-rows" "auto auto" ]
             ]
         ]
-        (logo ++ [ date ])
+        [ logotype, date ]
 
 
 heroSponsorsBlock : List { name : String, image : String, href : String } -> Html msg
