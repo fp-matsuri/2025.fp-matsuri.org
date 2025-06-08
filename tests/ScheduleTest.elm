@@ -17,9 +17,9 @@ suite =
                 \_ ->
                     let
                         gridPositionByUUID items uuid =
-                            findCommonPropsByUUID items uuid
+                            findTalkByUUID items uuid
                                 |> Maybe.map
-                                    (\props ->
+                                    (\{ item, props } ->
                                         let
                                             baseTime =
                                                 if isDay1 props then
@@ -28,11 +28,11 @@ suite =
                                                 else
                                                     { baseHour = 9, baseMinute = 30 }
                                         in
-                                        calcGridRow baseTime props |> .row
+                                        calcGridRow baseTime item |> .row
                                     )
                                 |> Maybe.withDefault "50"
 
-                        findCommonPropsByUUID items uuid =
+                        findTalkByUUID items uuid =
                             items
                                 |> List.filterMap
                                     (\item ->
@@ -41,7 +41,7 @@ suite =
                                                 getCommonProps item
                                         in
                                         if props.uuid == uuid then
-                                            Just props
+                                            Just { item = item, props = props }
 
                                         else
                                             Nothing
