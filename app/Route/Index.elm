@@ -482,7 +482,8 @@ overviewSection =
                 [ display grid
                 , rowGap (em 1)
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                    [ maxWidth (px 800)
+                    [ width (pct 100)
+                    , maxWidth (px 800)
                     , gridTemplateColumns [ fr 1, fr 1 ]
                     , columnGap (em 2)
                     ]
