@@ -162,7 +162,7 @@ a {
 .site-footer {
   padding: 2rem;
   text-align: center;
-  background-color: var(--color-primary);
+  background-color: hsl(209 0.94 0.06);
   color: var(--color-on-primary);
 }
 

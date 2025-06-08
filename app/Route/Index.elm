@@ -13,7 +13,7 @@ import FpMatsuri.BackgroundTexture as BackgroundTexture
 import FpMatsuri.Logo
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
+import Html.Styled as Html exposing (Attribute, Html, a, div, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
@@ -139,7 +139,7 @@ hero seed time sponsorsData =
                 |> List.map
                     (\article ->
                         { name = article.metadata.name
-                        , image = article.metadata.id ++ ".png"
+                        , image = article.metadata.id ++ "_inverted.png"
                         , href = article.metadata.href
                         }
                     )
@@ -169,13 +169,13 @@ hero seed time sponsorsData =
                     ]
                 ]
                 [ div [ css [ property "display" "contents" ] ] <|
-                    div [ css [ gridColumn "1 / -1", gridRow "1 / -1", backgroundColor (hsl 226 0.05 0.9) ] ] []
+                    div [ css [ gridColumn "1 / -1", gridRow "1 / -1", backgroundColor (hsl 209 0.94 0.06) ] ] []
                         :: BackgroundTexture.textureGrid seed time { rows = gridRows, columns = gridColumns }
                 , div
                     [ css
                         [ gridColumn "38/-38"
                         , gridRow "3/8"
-                        , backgroundColor (hsl 226 0.05 0.9)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         , padding (px cellSize)
                         , zIndex (int 1)
                         , children [ Css.Global.svg [ width (px (cellSize * 5)), height (px (cellSize * 4)) ] ]
@@ -188,7 +188,7 @@ hero seed time sponsorsData =
                     [ css
                         [ gridColumn "35/-35"
                         , gridRow "8/13"
-                        , backgroundColor (hsl 226 0.05 0.9)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
@@ -204,9 +204,9 @@ hero seed time sponsorsData =
                         , zIndex (int 1)
                         , displayFlex
                         , property "place-items" "center"
-                        , backgroundColor (hsl 226 0.05 0.9)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ gridRow "15/17" ]
+                            [ gridRow "14/18" ]
                         ]
                     ]
                     [ heroSponsorsBlock platinumSponsors ]
@@ -232,7 +232,8 @@ logotypeAndDate =
                 [ css
                     [ property "font-family" "var(--montserrat-sans)"
                     , fontSize (em 1.1)
-                    , fontWeight (int 300)
+                    , fontWeight (int 400)
+                    , color (hsl 0 0 1)
                     ]
                 ]
                 [ text "2025.6.14"
@@ -274,6 +275,7 @@ heroSponsorsBlock sponsors =
                         [ display block
                         , borderRadius (px 10)
                         , width (pct 100)
+                        , backgroundColor (hsl 209 0.94 0.06)
                         ]
                     , alt sponsor.name
                     ]
