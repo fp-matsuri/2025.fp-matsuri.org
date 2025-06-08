@@ -164,7 +164,7 @@ navMenu toMsg menuOpened =
                     , css [ mediaQueryForPC [ Css.display Css.none ], mediaQueryForMobile [ Css.display Css.block ] ]
                     ]
                     [ div [ class "menu-header" ]
-                        [ a [ href "/", withClose ] [ img [ src "/images/logotype.svg", alt "関数型まつり" ] [] ]
+                        [ a [ href "/", withClose ] [ img [ src "/images/logo_horizontal.svg", alt "関数型まつり" ] [] ]
                         , div [ class "menu-close-button", withClose ] [ text "✕" ]
                         ]
                     , div [] sitemap
@@ -191,11 +191,7 @@ view _ { route } model toMsg pageView =
         List.map Html.Styled.toUnstyled
             [ header [ class "site-header" ]
                 [ a [ class "site-logo", href "/" ]
-                    [ img
-                        [ src "/images/logotype.svg"
-                        , alt "関数型まつり"
-                        ]
-                        []
+                    [ img [ src "/images/logo_horizontal.svg", alt "関数型まつり" ] []
                     ]
                 , navMenu toMsg model.menuOpened
                 ]
