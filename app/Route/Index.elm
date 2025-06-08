@@ -218,7 +218,6 @@ hero seed time sponsorsData =
 logotypeAndDate : Html msg
 logotypeAndDate =
     let
-        -- TODO：ロゴイメージとロゴタイプ1枚の画像にする
         logotype =
             img
                 [ src "/images/logotype.svg"
