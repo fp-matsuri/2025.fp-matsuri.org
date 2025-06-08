@@ -4,7 +4,7 @@ import BackendTask exposing (BackendTask)
 import Browser.Events
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, grid, gridColumn, gridRow, gridTemplateColumns, gridTemplateRows, rowGap)
-import Css.Global exposing (children, descendants, withClass)
+import Css.Global exposing (children, descendants)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Data.Sponsor as Sponsor exposing (Plan(..))
 import Effect exposing (Effect)
@@ -149,15 +149,11 @@ hero seed time sponsorsData =
         [ css
             [ padding3 zero (px 10) (px 10)
             , display grid
-            , gridTemplateColumns [ fr 1 ]
-            , gridTemplateRows [ fr 1 ]
             ]
         ]
         [ div
             [ css
-                [ gridColumn "1/-1"
-                , gridRow "1/-1"
-                , overflow hidden
+                [ overflow hidden
                 , height (px (cellSize * 20))
                 , borderRadius (px 10)
                 , withMedia [ only screen [ Media.minWidth (px 640) ] ]
@@ -214,31 +210,6 @@ hero seed time sponsorsData =
                         ]
                     ]
                     [ heroSponsorsBlock platinumSponsors ]
-                ]
-            ]
-        , div
-            [ css
-                [ gridColumn "1/-1"
-                , gridRow "1/-1"
-                , padding (px 20)
-                , display grid
-                , property "align-items" "end"
-                , zIndex (int 1)
-                ]
-            ]
-            [ socialLinkList
-                [ { id = "x"
-                  , icon = "/images/x.svg"
-                  , href = "https://x.com/fp_matsuri"
-                  }
-                , { id = "hatena_blog"
-                  , icon = "/images/hatenablog.svg"
-                  , href = "https://blog.fp-matsuri.org/"
-                  }
-                , { id = "fortee"
-                  , icon = "/images/fortee.svg"
-                  , href = "https://fortee.jp/2025fp-matsuri"
-                  }
                 ]
             ]
         ]
@@ -315,48 +286,6 @@ heroSponsorsBlock sponsors =
                 ]
     in
     div [ css [ display grid, property "place-items" "center" ] ] (List.map platinumSponsorLogo sponsors)
-
-
-socialLinkList : List { id : String, icon : String, href : String } -> Html msg
-socialLinkList links_ =
-    let
-        iconButton item =
-            a
-                [ href item.href
-                , css
-                    [ width (px 44)
-                    , height (px 44)
-                    , displayFlex
-                    , alignItems center
-                    , justifyContent center
-                    , borderRadius (pct 100)
-                    , backgroundColor (rgba 255 255 255 1)
-                    ]
-                ]
-                [ img
-                    [ class item.id
-                    , src item.icon
-                    , css
-                        [ withClass "x" [ width (pct 50), height (pct 50) ]
-                        , withClass "fortee" [ width (pct 50), height (pct 50) ]
-                        , withClass "hatena_blog" [ width (pct 100), height (pct 100) ]
-                        ]
-                    ]
-                    []
-                ]
-    in
-    ul
-        [ css
-            [ width (pct 100)
-            , height (px 44)
-            , margin zero
-            , padding zero
-            , displayFlex
-            , justifyContent flexEnd
-            , columnGap (rem 0.75)
-            ]
-        ]
-        (List.map (\link -> li [ css [ listStyle none ] ] [ iconButton link ]) links_)
 
 
 newsSection : Html msg
