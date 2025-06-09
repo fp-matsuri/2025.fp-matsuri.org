@@ -16,27 +16,24 @@ export default {
     return !file.endsWith(".css");
   },
   adapter() {
-    console.log("Generating 404.html with redirect to ErrorPage.elm...");
+    try {
+      const notFoundPath = "dist/not-found/index.html";
+      if (fs.existsSync(notFoundPath)) {
+        let notFoundHtml = fs.readFileSync(notFoundPath, 'utf8');
+        notFoundHtml = notFoundHtml
+          .replace(/<script[^>]*elm\.[\w.]+\.js[^>]*><\/script>/g, '')
+          .replace(/<script[^>]*type="module"[^>]*><\/script>/g, '')
+          .replace(/<link[^>]*modulepreload[^>]*>/g, '')
+          .replace(/<script[^>]*defer[^>]*><\/script>/g, '');
 
-    const redirectHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found | 関数型まつり</title>
-    <meta http-equiv="refresh" content="0; url=/not-found">
-    <script>
-        // Redirect to /not-found route that displays ErrorPage.elm content
-        window.location.replace('/not-found');
-    </script>
-</head>
-<body>
-    <p>Page not found. Redirecting to <a href="/not-found">error page</a>...</p>
-</body>
-</html>`;
-
-    fs.writeFileSync("dist/404.html", redirectHtml);
-    console.log("✅ Generated 404.html with redirect to /not-found route (ErrorPage.elm)");
+        fs.writeFileSync("dist/404.html", notFoundHtml);
+        console.log("✅ Generated 404.html using ErrorPage.elm HTML without JavaScript dependencies");
+      } else {
+        console.log("⚠️  /not-found route not found, skipping 404.html generation");
+      }
+    } catch (error) {
+      console.error("❌ Error generating 404.html:", error);
+    }
 
     return Promise.resolve();
   },
