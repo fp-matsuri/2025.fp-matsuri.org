@@ -77,7 +77,7 @@ a {
 }
 
 .site-header > .site-menu > nav a {
-  display: inline-block;
+  display: block;
   padding: 0.5rem 0.5rem;
   text-decoration: inherit;
   color: inherit;
@@ -103,9 +103,9 @@ a {
 
 .mobile-menu-content {
   position: fixed;
-  top: 30%;
+  top: 10%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
   width: auto;
   min-width: 300px;
   max-width: calc(100% - 40px);
@@ -162,7 +162,7 @@ a {
 .site-footer {
   padding: 2rem;
   text-align: center;
-  background-color: var(--color-primary);
+  background-color: hsl(209 0.94 0.06);
   color: var(--color-on-primary);
 }
 
@@ -287,11 +287,11 @@ section > h2 {
 }
 
 .people.leaders {
-  max-width: 720px;
+  max-width: 600px;
 }
 
 .people.staff {
-  max-width: 1200px;
+  max-width: 799px;
 }
 
 .people ul {
@@ -299,41 +299,15 @@ section > h2 {
   padding: 0;
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   row-gap: 0.2rem;
   list-style: none;
 }
 
 @media all and (min-width: 640px) {
   .people ul {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
-}
-
-.people a.person {
-  margin: 0;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  text-align: center;
-  font-size: 14px;
-  text-decoration: none;
-  color: inherit;
-  border-radius: 10px;
-  border: 1px solid transparent;
-}
-
-a.person:hover {
-  background-color: #f9f9f9;
-  border-color: #ddd;
-}
-
-.people .person > img {
-  max-width: 50px;
-  border-radius: 50%;
-  border: 1px solid hsl(0 0 0 / 0.05);
 }
 
 /* ------------------------------------

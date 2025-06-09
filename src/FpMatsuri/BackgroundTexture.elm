@@ -133,7 +133,7 @@ renderGridCell { rows, columns } time ( ( column, row ), element ) =
             div
                 [ css
                     [ batch commonStyles
-                    , property "background-color" "hsla(0, 0%, 100%, 0.3)"
+                    , property "background-color" "hsla(0, 0%, 100%, 0.1)"
                     , borderRadius (pct 50)
                     ]
                 ]
@@ -148,19 +148,19 @@ renderGridCell { rows, columns } time ( ( column, row ), element ) =
                 gradientColors =
                     case gradientType of
                         0 ->
-                            "hsla(0, 0%, 100%, 0.9) 0%, hsla(0, 0%, 100%, 0.6) 100%"
+                            "hsla(0, 0%, 100%, 0.14) 0%, hsla(0, 0%, 100%, 0.09) 100%"
 
                         1 ->
-                            "hsla(0, 0%, 100%, 0.8) 0%, hsla(0, 0%, 100%, 0.5) 100%"
+                            "hsla(0, 0%, 100%, 0.13) 0%, hsla(0, 0%, 100%, 0.08) 100%"
 
                         2 ->
-                            "hsla(0, 0%, 100%, 0.7) 0%, hsla(0, 0%, 100%, 0.4) 100%"
+                            "hsla(0, 0%, 100%, 0.12) 0%, hsla(0, 0%, 100%, 0.07) 100%"
 
                         3 ->
-                            "hsla(0, 0%, 100%, 0.6) 0%, hsla(0, 0%, 100%, 0.3) 100%"
+                            "hsla(0, 0%, 100%, 0.11) 0%, hsla(0, 0%, 100%, 0.06) 100%"
 
                         _ ->
-                            "hsla(0, 0%, 100%, 0.5) 0%, hsla(0, 0%, 100%, 0.2) 100%"
+                            "hsla(0, 0%, 100%, 0.1) 0%, hsla(0, 0%, 100%, 0.05) 100%"
             in
             div
                 [ css

@@ -58,6 +58,7 @@ type Track
     | TrackA
     | TrackB
     | TrackC
+    | AB
 
 
 type alias Tag =
@@ -162,6 +163,16 @@ iso8601Decoder =
             )
 
 
+isTalk : TimetableItem -> Bool
+isTalk item =
+    case item of
+        Talk _ _ ->
+            True
+
+        _ ->
+            False
+
+
 {-| タイムテーブル項目から共通プロパティを取得する
 -}
 getCommonProps : TimetableItem -> CommonProps
@@ -183,9 +194,12 @@ getStartsAtMillis =
 
 {-| セッションの開始時刻と所要時間からグリッドレイアウト用の行番号を取得する
 -}
-calcGridRow : { baseHour : Int, baseMinute : Int } -> CommonProps -> { row : String }
-calcGridRow { baseHour, baseMinute } c =
+calcGridRow : { baseHour : Int, baseMinute : Int } -> TimetableItem -> { row : String }
+calcGridRow { baseHour, baseMinute } item =
     let
+        c =
+            getCommonProps item
+
         gridInterval =
             5
 
@@ -217,14 +231,15 @@ calcGridRow { baseHour, baseMinute } c =
 
         -- 所要時間に基づくグリッドのスパン数（50分の場合は60分、25分の場合は30分として計算）
         adjustedLength =
-            if c.lengthMin == 50 then
-                60
+            case ( isTalk item, c.lengthMin ) of
+                ( True, 50 ) ->
+                    60
 
-            else if c.lengthMin == 25 then
-                30
+                ( True, 25 ) ->
+                    30
 
-            else
-                c.lengthMin
+                _ ->
+                    c.lengthMin
 
         spanCount =
             ceiling (toFloat adjustedLength / gridInterval)

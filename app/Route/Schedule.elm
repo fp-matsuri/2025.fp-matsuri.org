@@ -4,7 +4,7 @@ import BackendTask exposing (BackendTask)
 import BackendTask.Http
 import Css exposing (..)
 import Css.Extra exposing (columnGap, fr, gap, grid, gridColumn, gridRow, gridTemplateColumns, rowGap)
-import Css.Media as Media exposing (only, screen, withMedia)
+import Css.Media as Media exposing (only, print, screen, withMedia)
 import Data.Schedule exposing (TimetableItem(..), Track(..), calcGridRow, getCommonProps, timetableItemDecoder)
 import Data.Schedule.TalkId exposing (calcTalkIdWithOverride)
 import Dict
@@ -14,7 +14,6 @@ import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, div, h1, header, img, span, text)
 import Html.Styled.Attributes as Attributes exposing (alt, css, href, rel, src)
-import Iso8601
 import Json.Decode as Decode
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -59,12 +58,6 @@ data =
         |> BackendTask.onError (\_ -> BackendTask.succeed { timetable = [] })
 
 
-parseIso8601 : String -> Posix
-parseIso8601 isoString =
-    Iso8601.toTime isoString
-        |> Result.withDefault (Time.millisToPosix 0)
-
-
 head : App Data ActionData RouteParams -> List Head.Tag
 head _ =
     Site.summaryLarge { pageTitle = "開催スケジュール" }
@@ -82,6 +75,7 @@ view app _ =
             [ css
                 [ maxWidth (px 850)
                 , margin2 zero auto
+                , padding3 zero (px 15) (px 30)
                 , display grid
                 , rowGap (px 30)
                 ]
@@ -91,23 +85,8 @@ view app _ =
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 14)
                     |> filterDuplicateTimeslots
-                    |> List.filter (getCommonProps >> .title >> (/=) "Scott Wlaschinさんによるセッション")
-                    |> (::)
-                        (Talk
-                            { type_ = "talk"
-                            , uuid = "scott"
-                            , title = "Scott Wlaschinさんによるセッション"
-                            , track = All
-                            , startsAt = parseIso8601 "2025-06-14T18:00:00+09:00"
-                            , lengthMin = 50
-                            }
-                            { url = ""
-                            , abstract = "Domain Modeling Made Functional (『関数型ドメインモデリング』)の著者として知られるScott Wlaschinさんによる招待セッション"
-                            , accepted = True
-                            , tags = []
-                            , speaker = { name = "Scott Wlaschin", kana = "スコット", twitter = Nothing, avatarUrl = Nothing }
-                            }
-                        )
+                    -- 複数トラックに登録されているScottさんのトークを1つに統合する
+                    |> scottSessionFilter
                     |> List.sortBy timetableItemSortKey
                 )
             , timetable "Day 2：2025年6月15日"
@@ -143,6 +122,9 @@ timetableItemSortKey item =
 
                 TrackC ->
                     3
+
+                AB ->
+                    1
     in
     ( Time.posixToMillis startsAt, trackOrder )
 
@@ -182,14 +164,41 @@ filterDuplicateTimeslots items =
             )
         |> Dict.toList
         |> List.concatMap
-            -- グループ内のTimeslotが3つある場合、1つを残しTrack.Allとして扱う
             (\( _, items_ ) ->
-                case ( List.length items_ >= 3, List.head items_ ) of
-                    ( True, Just (Timeslot c) ) ->
+                case ( List.length items_, List.head items_ ) of
+                    ( 3, Just (Timeslot c) ) ->
+                        -- グループ内のTimeslotが3つある場合、1つを残しTrack.Allとして扱う
                         [ Timeslot { c | track = All } ]
+
+                    ( 2, Just (Timeslot c) ) ->
+                        -- グループ内のTimeslotが2つある場合、1つを残しTrack.ABとして扱う
+                        -- TODO: TrackCが含まれる場合を想定する
+                        [ Timeslot { c | title = c.title ++ "（Track A, B共通）", track = AB } ]
 
                     _ ->
                         items_
+            )
+
+
+{-| 複数トラックに登録されているScottさんのトークを1つに統合する
+TrackA以外のTimeslotを削除し、TrackAで登録されているトークのTrackをAllに変更
+-}
+scottSessionFilter : List TimetableItem -> List TimetableItem
+scottSessionFilter items =
+    items
+        |> List.filter (getCommonProps >> (\{ title, track } -> not (title == "What I have learned from 15 years of functional programming" && track /= TrackA)))
+        |> List.map
+            (\item ->
+                let
+                    { title } =
+                        getCommonProps item
+                in
+                case ( item, title == "What I have learned from 15 years of functional programming" ) of
+                    ( Talk c t, True ) ->
+                        Talk { c | track = All } t
+
+                    _ ->
+                        item
             )
 
 
@@ -214,7 +223,10 @@ timetable title items =
                 , div
                     [ css
                         [ display none
-                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                        , withMedia
+                            [ only screen [ Media.minWidth (px 640) ]
+                            , only print []
+                            ]
                             [ display grid
                             , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
                             , columnGap (px 10)
@@ -247,7 +259,10 @@ timetable title items =
                 [ displayFlex
                 , flexDirection column
                 , gap (px 10)
-                , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                , withMedia
+                    [ only screen [ Media.minWidth (px 640) ]
+                    , only print []
+                    ]
                     [ display grid
                     , gridTemplateColumns [ fr 1, fr 1, fr 1 ]
                     , rowGap zero
@@ -320,7 +335,7 @@ timetableItem talkId item =
                 { baseHour = 9, baseMinute = 30 }
 
         { row } =
-            calcGridRow baseTime (getCommonProps item)
+            calcGridRow baseTime item
 
         commonStyles c =
             [ gridColumn (columnFromTrack c.track)
@@ -341,7 +356,7 @@ timetableItem talkId item =
                                 -- 招待セッションの場合はタグを追加
                                 if
                                     List.any (\id -> c.uuid == id)
-                                        [ "scott"
+                                        [ "cc680424-27f5-4fc1-8fa1-82b5df6cad20"
                                         , "5699c262-e04d-4f58-a6f5-34c390f36d0d"
                                         , "61fb241f-cfaa-448a-892d-277e93577198"
                                         ]
@@ -378,7 +393,10 @@ timetableItem talkId item =
                     , textDecoration none
                     , border3 (px 1.5) solid (hsl 226 0.1 0.9)
                     , color inherit
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    , withMedia
+                        [ only screen [ Media.minWidth (px 640) ]
+                        , only print []
+                        ]
                         [ marginTop (px 10) ]
                     ]
             in
@@ -419,6 +437,12 @@ timetableItem talkId item =
                     ]
                 , div [ css [ displayFlex, flexWrap wrap, gap (px 4) ] ]
                     (List.map viewTag filteredTags)
+                , if c.title == "What I have learned from 15 years of functional programming" then
+                    div [ css [ fontSize (px 14), color (hex "#666") ] ]
+                        [ text "※ Track A, B, C共通で日本語字幕付きのセッション動画を投影する形式で行います" ]
+
+                  else
+                    text ""
                 ]
 
         Timeslot c ->
@@ -430,7 +454,10 @@ timetableItem talkId item =
                     , alignItems center
                     , columnGap (px 10)
                     , backgroundColor (hsl 226 0.1 0.92)
-                    , withMedia [ only screen [ Media.minWidth (px 640) ] ]
+                    , withMedia
+                        [ only screen [ Media.minWidth (px 640) ]
+                        , only print []
+                        ]
                         [ nthChild "n+2" [ marginTop (px 10) ] ]
                     ]
                 ]
@@ -456,15 +483,18 @@ columnFromTrack track =
         TrackC ->
             "3"
 
+        AB ->
+            "1/3"
+
 
 viewTag : { name : String, colorText : Css.Color, colorBackground : Css.Color } -> Html msg
 viewTag tag =
     div
         [ css
-            [ display inlineBlock
-            , padding2 (px 2) (px 6)
+            [ padding (px 5)
             , borderRadius (px 4)
             , whiteSpace noWrap
+            , lineHeight (num 1)
             , fontSize (px 12)
             , backgroundColor tag.colorBackground
             , color tag.colorText
@@ -517,3 +547,6 @@ trackColorConfig track =
 
         TrackC ->
             { bgColor = hex "#5352A0", textColor = hex "#FFFFFF" }
+
+        AB ->
+            { bgColor = hex "#CE3F3D", textColor = hex "#FFFFFF" }

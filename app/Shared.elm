@@ -142,14 +142,15 @@ navMenu toMsg menuOpened =
             , div [] [ a [ href "/schedule", withClose ] [ text "スケジュール" ] ]
             , div [] [ a [ href "/sponsors", withClose ] [ text "スポンサー" ] ]
             , div [] [ a [ href "/code-of-conduct/", withClose ] [ text "行動規範" ] ]
+            , div [] [ a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d", withClose, Attr.target "_blank" ] [ text "お問い合わせ" ] ]
             ]
 
         accounts =
             [ div [ class "hr-with-text" ] [ text "公式アカウント" ]
-            , div [] [ a [ href "https://x.com/fp_matsuri", rel "noopener noreferrer", Attr.target "_blank" ] [ text "X" ] ]
-            , div [] [ a [ href "https://bsky.app/profile/fp-matsuri.bsky.social", rel "noopener noreferrer", Attr.target "_blank" ] [ text "Bluesky" ] ]
-            , div [] [ a [ href "https://blog.fp-matsuri.org/", rel "noopener noreferrer", Attr.target "_blank" ] [ text "ブログ" ] ]
-            , div [] [ a [ href "https://fortee.jp/2025fp-matsuri", rel "noopener noreferrer", Attr.target "_blank" ] [ text "fortee" ] ]
+            , socialLink False X "https://x.com/fp_matsuri"
+            , socialLink False Bluesky "https://bsky.app/profile/fp-matsuri.bsky.social"
+            , socialLink False Blog "https://blog.fp-matsuri.org/"
+            , socialLink False Fortee "https://fortee.jp/2025fp-matsuri"
             ]
 
         hamburgerMenuContents =
@@ -163,7 +164,7 @@ navMenu toMsg menuOpened =
                     , css [ mediaQueryForPC [ Css.display Css.none ], mediaQueryForMobile [ Css.display Css.block ] ]
                     ]
                     [ div [ class "menu-header" ]
-                        [ a [ href "/", withClose ] [ img [ src "/images/logotype.svg", alt "関数型まつり" ] [] ]
+                        [ a [ href "/", withClose ] [ img [ src "/images/logo_horizontal.svg", alt "関数型まつり" ] [] ]
                         , div [ class "menu-close-button", withClose ] [ text "✕" ]
                         ]
                     , div [] sitemap
@@ -190,25 +191,11 @@ view _ { route } model toMsg pageView =
         List.map Html.Styled.toUnstyled
             [ header [ class "site-header" ]
                 [ a [ class "site-logo", href "/" ]
-                    [ img
-                        [ src "/images/logotype.svg"
-                        , alt "関数型まつり"
-                        ]
-                        []
+                    [ img [ src "/images/logo_horizontal.svg", alt "関数型まつり" ] []
                     ]
                 , navMenu toMsg model.menuOpened
                 ]
-            , main_
-                [ css
-                    [ case route of
-                        Just Route.Index ->
-                            padding zero
-
-                        _ ->
-                            padding3 zero (px 15) (px 30)
-                    ]
-                ]
-                pageView.body
+            , main_ [] pageView.body
             , footer [ class "site-footer" ]
                 [ nav []
                     [ h4 [] [ text "サイトマップ" ]
@@ -216,12 +203,13 @@ view _ { route } model toMsg pageView =
                     , div [] [ a [ href "/schedule" ] [ text "スケジュール" ] ]
                     , div [] [ a [ href "/sponsors" ] [ text "スポンサー" ] ]
                     , div [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
+                    , div [] [ a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d", Attr.target "_blank" ] [ text "お問い合わせ" ] ]
                     , br [] []
                     , h4 [] [ text "公式アカウント" ]
-                    , div [] [ a [ href "https://x.com/fp_matsuri", rel "noopener noreferrer", Attr.target "_blank" ] [ text "X" ] ]
-                    , div [] [ a [ href "https://bsky.app/profile/fp-matsuri.bsky.social", rel "noopener noreferrer", Attr.target "_blank" ] [ text "Bluesky" ] ]
-                    , div [] [ a [ href "https://blog.fp-matsuri.org/", rel "noopener noreferrer", Attr.target "_blank" ] [ text "ブログ" ] ]
-                    , div [] [ a [ href "https://fortee.jp/2025fp-matsuri", rel "noopener noreferrer", Attr.target "_blank" ] [ text "fortee" ] ]
+                    , socialLink True X "https://x.com/fp_matsuri"
+                    , socialLink True Bluesky "https://bsky.app/profile/fp-matsuri.bsky.social"
+                    , socialLink True Blog "https://blog.fp-matsuri.org/"
+                    , socialLink True Fortee "https://fortee.jp/2025fp-matsuri"
                     , br [] []
                     ]
                 , text "© 2025 関数型まつり準備委員会"
@@ -234,3 +222,98 @@ view _ { route } model toMsg pageView =
         else
             "関数型まつり"
     }
+
+
+
+-- SNS
+
+
+type SNS
+    = X
+    | Bluesky
+    | Blog
+    | Fortee
+
+
+snsToString : SNS -> String
+snsToString sns =
+    case sns of
+        X ->
+            "X"
+
+        Bluesky ->
+            "Bluesky"
+
+        Blog ->
+            "ブログ"
+
+        Fortee ->
+            "fortee"
+
+
+snsIcon : Bool -> SNS -> Html.Styled.Html msg
+snsIcon isInverted sns =
+    let
+        iconStyles =
+            [ property "justify-self" "center"
+            , if isInverted then
+                property "filter" "invert(100%) sepia(1%) saturate(2%) hue-rotate(141deg) brightness(113%) contrast(100%)"
+
+              else
+                property "filter" "invert(9%) sepia(41%) saturate(1096%) hue-rotate(151deg) brightness(94%) contrast(88%);"
+            ]
+    in
+    case sns of
+        X ->
+            img
+                [ src "/images/x.svg"
+                , alt (snsToString sns)
+                , css [ batch iconStyles, width (pct 80) ]
+                ]
+                []
+
+        Bluesky ->
+            img
+                [ src "/images/bluesky.svg"
+                , alt (snsToString sns)
+                , css [ batch iconStyles, width (pct 90) ]
+                ]
+                []
+
+        Blog ->
+            img
+                [ src "/images/hatenablog.svg"
+                , alt (snsToString sns)
+                , css [ batch iconStyles, width (pct 145) ]
+                ]
+                []
+
+        Fortee ->
+            img
+                [ src "/images/fortee.svg"
+                , alt (snsToString sns)
+                , css [ batch iconStyles, width (pct 90) ]
+                ]
+                []
+
+
+socialLink : Bool -> SNS -> String -> Html.Styled.Html msg
+socialLink isInverted sns url =
+    a
+        [ href url
+        , Attr.target "_blank"
+        , rel "noopener noreferrer"
+        , css
+            [ padding (rem 0.5)
+            , property "display" "grid" |> Css.important
+            , property "grid-template-columns" "1em 1fr"
+            , alignItems center
+            , property "column-gap" "0.5em"
+            , lineHeight (num 1)
+            , textDecoration none
+            , color inherit
+            ]
+        ]
+        [ snsIcon isInverted sns
+        , text (snsToString sns)
+        ]

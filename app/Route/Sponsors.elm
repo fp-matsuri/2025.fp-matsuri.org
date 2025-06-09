@@ -3,15 +3,17 @@ module Route.Sponsors exposing (ActionData, Data, Model, Msg, data, route)
 import BackendTask exposing (BackendTask)
 import BackendTask.Glob as Glob
 import Css exposing (..)
-import Css.Extra exposing (columnGap, grid, paddingBlock)
+import Css.Extra exposing (columnGap, grid, paddingBlock, rowGap)
+import Css.Global
 import Css.Media as Media exposing (only, screen, withMedia)
-import Data.Sponsor exposing (IframeData(..), Plan(..), SponsorArticle, metadataDecoder, planToBadge)
+import Data.Sponsor as Sponsor exposing (IframeData(..), Plan(..), SponsorArticle, metadataDecoder, planToBadge)
+import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html as PlainHtml
 import Html.Attributes as PlainAttributes
-import Html.Styled as Html exposing (Html, a, div, iframe, img, text)
+import Html.Styled as Html exposing (Html, a, aside, div, iframe, img, text)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, src)
 import Json.Decode as Decode
 import Markdown.Block exposing (Block)
@@ -19,7 +21,8 @@ import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
 import PagesMsg exposing (PagesMsg)
 import Plugin.MarkdownCodec
-import RouteBuilder exposing (App, StatelessRoute)
+import Random
+import RouteBuilder exposing (App, StatefulRoute)
 import Shared
 import Site
 import Svg.Styled.Attributes exposing (style)
@@ -27,11 +30,11 @@ import View exposing (View)
 
 
 type alias Model =
-    {}
+    { seed : Int }
 
 
-type alias Msg =
-    ()
+type Msg
+    = GotRandomSeed Int
 
 
 type alias RouteParams =
@@ -52,10 +55,29 @@ type alias ActionData =
     {}
 
 
-route : StatelessRoute RouteParams Data ActionData
+route : StatefulRoute RouteParams Data ActionData Model Msg
 route =
     RouteBuilder.single { head = head, data = data }
-        |> RouteBuilder.buildNoState { view = view }
+        |> RouteBuilder.buildWithLocalState
+            { init = init
+            , update = update
+            , view = view
+            , subscriptions = \_ _ _ _ -> Sub.none
+            }
+
+
+init : App Data ActionData RouteParams -> Shared.Model -> ( Model, Effect Msg )
+init _ _ =
+    ( { seed = 0 }
+    , Effect.fromCmd (Random.generate GotRandomSeed (Random.int 0 100))
+    )
+
+
+update : App Data ActionData RouteParams -> Shared.Model -> Msg -> Model -> ( Model, Effect Msg )
+update _ _ msg model =
+    case msg of
+        GotRandomSeed newSeed ->
+            ( { model | seed = newSeed }, Effect.none )
 
 
 data : BackendTask FatalError Data
@@ -146,15 +168,82 @@ sponsorFilesByPlan planName =
 view :
     App Data ActionData RouteParams
     -> Shared.Model
+    -> Model
     -> View (PagesMsg Msg)
-view d _ =
+view d _ model =
     { title = "スポンサー"
-    , body = [ Html.section [] [ sponsorsSection d.data ] ]
+    , body =
+        [ Html.section
+            [ css
+                [ withMedia [ only screen [ Media.minWidth (px 1024) ] ]
+                    [ margin2 zero auto
+                    , display grid
+                    , property "grid-template-columns" "19em 35em"
+                    , justifyContent center
+                    , alignItems start
+                    , columnGap (em 5)
+                    ]
+                ]
+            ]
+            [ div
+                [ css
+                    [ withMedia [ only screen [ Media.minWidth (px 1024) ] ]
+                        [ position sticky
+                        , top (rem 2)
+                        ]
+                    ]
+                ]
+                [ tableOfContents model.seed d.data ]
+            , sponsorsSection model.seed d.data
+            ]
+        ]
     }
 
 
-sponsorsSection : Data -> Html msg
-sponsorsSection pageData =
+tableOfContents : Int -> Data -> Html msg
+tableOfContents seed pageData =
+    let
+        sponsorGroups =
+            [ ( "プラチナスポンサー", pageData.platinumSponsors |> List.filter (\s -> s.body /= []) |> Sponsor.shuffle seed )
+            , ( "ゴールドスポンサー", pageData.goldSponsors |> List.filter (\s -> s.body /= []) |> Sponsor.shuffle seed )
+            , ( "シルバースポンサー", pageData.silverSponsors |> List.filter (\s -> s.body /= []) |> Sponsor.shuffle seed )
+            ]
+                |> List.filter (\( _, sponsors ) -> not (List.isEmpty sponsors))
+
+        tocItem sponsor =
+            a
+                [ href ("#" ++ sponsor.metadata.id)
+                , css
+                    [ display block
+                    , paddingBlock (px 4)
+                    , textDecoration none
+                    , hover [ textDecoration underline ]
+                    , fontSize (px 14)
+                    ]
+                ]
+                [ text sponsor.metadata.name ]
+
+        tocGroup ( planName, sponsors ) =
+            div [ css [ display grid, rowGap (em 0.5) ] ]
+                [ div [ css [ fontSize (px 16), fontWeight bold, color (rgb 68 68 68) ] ]
+                    [ text planName ]
+                , div [] (List.map tocItem sponsors)
+                ]
+    in
+    aside
+        [ css
+            [ padding (em 1.5)
+            , display grid
+            , rowGap (em 1)
+            , borderRadius (px 8)
+            , backgroundColor (rgb 248 249 250)
+            ]
+        ]
+        (List.map tocGroup sponsorGroups)
+
+
+sponsorsSection : Int -> Data -> Html msg
+sponsorsSection seed pageData =
     div
         []
         (List.map
@@ -163,18 +252,12 @@ sponsorsSection pageData =
                     [ css
                         [ paddingBlock (px 40)
                         , borderTop3 (px 5) solid (rgb 246 246 246)
-                        , firstChild [ borderTopStyle none ]
-                        , withMedia [ only screen [ Media.minWidth (px 640) ] ]
-                            [ display grid
-                            , property "grid-template-columns" "210px 1fr"
-                            , columnGap (px 40)
-                            ]
                         ]
+                    , Attributes.id f.metadata.id
                     ]
-                    [ div [ css [ marginBottom (px 30) ] ]
-                        [ sponsorLogo f.metadata.id f.metadata.name f.metadata.href ]
-                    , div
-                        [ css [ maxWidth (em 32.5) ] ]
+                    [ div [ css [ marginBottom (px 30), textAlign center ] ]
+                        [ sponsorLogo f.metadata.id f.metadata.name ]
+                    , div []
                         [ div [] [ planToBadge f.metadata.plan ]
                         , div
                             [ css
@@ -195,61 +278,53 @@ sponsorsSection pageData =
                         ]
                     ]
             )
-            ((pageData.platinumSponsors ++ pageData.goldSponsors ++ pageData.silverSponsors)
-                |> List.filter (\s -> s.body /= [])
-                |> sortSponsors
+            ([ pageData.platinumSponsors
+             , pageData.goldSponsors
+             , pageData.silverSponsors
+             ]
+                |> List.map (List.filter (\s -> s.body /= []) >> Sponsor.shuffle seed)
+                |> List.concat
             )
         )
 
 
-sortSponsors : List SponsorArticle -> List SponsorArticle
-sortSponsors =
-    List.sortBy
-        (\s ->
-            let
-                priority =
-                    case s.metadata.plan of
-                        Platinum ->
-                            3
-
-                        Gold ->
-                            2
-
-                        Silver ->
-                            1
-
-                        _ ->
-                            0
-            in
-            ( -priority, s.metadata.postedAt )
-        )
-
-
-sponsorLogo : String -> String -> String -> Html msg
-sponsorLogo image name site =
-    a
-        [ href site
-        , Attributes.rel "noopener noreferrer"
-        , Attributes.target "_blank"
-        ]
-        [ img
-            [ src ("/images/sponsors/" ++ image ++ ".png")
-            , css
-                [ backgroundColor (rgb 255 255 255)
-                , borderRadius (px 10)
-                , width (pct 100)
-                ]
-            , alt name
+sponsorLogo : String -> String -> Html msg
+sponsorLogo image name =
+    img
+        [ src ("/images/sponsors/" ++ image ++ ".png")
+        , css
+            [ backgroundColor (rgb 255 255 255)
+            , borderRadius (px 10)
+            , width (pct 100)
+            , maxWidth (px 250)
             ]
-            []
+        , alt name
         ]
+        []
 
 
 sponsorBody : Markdown.Renderer.Renderer (PlainHtml.Html msg) -> List Block -> List (Html msg)
 sponsorBody renderer body =
     body
         |> Markdown.Renderer.render renderer
-        |> Result.map (List.map (\x -> Html.fromUnstyled x))
+        |> Result.map
+            (List.map
+                (\x ->
+                    Html.div
+                        [ css
+                            [ Css.Global.descendants
+                                [ Css.Global.selector "iframe"
+                                    [ maxWidth (pct 100)
+                                    , width (pct 100)
+                                    , property "aspect-ratio" "16 / 9"
+                                    , height auto
+                                    ]
+                                ]
+                            ]
+                        ]
+                        [ Html.fromUnstyled x ]
+                )
+            )
         |> (\r ->
                 case r of
                     Err e ->
@@ -343,6 +418,7 @@ customizedHtmlRenderer =
                     |> Markdown.Html.withAttribute "allowfullscreen"
 
                 -- スポンサー記事向けに追加
+                , Markdown.Html.tag "h3" (\children -> PlainHtml.h3 [] children)
                 , Markdown.Html.tag "p" (\children -> PlainHtml.p [] children)
                 , Markdown.Html.tag "b" (\children -> PlainHtml.b [] children)
                 , Markdown.Html.tag "li" (\children -> PlainHtml.li [] children)
@@ -358,5 +434,6 @@ customizedHtmlRenderer =
                             children
                     )
                     |> Markdown.Html.withAttribute "href"
+                , Markdown.Html.tag "strong" (\children -> PlainHtml.strong [] children)
                 ]
     }
