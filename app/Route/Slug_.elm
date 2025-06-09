@@ -22,7 +22,7 @@ import Markdown.Renderer exposing (Renderer)
 import Page exposing (Metadata)
 import PagesMsg exposing (PagesMsg)
 import Plugin.MarkdownCodec
-import RouteBuilder exposing (App, StatelessRoute, StatefulRoute)
+import RouteBuilder exposing (App, StatefulRoute, StatelessRoute)
 import Server.Response as Response
 import Shared
 import Site
