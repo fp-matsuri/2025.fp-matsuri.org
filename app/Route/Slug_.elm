@@ -1,4 +1,4 @@
-module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, route)
+module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, pages, route)
 
 {-|
 
@@ -8,8 +8,6 @@ module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, route)
 -}
 
 import BackendTask exposing (BackendTask)
-import BackendTask.Glob as Glob
-import ErrorPage exposing (ErrorPage)
 import FatalError exposing (FatalError)
 import Head
 import Head.Seo
@@ -17,7 +15,6 @@ import Html exposing (Html, a, iframe)
 import Html.Attributes exposing (attribute, href, rel, src, target)
 import Html.Styled exposing (div, section)
 import Html.Styled.Attributes exposing (class)
-import Json.Decode
 import Markdown.Block exposing (Block)
 import Markdown.Html
 import Markdown.Renderer exposing (Renderer)
@@ -63,12 +60,13 @@ route =
 
 pages : BackendTask FatalError (List RouteParams)
 pages =
-    Glob.succeed (\slug -> { slug = slug })
-        |> Glob.match (Glob.literal "content/")
-        |> Glob.capture Glob.wildcard
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.toBackendTask
-        |> BackendTask.mapError FatalError.fromString
+    Page.pagesGlob
+        |> BackendTask.map
+            (List.map
+                (\globData ->
+                    { slug = globData.slug }
+                )
+            )
 
 
 data : RouteParams -> BackendTask FatalError Data
@@ -77,21 +75,6 @@ data routeParams =
         Page.frontmatterDecoder
         customizedHtmlRenderer
         ("content/" ++ routeParams.slug ++ ".md")
-        |> BackendTask.mapError
-            (\codecError ->
-                case codecError of
-                    Plugin.MarkdownCodec.FileDoesNotExist ->
-                        FatalError.fromString ("Content not found for slug: " ++ routeParams.slug)
-
-                    Plugin.MarkdownCodec.FileReadFailure msg ->
-                        FatalError.fromString ("Internal error processing content for slug " ++ routeParams.slug ++ ": " ++ msg)
-
-                    Plugin.MarkdownCodec.FrontmatterDecodingFailure decodeError ->
-                        FatalError.fromString ("Frontmatter decoding error for slug " ++ routeParams.slug ++ ": " ++ Json.Decode.errorToString decodeError)
-
-                    Plugin.MarkdownCodec.MarkdownProcessingFailure fatalError ->
-                        fatalError
-            )
 
 
 customizedHtmlRenderer : Renderer (Html msg)

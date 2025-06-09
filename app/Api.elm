@@ -10,6 +10,7 @@ import Html exposing (Html)
 import Iso8601
 import Pages
 import Route exposing (Route(..))
+import Route.Slug_ as Route__slug_
 import Route.Sponsors as Route__sponsors
 import Site
 import Sitemap
@@ -69,8 +70,9 @@ makeSitemapEntries getStaticRoutes =
                 Schedule ->
                     Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
 
-                Slug_ _ ->
-                    routeSource (Iso8601.fromTime Pages.builtAt)
+                Slug_ routeParam ->
+                    Route__slug_.data routeParam
+                        |> BackendTask.andThen (\_ -> routeSource (Iso8601.fromTime Pages.builtAt))
                         |> Just
 
                 Sponsors ->

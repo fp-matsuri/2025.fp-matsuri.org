@@ -1,4 +1,4 @@
-module Plugin.MarkdownCodec exposing (Error(..), withFrontmatter)
+module Plugin.MarkdownCodec exposing (withFrontmatter)
 
 {-| elm-pages のサンプルに使われている MarkdownCodec モジュールから、不使用コードを削除したもの
 <https://github.com/dillonkearns/elm-pages/blob/master/plugins/MarkdownCodec.elm>
@@ -13,64 +13,37 @@ import Markdown.Parser
 import Markdown.Renderer
 
 
-type Error
-    = FileDoesNotExist
-    | FileReadFailure String
-    | FrontmatterDecodingFailure Json.Decode.Error
-    | MarkdownProcessingFailure FatalError
-
-
 withFrontmatter :
     (frontmatter -> List Block -> value)
     -> Decoder frontmatter
     -> Markdown.Renderer.Renderer view
     -> String
-    -> BackendTask Error value
+    -> BackendTask FatalError value
 withFrontmatter constructor frontmatterDecoder_ renderer filePath =
     BackendTask.map2 constructor
         (StaticFile.onlyFrontmatter
             frontmatterDecoder_
             filePath
-            |> BackendTask.mapError
-                (\entryError ->
-                    case entryError.recoverable of
-                        StaticFile.FileDoesntExist ->
-                            FileDoesNotExist
-
-                        StaticFile.FileReadError msg ->
-                            FileReadFailure msg
-
-                        StaticFile.DecodingError decodeErr ->
-                            FrontmatterDecodingFailure decodeErr
-                )
+            |> BackendTask.allowFatal
         )
         (StaticFile.bodyWithoutFrontmatter
             filePath
-            |> BackendTask.mapError
-                (\entryError ->
-                    case entryError.recoverable of
-                        StaticFile.FileDoesntExist ->
-                            FileDoesNotExist
-
-                        StaticFile.FileReadError msg ->
-                            FileReadFailure msg
-
-                        StaticFile.DecodingError () ->
-                            MarkdownProcessingFailure (FatalError.fromString "Unexpected decoding error in bodyWithoutFrontmatter")
-                )
+            |> BackendTask.allowFatal
             |> BackendTask.andThen
                 (\rawBody ->
                     rawBody
                         |> Markdown.Parser.parse
-                        |> Result.mapError (\_ -> MarkdownProcessingFailure (FatalError.fromString "Couldn't parse markdown."))
+                        |> Result.mapError (\_ -> FatalError.fromString "Couldn't parse markdown.")
                         |> BackendTask.fromResult
                 )
             |> BackendTask.andThen
                 (\blocks ->
                     blocks
                         |> Markdown.Renderer.render renderer
+                        -- we don't want to encode the HTML since it contains functions so it's not serializable
+                        -- but we can at least make sure there are no errors turning it into HTML before encoding it
                         |> Result.map (\_ -> blocks)
-                        |> Result.mapError (\errMsg -> MarkdownProcessingFailure (FatalError.fromString errMsg))
+                        |> Result.mapError (\error -> FatalError.fromString error)
                         |> BackendTask.fromResult
                 )
         )
