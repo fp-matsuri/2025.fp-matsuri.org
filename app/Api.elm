@@ -71,6 +71,9 @@ makeSitemapEntries getStaticRoutes =
                     Route__sponsors.data
                         |> BackendTask.andThen (\_ -> routeSource (Iso8601.fromTime Pages.builtAt))
                         |> Just
+
+                NotFound ->
+                    Just <| routeSource <| Iso8601.fromTime <| Pages.builtAt
     in
     getStaticRoutes
         |> BackendTask.map (List.filterMap build)

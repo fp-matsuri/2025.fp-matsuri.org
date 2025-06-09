@@ -8,6 +8,7 @@ module Route.Slug_ exposing (ActionData, Data, Model, Msg, data, route)
 -}
 
 import BackendTask exposing (BackendTask)
+import BackendTask.Glob as Glob
 import ErrorPage exposing (ErrorPage)
 import FatalError exposing (FatalError)
 import Head
@@ -24,8 +25,6 @@ import Page exposing (Metadata)
 import PagesMsg exposing (PagesMsg)
 import Plugin.MarkdownCodec
 import RouteBuilder exposing (App, StatelessRoute)
-import Server.Request exposing (Request)
-import Server.Response exposing (Response)
 import Shared
 import Site
 import View exposing (View)
@@ -58,47 +57,26 @@ type alias ActionData =
 
 route : StatelessRoute RouteParams Data ActionData
 route =
-    RouteBuilder.serverRender { data = data, head = head, action = action }
+    RouteBuilder.preRender { data = data, head = head, pages = pages }
         |> RouteBuilder.buildNoState { view = view }
 
 
-action : RouteParams -> Request -> BackendTask FatalError (Response ActionData ErrorPage)
-action _ _ =
-    BackendTask.succeed (Server.Response.render {})
+pages : BackendTask FatalError (List RouteParams)
+pages =
+    Glob.succeed (\slug -> { slug = slug })
+        |> Glob.match (Glob.literal "content/")
+        |> Glob.capture Glob.wildcard
+        |> Glob.match (Glob.literal ".md")
+        |> Glob.toBackendTask
+        |> BackendTask.mapError FatalError.fromString
 
 
-data : RouteParams -> Request -> BackendTask FatalError (Response Data ErrorPage)
-data routeParams _ =
-    let
-        attemptLoadTask : BackendTask Plugin.MarkdownCodec.Error (Response Data ErrorPage)
-        attemptLoadTask =
-            Plugin.MarkdownCodec.withFrontmatter Data
-                Page.frontmatterDecoder
-                customizedHtmlRenderer
-                ("content/" ++ routeParams.slug ++ ".md")
-                |> BackendTask.map Server.Response.render
-
-        handleCodecError : Plugin.MarkdownCodec.Error -> BackendTask Plugin.MarkdownCodec.Error (Response Data ErrorPage)
-        handleCodecError codecError =
-            let
-                errorPage =
-                    case codecError of
-                        Plugin.MarkdownCodec.FileDoesNotExist ->
-                            ErrorPage.notFound
-
-                        Plugin.MarkdownCodec.FileReadFailure msg ->
-                            ErrorPage.internalError msg
-
-                        Plugin.MarkdownCodec.FrontmatterDecodingFailure decodeError ->
-                            ErrorPage.internalError ("Frontmatter decoding error: " ++ Json.Decode.errorToString decodeError)
-
-                        Plugin.MarkdownCodec.MarkdownProcessingFailure fatalError ->
-                            ErrorPage.internalError "Markdown processing failed."
-            in
-            BackendTask.succeed (Server.Response.errorPage errorPage)
-    in
-    attemptLoadTask
-        |> BackendTask.onError handleCodecError
+data : RouteParams -> BackendTask FatalError Data
+data routeParams =
+    Plugin.MarkdownCodec.withFrontmatter Data
+        Page.frontmatterDecoder
+        customizedHtmlRenderer
+        ("content/" ++ routeParams.slug ++ ".md")
         |> BackendTask.mapError
             (\codecError ->
                 case codecError of
