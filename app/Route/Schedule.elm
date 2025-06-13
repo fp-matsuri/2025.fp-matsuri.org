@@ -13,7 +13,7 @@ import FatalError exposing (FatalError)
 import Head
 import Head.Seo
 import Html.Styled as Html exposing (Html, a, div, h1, header, img, span, text)
-import Html.Styled.Attributes as Attributes exposing (alt, css, href, rel, src)
+import Html.Styled.Attributes as Attributes exposing (alt, css, href, id, rel, src)
 import Json.Decode as Decode
 import PagesMsg exposing (PagesMsg)
 import RouteBuilder exposing (App, StatelessRoute)
@@ -81,7 +81,8 @@ view app _ =
                 ]
             ]
             [ h1 [] [ text "開催スケジュール" ]
-            , timetable "Day 1：2025年6月14日"
+            , timetable "day1"
+                "Day 1：2025年6月14日"
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 14)
                     |> filterDuplicateTimeslots
@@ -89,7 +90,8 @@ view app _ =
                     |> scottSessionFilter
                     |> List.sortBy timetableItemSortKey
                 )
-            , timetable "Day 2：2025年6月15日"
+            , timetable "day2"
+                "Day 2：2025年6月15日"
                 (app.data.timetable
                     |> List.filter (isItemOnDate 2025 Jun 15)
                     |> filterDuplicateTimeslots
@@ -202,12 +204,13 @@ scottSessionFilter items =
             )
 
 
-timetable : String -> List TimetableItem -> Html msg
-timetable title items =
+timetable : String -> String -> List TimetableItem -> Html msg
+timetable headerId title items =
     let
         stickyHeader =
             header
-                [ css
+                [ id headerId
+                , css
                     [ position sticky
                     , top (px 0)
                     , zIndex (int 1)
