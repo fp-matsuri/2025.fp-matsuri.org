@@ -115,7 +115,7 @@ navMenu toMsg menuOpened =
         pcMenuContent =
             nav [ css [ mediaQueryForPC [ Css.displayFlex ], mediaQueryForMobile [ Css.display Css.none ] ] ]
                 [ a [ href "/code-of-conduct/" ] [ text "行動規範" ]
-                , a [ href "/schedule" ] [ text "スケジュール" ]
+                , a [ href "/schedule#day2" ] [ text "スケジュール" ]
                 , a [ href "/sponsors" ] [ text "スポンサー" ]
                 ]
 
@@ -139,7 +139,7 @@ navMenu toMsg menuOpened =
         sitemap =
             [ div [ class "hr-with-text" ] [ text "サイトマップ" ]
             , div [] [ a [ href "/", withClose ] [ text "トップページ" ] ]
-            , div [] [ a [ href "/schedule", withClose ] [ text "スケジュール" ] ]
+            , div [] [ a [ href "/schedule#day2", withClose ] [ text "スケジュール" ] ]
             , div [] [ a [ href "/sponsors", withClose ] [ text "スポンサー" ] ]
             , div [] [ a [ href "/code-of-conduct/", withClose ] [ text "行動規範" ] ]
             , div [] [ a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d", withClose, Attr.target "_blank" ] [ text "お問い合わせ" ] ]
@@ -200,7 +200,7 @@ view _ { route } model toMsg pageView =
                 [ nav []
                     [ h4 [] [ text "サイトマップ" ]
                     , div [] [ a [ href "/" ] [ text "トップページ" ] ]
-                    , div [] [ a [ href "/schedule" ] [ text "スケジュール" ] ]
+                    , div [] [ a [ href "/schedule#day2" ] [ text "スケジュール" ] ]
                     , div [] [ a [ href "/sponsors" ] [ text "スポンサー" ] ]
                     , div [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
                     , div [] [ a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d", Attr.target "_blank" ] [ text "お問い合わせ" ] ]
