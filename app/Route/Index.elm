@@ -879,6 +879,7 @@ staff =
         , Member "y047aka"
         , Member "yonta"
         , Member "yshnb"
+        , Member "ar1ak1"
         ]
     }
 
