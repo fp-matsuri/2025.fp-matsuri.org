@@ -13,7 +13,7 @@ import FpMatsuri.BackgroundTexture as BackgroundTexture
 import FpMatsuri.Logo
 import Head
 import Head.Seo
-import Html.Styled as Html exposing (Attribute, Html, a, div, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
+import Html.Styled as Html exposing (Attribute, Html, a, br, div, h2, h3, iframe, img, li, p, section, span, tbody, td, text, th, thead, tr, ul)
 import Html.Styled.Attributes as Attributes exposing (alt, attribute, class, css, href, rel, src)
 import PagesMsg exposing (PagesMsg)
 import Random
@@ -115,6 +115,7 @@ view app _ model =
     { title = ""
     , body =
         [ hero model.seed model.time app.data.sponsors
+        , eventEndedSection
         , newsSection
         , aboutSection
         , overviewSection
@@ -282,6 +283,51 @@ heroSponsorsBlock sponsors =
                 ]
     in
     div [ css [ display grid, property "place-items" "center" ] ] (List.map platinumSponsorLogo sponsors)
+
+
+eventEndedSection : Html msg
+eventEndedSection =
+    section ""
+        [ div
+            [ css
+                [ padding (rem 1.5)
+                , borderRadius (px 8)
+                , display grid
+                , rowGap (rem 1.5)
+                , backgroundColor (rgba 210 96 88 0.1)
+                ]
+            ]
+            [ p
+                [ css
+                    [ fontSize (rem 1.1)
+                    , lineHeight (num 1.6)
+                    , margin zero
+                    , color (rgba 0 0 0 0.8)
+                    ]
+                ]
+                [ text "関数型まつり 2025は盛況のうちに終了しました。"
+                , br [] []
+                , text "ご参加・ご協力いただいた皆さま、ありがとうございました！"
+                ]
+            , a
+                [ href "https://www.ttrinity.jp/shop/fp-matsuri/"
+                , Attributes.target "_blank"
+                , rel "noopener noreferrer"
+                , css
+                    [ display block
+                    , padding2 (rem 0.75) (rem 1.5)
+                    , textAlign center
+                    , textDecoration none
+                    , borderRadius (px 30)
+                    , backgroundColor (rgba 210 96 88 1)
+                    , color (rgb 255 255 255)
+                    , hover
+                        [ backgroundColor (rgba 190 76 68 1) ]
+                    ]
+                ]
+                [ text "関数型まつり 公式Tシャツ" ]
+            ]
+        ]
 
 
 newsSection : Html msg
