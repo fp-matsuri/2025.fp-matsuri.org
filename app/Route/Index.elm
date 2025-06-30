@@ -305,9 +305,9 @@ eventEndedSection =
                     , color (rgba 0 0 0 0.8)
                     ]
                 ]
-                [ text "関数型まつり 2025は盛況のうちに終了しました。"
+                [ text "関数型まつり2025は終了しました。"
                 , br [] []
-                , text "ご参加・ご協力いただいた皆さま、ありがとうございました！"
+                , text "たくさんの方にご参加・ご協力いただき、ありがとうございました！"
                 ]
             , a
                 [ href "https://www.ttrinity.jp/shop/fp-matsuri/"
