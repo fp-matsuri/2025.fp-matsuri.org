@@ -142,7 +142,7 @@ navMenu toMsg menuOpened =
             , div [] [ a [ href "/schedule#day2", withClose ] [ text "スケジュール" ] ]
             , div [] [ a [ href "/sponsors", withClose ] [ text "スポンサー" ] ]
             , div [] [ a [ href "/code-of-conduct/", withClose ] [ text "行動規範" ] ]
-            , div [] [ a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d", withClose, Attr.target "_blank" ] [ text "お問い合わせ" ] ]
+            , div [] [ a [ href "https://forms.gle/nwG9RnkP3AHWQtzh6", withClose, Attr.target "_blank" ] [ text "お問い合わせ" ] ]
             ]
 
         accounts =
@@ -203,7 +203,7 @@ view _ { route } model toMsg pageView =
                     , div [] [ a [ href "/schedule#day2" ] [ text "スケジュール" ] ]
                     , div [] [ a [ href "/sponsors" ] [ text "スポンサー" ] ]
                     , div [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
-                    , div [] [ a [ href "https://scalajp.notion.site/19c6d12253aa8068958ee110dbe8d38d", Attr.target "_blank" ] [ text "お問い合わせ" ] ]
+                    , div [] [ a [ href "https://forms.gle/nwG9RnkP3AHWQtzh6", Attr.target "_blank" ] [ text "お問い合わせ" ] ]
                     , br [] []
                     , h4 [] [ text "公式アカウント" ]
                     , socialLink True X "https://x.com/fp_matsuri"
