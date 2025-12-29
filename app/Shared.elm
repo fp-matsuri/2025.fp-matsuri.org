@@ -217,10 +217,10 @@ view _ { route } model toMsg pageView =
             ]
     , title =
         if pageView.title /= "" then
-            pageView.title ++ " | 関数型まつり"
+            pageView.title ++ " | 関数型まつり 2025"
 
         else
-            "関数型まつり"
+            "関数型まつり 2025"
     }
 
 
