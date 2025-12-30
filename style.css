@@ -183,6 +183,7 @@ Markdown
 ------------------------------------ */
 
 .markdown {
+  width: 100%;
   max-width: 32.5em;
 }
 
@@ -328,6 +329,14 @@ section.coc {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
+  border-radius: 10px;
+}
+
+.section_cm {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.1 / 1;
   border-radius: 10px;
 }
 

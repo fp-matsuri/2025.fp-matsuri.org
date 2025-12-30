@@ -113,10 +113,16 @@ navMenu toMsg menuOpened =
             Media.withMedia [ Media.only Media.screen [ Media.minWidth (px 769) ] ]
 
         pcMenuContent =
-            nav [ css [ mediaQueryForPC [ Css.displayFlex ], mediaQueryForMobile [ Css.display Css.none ] ] ]
+            nav
+                [ css
+                    [ mediaQueryForPC [ Css.displayFlex, alignItems center ]
+                    , mediaQueryForMobile [ Css.display Css.none ]
+                    ]
+                ]
                 [ a [ href "/code-of-conduct/" ] [ text "行動規範" ]
                 , a [ href "/schedule#day2" ] [ text "スケジュール" ]
                 , a [ href "/sponsors" ] [ text "スポンサー" ]
+                , a [ href "/cm" ] [ text "CM" ]
                 ]
 
         hamburger =
@@ -141,6 +147,7 @@ navMenu toMsg menuOpened =
             , div [] [ a [ href "/", withClose ] [ text "トップページ" ] ]
             , div [] [ a [ href "/schedule#day2", withClose ] [ text "スケジュール" ] ]
             , div [] [ a [ href "/sponsors", withClose ] [ text "スポンサー" ] ]
+            , div [] [ a [ href "/cm", withClose ] [ text "CM" ] ]
             , div [] [ a [ href "/code-of-conduct/", withClose ] [ text "行動規範" ] ]
             , div [] [ a [ href "https://forms.gle/nwG9RnkP3AHWQtzh6", withClose, Attr.target "_blank" ] [ text "お問い合わせ" ] ]
             ]
@@ -202,6 +209,7 @@ view _ { route } model toMsg pageView =
                     , div [] [ a [ href "/" ] [ text "トップページ" ] ]
                     , div [] [ a [ href "/schedule#day2" ] [ text "スケジュール" ] ]
                     , div [] [ a [ href "/sponsors" ] [ text "スポンサー" ] ]
+                    , div [] [ a [ href "/cm" ] [ text "CM" ] ]
                     , div [] [ a [ href "/code-of-conduct/" ] [ text "行動規範" ] ]
                     , div [] [ a [ href "https://forms.gle/nwG9RnkP3AHWQtzh6", Attr.target "_blank" ] [ text "お問い合わせ" ] ]
                     , br [] []
