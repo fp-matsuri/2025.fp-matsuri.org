@@ -133,6 +133,25 @@ customizedHtmlRenderer =
                                 |> Markdown.Html.withAttribute "frameborder"
                                 |> Markdown.Html.withAttribute "allow"
                                 |> Markdown.Html.withAttribute "allowfullscreen"
+                            , Markdown.Html.tag "iframe_cm"
+                                (\class_ width_ height_ src_ frameborder_ allowfullscreen_ children ->
+                                    iframe
+                                        [ Html.Attributes.class class_
+                                        , attribute "width" width_
+                                        , attribute "height" height_
+                                        , -- クエリ部分のパースでエラーが発生するため、ハードコードしている
+                                          src (src_ ++ "?start=true&loop=true&delayms=3000")
+                                        , attribute "frameborder" frameborder_
+                                        , attribute "allowfullscreen" allowfullscreen_
+                                        ]
+                                        children
+                                )
+                                |> Markdown.Html.withAttribute "class"
+                                |> Markdown.Html.withAttribute "width"
+                                |> Markdown.Html.withAttribute "height"
+                                |> Markdown.Html.withAttribute "src"
+                                |> Markdown.Html.withAttribute "frameborder"
+                                |> Markdown.Html.withAttribute "allowfullscreen"
                             ]
                 }
            )

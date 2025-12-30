@@ -1,6 +1,6 @@
 module Site exposing
     ( config
-    , eventName, eventName_2025, tagline
+    , eventName_2025, tagline
     , summaryLarge
     )
 
@@ -8,7 +8,7 @@ module Site exposing
 
 @docs config
 
-@docs eventName, eventName_2025, tagline
+@docs eventName_2025, tagline
 @docs summaryLarge
 
 -}
@@ -72,7 +72,7 @@ summaryLarge : { pageTitle : String } -> Common
 summaryLarge { pageTitle } =
     Head.Seo.summaryLarge
         { canonicalUrlOverride = Nothing
-        , siteName = eventName
+        , siteName = eventName_2025
         , image =
             { url = [ "images", "summaryLarge.png" ] |> UrlPath.join |> Pages.Url.fromPath
             , alt = eventName_2025
@@ -83,8 +83,8 @@ summaryLarge { pageTitle } =
         , locale = Just ( ja, jp )
         , title =
             if pageTitle /= "" then
-                pageTitle ++ " | " ++ eventName
+                pageTitle ++ " | " ++ eventName_2025
 
             else
-                eventName
+                eventName_2025
         }
